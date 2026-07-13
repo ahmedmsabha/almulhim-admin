@@ -1,7 +1,7 @@
 "use client";
 
-import { UserButton } from "@clerk/nextjs";
-import { Menu, Search, Globe } from "lucide-react";
+import { UserButton, SignOutButton } from "@clerk/nextjs";
+import { Menu, Search, Globe, LogOut } from "lucide-react";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type AppTopbarProps = {
@@ -50,13 +50,25 @@ export function AppTopbar({ onMenuClick }: AppTopbarProps) {
         </button>
         
         {/* Notifications bell omitted until a real Admin Web inbox is scoped */}
-        <UserButton
-          appearance={{
-            elements: {
-              avatarBox: "size-8",
-            },
-          }}
-        />
+        <div className="flex items-center gap-2">
+          <UserButton
+            appearance={{
+              elements: {
+                avatarBox: "size-8",
+              },
+            }}
+          />
+          <SignOutButton redirectUrl="/login">
+            <button
+              type="button"
+              className="rounded-lg p-2 text-on-surface-variant hover:bg-surface-container-low hover:text-destructive transition-colors duration-200"
+              title={t("common.signOut")}
+              aria-label={t("common.signOut")}
+            >
+              <LogOut className="size-5" aria-hidden />
+            </button>
+          </SignOutButton>
+        </div>
       </div>
     </header>
   );

@@ -12,6 +12,7 @@ export const translations = {
       openNavigation: "Open navigation",
       closeNavigation: "Close navigation",
       toggleLanguage: "العربية",
+      signOut: "Sign Out",
     },
     nav: {
       dashboard: "Dashboard",
@@ -82,6 +83,7 @@ export const translations = {
       openNavigation: "افتح القائمة",
       closeNavigation: "إغلاق القائمة",
       toggleLanguage: "English",
+      signOut: "تسجيل الخروج",
     },
     nav: {
       dashboard: "لوحة التحكم",

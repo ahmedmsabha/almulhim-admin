@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { SignOutButton } from "@clerk/nextjs";
 
 type DashboardErrorProps = {
   error: Error & { digest?: string };
@@ -22,14 +23,25 @@ export default function DashboardError({ error, reset }: DashboardErrorProps) {
           The Mulhim Backend could not be reached or returned an error. Check
           that the API is running, then try again.
         </p>
-        <button
-          type="button"
-          onClick={reset}
-          className="mt-8 inline-flex h-10 items-center justify-center rounded-lg bg-primary px-4 text-body-md font-semibold text-on-primary transition-colors hover:bg-primary-container"
-        >
-          Retry
-        </button>
+        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <button
+            type="button"
+            onClick={reset}
+            className="inline-flex h-10 items-center justify-center rounded-lg bg-primary px-4 text-body-md font-semibold text-on-primary transition-colors hover:bg-primary-container"
+          >
+            Retry
+          </button>
+          <SignOutButton redirectUrl="/login">
+            <button
+              type="button"
+              className="inline-flex h-10 items-center justify-center rounded-lg border border-outline-variant px-4 text-body-md font-semibold text-on-surface transition-colors hover:bg-surface-container-low"
+            >
+              Sign out
+            </button>
+          </SignOutButton>
+        </div>
       </div>
     </main>
   );
 }
+

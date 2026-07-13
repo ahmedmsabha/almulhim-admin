@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { UserButton, useUser } from "@clerk/nextjs";
-import { ShieldCheck, X } from "lucide-react";
+import { UserButton, useUser, SignOutButton } from "@clerk/nextjs";
+import { ShieldCheck, X, LogOut } from "lucide-react";
 import { DASHBOARD_NAV_ITEMS } from "@/lib/navigation";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 
@@ -109,6 +109,16 @@ export function AppSidebar({
               {displayEmail}
             </p>
           </div>
+          <SignOutButton redirectUrl="/login">
+            <button
+              type="button"
+              className="rounded-lg p-2 text-on-surface-variant hover:bg-surface-container-low hover:text-destructive transition-colors duration-200"
+              title={t("common.signOut")}
+              aria-label={t("common.signOut")}
+            >
+              <LogOut className="size-5" aria-hidden />
+            </button>
+          </SignOutButton>
         </div>
       </div>
     </aside>

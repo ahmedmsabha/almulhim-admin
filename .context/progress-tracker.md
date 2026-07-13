@@ -7,7 +7,7 @@ Update this file after every completed feature. Any AI agent reading this should
 ## Current Status
 
 **Phase:** 9 — Hardening  
-**Last completed:** Docs Sync (step 17)  
+**Last completed:** Sign Out / Switch Account Button (step 18)  
 **Next:** Session wrap up
 
 ---
@@ -65,6 +65,7 @@ Update this file after every completed feature. Any AI agent reading this should
 
 - [x] 16 Polish + Registry (built + verified; ADR 0015; test open)
 - [x] 17 Docs Sync (done)
+- [x] 18 Sign Out / Switch Account Button (built + verified; error page, sidebar, topbar; ready)
 
 ---
 
@@ -90,6 +91,7 @@ Update this file after every completed feature. Any AI agent reading this should
 - Support inbox mock (ADR 0013 built): Nest-shaped `SupportRequest` split pane; `TicketStatusBadge`; URL `id`/`status`/`q`/`state`; reply/close disabled with mock vs closed helper copy; no live API.
 - Support API wiring (ADR 0014 built): live `GET /support/admin/requests` with Nest `status` + `q`; Reply/Close mutations; PostHog `admin_support_replied` / `admin_support_closed`; email stays on Nest.
 - Polish + Registry (ADR 0015 built): Sonner toasts for mutations; ErrorPanels on `Empty`; table `aria-label`s; ui-registry updated; `npm run build` green; `CLERK_SECRET_KEY` only in `server-only` dev seed.
+- Sign Out / Switch Account Button: Integrated Clerk's `SignOutButton` on the "Admin API unavailable" error page (`error.tsx`), `AppSidebar.tsx` (next to account card footer), and `AppTopbar.tsx` (next to user avatar), with English/Arabic translations, allowing administrators to change accounts even during an API outage.
 
 ---
 
