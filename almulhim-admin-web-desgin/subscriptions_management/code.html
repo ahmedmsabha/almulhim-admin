@@ -1,0 +1,551 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Subscriptions Management | Mulhim Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .sidebar-active-indicator {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #3525cd;
+        }
+        /* Custom scrollbar for data-dense tables */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c7c4d8;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #777587;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed-dim": "#ffb695",
+                      "on-primary-container": "#dad7ff",
+                      "outline": "#777587",
+                      "error-container": "#ffdad6",
+                      "tertiary": "#7e3000",
+                      "inverse-surface": "#2d3133",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-tertiary-fixed-variant": "#7b2f00",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#351000",
+                      "background": "#f7f9fb",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed": "#131b2e",
+                      "secondary-fixed": "#dae2fd",
+                      "surface-container-highest": "#e0e3e5",
+                      "surface": "#f7f9fb",
+                      "surface-container-high": "#e6e8ea",
+                      "on-tertiary-container": "#ffd2be",
+                      "surface-variant": "#e0e3e5",
+                      "tertiary-container": "#a44100",
+                      "surface-container": "#eceef0",
+                      "outline-variant": "#c7c4d8",
+                      "on-primary": "#ffffff",
+                      "on-secondary-container": "#5c647a",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "secondary-container": "#dae2fd",
+                      "surface-tint": "#4d44e3",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed": "#ffdbcc",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "on-background": "#191c1e",
+                      "on-surface": "#191c1e",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#f7f9fb",
+                      "primary-container": "#4f46e5",
+                      "primary": "#3525cd",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed": "#0f0069",
+                      "error": "#ba1a1a",
+                      "primary-fixed": "#e2dfff",
+                      "surface-dim": "#d8dadc",
+                      "secondary": "#565e74",
+                      "surface-container-low": "#f2f4f6",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "inverse-primary": "#c3c0ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "container_padding": "32px",
+                      "topbar_height": "64px",
+                      "stack_lg": "24px",
+                      "stack_sm": "8px",
+                      "gutter": "24px",
+                      "stack_md": "16px",
+                      "sidebar_width": "280px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Hanken Grotesk"],
+                      "arabic-body": ["Inter"],
+                      "display-lg": ["Hanken Grotesk"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Hanken Grotesk"],
+                      "body-sm": ["Inter"],
+                      "label-md": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "arabic-body": ["16px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body class="bg-background font-body-md text-on-surface antialiased">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-container-lowest border-r border-outline-variant flex flex-col py-6 px-4 z-50">
+<div class="mb-10 px-2 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-2xl" data-icon="admin_panel_settings">admin_panel_settings</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">Mulhim Admin</h1>
+<p class="text-[11px] uppercase tracking-wider text-outline font-label-md">Tawjihi Admin</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Nav Item: Dashboard -->
+<a class="group flex items-center px-3 py-2.5 font-body-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-primary transition-colors" data-icon="dashboard">dashboard</span>
+<span class="">Dashboard</span>
+</a>
+<!-- Nav Item: Students -->
+<a class="group flex items-center px-3 py-2.5 font-body-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-primary transition-colors" data-icon="group">group</span>
+<span class="">Students</span>
+</a>
+<!-- Nav Item: Plans -->
+<a class="group flex items-center px-3 py-2.5 font-body-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-primary transition-colors" data-icon="payments">payments</span>
+<span class="">Plans</span>
+</a>
+<!-- Nav Item: Subscriptions (ACTIVE) -->
+<a class="relative group flex items-center px-3 py-2.5 font-body-md text-primary font-bold border-r-2 border-primary bg-surface-container-low rounded-l-lg" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="event_repeat">event_repeat</span>
+<span class="">Subscriptions</span>
+</a>
+<!-- Nav Item: Content -->
+<a class="group flex items-center px-3 py-2.5 font-body-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-primary transition-colors" data-icon="library_books">library_books</span>
+<span class="">Content</span>
+</a>
+<!-- Nav Item: Announcements -->
+<a class="group flex items-center px-3 py-2.5 font-body-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-primary transition-colors" data-icon="campaign">campaign</span>
+<span class="">Announcements</span>
+</a>
+<!-- Nav Item: Support -->
+<a class="group flex items-center px-3 py-2.5 font-body-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-primary transition-colors" data-icon="contact_support">contact_support</span>
+<span class="">Support</span>
+</a>
+</nav>
+<div class="pt-6 mt-6 border-t border-outline-variant">
+
+<a class="group flex items-center px-3 py-2.5 font-body-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-primary transition-colors" data-icon="settings">settings</span>
+<span class="">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 right-0 h-16 w-[calc(100%-280px)] bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-8 z-40">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-transparent focus:border-primary focus:ring-0 rounded-lg text-body-sm transition-all" placeholder="Search student subscriptions..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-low p-2 rounded-full transition-all relative">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="font-body-md font-bold text-on-surface">Ustadh Ahmed</p>
+<p class="text-[11px] text-outline uppercase font-label-md">Teacher Admin</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-cover bg-center border border-outline-variant" data-alt="A professional headshot of a Hispanic male administrator in his early 40s, wearing a crisp white shirt and navy blazer. The background is a soft-focus modern office environment with warm natural light. The overall mood is professional, trustworthy, and authoritative, matching a high-end corporate SaaS aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA5D-iV0Q_gNEG_A4OEIP_r8BnRFKFAFx_RBNH7H6ioUHzoSERp9IIhWTaZW8avXo1HJISOxk-fFYtP5k0Kh1ZEZRtHQyWdi2M6dZVAUpOJxZWiZ19kJe0s2EtP4bGypr5GHzQwyJcbXRSLWJ3AoL2r804v130O86GkSn38nroCcQbrPgkmiFHCg6h8F1DPUJgBqwc8ppAAn20F30sQ20aFb_J0lEvd42k3GXTAxGUBjAKFiBGO018P')"></div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="pt-[64px] ml-[280px] min-h-screen">
+<div class="p-8">
+<!-- Breadcrumbs & Title -->
+<div class="mb-8">
+<div class="flex items-center gap-2 text-body-sm text-outline mb-2">
+<span class="">Mulhim Admin</span>
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-medium">Subscriptions</span>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface">Manual Approval Queue</h2>
+<p class="text-body-lg text-on-surface-variant mt-1">Review and verify student subscription documents.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg font-body-md hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="filter_list">filter_list</span>
+                            Filter Queue
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg font-body-md hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-lg" data-icon="download">download</span>
+                            Export Data
+                        </button>
+</div>
+</div>
+</div>
+<!-- Dashboard Stats (KPI Bento) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant transition-colors">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary-fixed rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="pending_actions">pending_actions</span>
+</div>
+<span class="text-primary font-label-md text-label-md bg-primary-fixed-dim/20 px-2 py-0.5 rounded">+12%</span>
+</div>
+<h3 class="text-label-md text-outline font-label-md uppercase mb-1">Total Pending</h3>
+<p class="text-headline-md font-headline-md text-on-surface">142</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant transition-colors">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-secondary-fixed rounded-lg">
+<span class="material-symbols-outlined text-secondary" data-icon="fact_check">fact_check</span>
+</div>
+<span class="text-secondary font-label-md text-label-md bg-secondary-fixed-dim/20 px-2 py-0.5 rounded">94% AI</span>
+</div>
+<h3 class="text-label-md text-outline font-label-md uppercase mb-1">Verified Today</h3>
+<p class="text-headline-md font-headline-md text-on-surface">89</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant transition-colors">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-error-container rounded-lg">
+<span class="material-symbols-outlined text-error" data-icon="report_problem">report_problem</span>
+</div>
+<span class="text-error font-label-md text-label-md bg-error-container/20 px-2 py-0.5 rounded">Critical</span>
+</div>
+<h3 class="text-label-md text-outline font-label-md uppercase mb-1">AI Discrepancies</h3>
+<p class="text-headline-md font-headline-md text-on-surface">04</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant transition-colors">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-tertiary-fixed rounded-lg">
+<span class="material-symbols-outlined text-tertiary" data-icon="speed">speed</span>
+</div>
+<span class="text-tertiary font-label-md text-label-md bg-tertiary-fixed-dim/20 px-2 py-0.5 rounded">Fast</span>
+</div>
+<h3 class="text-label-md text-outline font-label-md uppercase mb-1">Avg Decision Time</h3>
+<p class="text-headline-md font-headline-md text-on-surface">2.4m</p>
+</div>
+</div>
+<!-- Pending Queue Tab System -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+<div class="border-b border-outline-variant px-6 flex items-center justify-between">
+<div class="flex">
+<button class="px-6 py-4 font-body-md text-primary font-bold border-b-2 border-primary">Pending Queue (142)</button>
+<button class="px-6 py-4 font-body-md text-on-surface-variant hover:bg-surface-container-low transition-colors">Archived Decisions</button>
+<button class="px-6 py-4 font-body-md text-on-surface-variant hover:bg-surface-container-low transition-colors">AI Logs</button>
+</div>
+<div class="flex gap-2">
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+</button>
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Table Content -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-label-md font-label-md text-outline uppercase tracking-wider">
+<th class="px-6 py-4 border-b border-outline-variant">Student Name</th>
+<th class="px-6 py-4 border-b border-outline-variant">Plan</th>
+<th class="px-6 py-4 border-b border-outline-variant">Submitted Date</th>
+<th class="px-6 py-4 border-b border-outline-variant">Status Badge</th>
+<th class="px-6 py-4 border-b border-outline-variant">AI Verification</th>
+<th class="px-6 py-4 border-b border-outline-variant text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1: Pending Approval -->
+<tr class="group hover:bg-surface-container-low transition-colors duration-150">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center font-bold text-primary text-xs">JD</div>
+<div>
+<p class="font-body-md font-bold text-on-surface">Ahmad Al-Masri</p>
+<p class="text-body-sm text-outline">ahmad.masri@student.ps</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-on-surface">Premium Yearly</td>
+<td class="px-6 py-4 font-body-md text-on-surface">Oct 24, 2023 · 14:20</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 text-white text-label-md font-label-md rounded uppercase tracking-tighter" style="background-color: rgb(245, 158, 11);">PENDING_APPROVAL</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-body-md text-emerald-700 font-medium">
+<span class="material-symbols-outlined text-lg" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                        Pass - Document matches
+                                    </div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-outline hover:text-primary hover:bg-white rounded transition-all" onclick="toggleModal('receipt-modal')" title="View Receipt">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 text-emerald-700 hover:bg-emerald-50 rounded transition-all" title="Approve">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+</button>
+<button class="p-1.5 text-error hover:bg-red-50 rounded transition-all" onclick="showRejectReason(this)" title="Reject">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+<button class="p-1.5 text-orange-500 hover:bg-orange-50 rounded transition-all" title="Suspend">
+<span class="material-symbols-outlined" data-icon="block">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Pending Review -->
+<tr class="group hover:bg-surface-container-low transition-colors duration-150">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center font-bold text-secondary text-xs">SM</div>
+<div>
+<p class="font-body-md font-bold text-on-surface">Sara Abu Khader</p>
+<p class="text-body-sm text-outline">sara.abukhader@student.ps</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-on-surface">Standard Monthly</td>
+<td class="px-6 py-4 font-body-md text-on-surface">Oct 24, 2023 · 12:45</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 text-on-surface text-label-md font-label-md rounded uppercase tracking-tighter" style="background-color: rgb(253, 230, 138);">PENDING_REVIEW</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-body-md text-amber-600 font-medium">
+<span class="material-symbols-outlined text-lg" data-icon="warning">warning</span>
+                                        AI: Blurred image detected
+                                    </div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-outline hover:text-primary hover:bg-white rounded transition-all">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 text-emerald-700 hover:bg-emerald-50 rounded transition-all">
+<span class="material-symbols-outlined" data-icon="check">check</span>
+</button>
+<button class="p-1.5 text-error hover:bg-red-50 rounded transition-all">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+<button class="p-1.5 text-orange-500 hover:bg-orange-50 rounded transition-all">
+<span class="material-symbols-outlined" data-icon="block">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Active (Reference for comparison) -->
+<tr class="group hover:bg-surface-container-low transition-colors duration-150">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center font-bold text-green-700 text-xs">RK</div>
+<div>
+<p class="font-body-md font-bold text-on-surface">Omar Nasser</p>
+<p class="text-body-sm text-outline">omar.nasser@student.ps</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-on-surface">Free Tier</td>
+<td class="px-6 py-4 font-body-md text-on-surface">Oct 23, 2023 · 09:10</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 text-white text-label-md font-label-md rounded uppercase tracking-tighter" style="background-color: rgb(148, 163, 184);">FREE</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2 text-body-md text-outline">
+<span class="material-symbols-outlined text-lg" data-icon="info">info</span>
+                                        N/A - Verification skipped
+                                    </div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-outline hover:text-primary hover:bg-white rounded transition-all">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="p-1.5 text-orange-500 hover:bg-orange-50 rounded transition-all">
+<span class="material-symbols-outlined" data-icon="block">block</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footer Pagination -->
+<div class="px-6 py-4 bg-surface-container-low flex justify-between items-center border-t border-outline-variant">
+<p class="text-body-sm text-outline">Showing 1 to 10 of 142 students</p>
+<div class="flex gap-1">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-surface-container-lowest transition-colors text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-primary bg-primary text-on-primary font-bold text-xs">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-surface-container-lowest transition-colors text-outline font-bold text-xs">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-surface-container-lowest transition-colors text-outline font-bold text-xs">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-surface-container-lowest transition-colors text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Receipt Preview Modal (Hidden by default) -->
+<div class="fixed inset-0 z-[100] hidden" id="receipt-modal">
+<div class="absolute inset-0 bg-on-background/40 backdrop-blur-sm" onclick="toggleModal('receipt-modal')"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden border border-outline-variant">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Verification Document Preview</h3>
+<button class="p-2 hover:bg-surface-container-highest rounded-full transition-colors" onclick="toggleModal('receipt-modal')">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="p-8">
+<div class="flex gap-8">
+<div class="w-1/2">
+<div class="aspect-[3/4] bg-surface-container-high rounded-lg flex items-center justify-center border-2 border-dashed border-outline-variant overflow-hidden group relative">
+<img class="object-cover w-full h-full opacity-90 group-hover:opacity-100 transition-opacity" data-alt="A high-resolution photograph of a standard university student ID card and a bank payment receipt laid side-by-side on a light gray textured desk surface. The lighting is bright and overhead, casting soft shadows. The image captures fine details of the text and official stamps, illustrating a typical document provided for subscription verification in a modern educational SaaS platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB5dLZfxd4_vqL1qvPHow8nvhDBieC37JYRzE-63QsZZuE3hh9c680W-MRZ9HdcahrX7DEvpKA6JY10jxIO_x1GnmqKG_qnMIqKO4jbGS3YtGiQ0uGNKeffdreOE7zS7W0i9v90i9txMlvvFg-wXXcLBvBKuoO46NukzyEuKPI2C9Pr3glnJmduTXHPTbK5rx8d5TWSCDCPeHZQJEmm8EwIMxhBEDXqY43lyHlNv-icXnuu-bKGdXn">
+<div class="absolute inset-0 bg-primary/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+<span class="bg-white px-4 py-2 rounded-full shadow-lg text-body-sm font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="zoom_in">zoom_in</span>
+                                    Enlarge View
+                                </span>
+</div>
+</div>
+</div>
+<div class="w-1/2 space-y-6">
+<div>
+<h4 class="text-label-md text-outline uppercase font-label-md mb-2">Metadata Comparison</h4>
+<div class="space-y-3">
+<div class="p-3 bg-emerald-50 border border-green-100 rounded-lg">
+<p class="text-[10px] text-green-700 font-label-md uppercase">AI Entity Match</p>
+<p class="text-body-md font-bold text-green-900">Verified: Ahmad Al-Masri</p>
+</div>
+<div class="p-3 bg-emerald-50 border border-green-100 rounded-lg">
+<p class="text-[10px] text-green-700 font-label-md uppercase">Date Consistency</p>
+<p class="text-body-md font-bold text-green-900">Valid: Oct 2023</p>
+</div>
+<div class="p-3 bg-surface-container-low border border-outline-variant rounded-lg">
+<p class="text-[10px] text-outline font-label-md uppercase">OCR Confidence</p>
+<p class="text-body-md font-bold text-on-surface">Score: 98.2%</p>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant flex gap-3">
+<button class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 transition-colors">Approve</button>
+<button class="flex-1 px-4 py-2 border border-error text-error rounded-lg font-bold hover:bg-error/10 transition-colors">Reject</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Reject Reason Inline Field (Simulated Injection) -->
+<template id="reject-field-template">
+<div class="mt-2 flex gap-2 animate-in slide-in-from-top-2 duration-300">
+<input class="flex-1 px-3 py-1.5 text-body-sm border border-error-container focus:ring-1 focus:ring-error rounded outline-none" placeholder="Enter rejection reason..." type="text">
+<button class="px-3 py-1 bg-error text-white text-xs font-bold rounded">Submit</button>
+</div>
+</template>
+<script>
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.toggle('hidden');
+        }
+
+        function showRejectReason(btn) {
+            // Find the closest container or cell to inject the field
+            const td = btn.closest('td');
+            // Remove existing if any
+            const existing = td.querySelector('.reject-reason-box');
+            if (existing) {
+                existing.remove();
+                return;
+            }
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'reject-reason-box mt-4 bg-error-container/10 p-3 rounded-lg border border-error/20 w-[240px] absolute right-0 z-10 shadow-lg backdrop-blur-md';
+            wrapper.innerHTML = `
+                <p class="text-[10px] text-error font-bold uppercase mb-2">Rejection Feedback</p>
+                <select class="w-full text-body-sm border-outline-variant rounded mb-2 bg-white">
+                    <option>Blurry document</option>
+                    <option>Name mismatch</option>
+                    <option>Expired ID</option>
+                    <option>Duplicate submission</option>
+                    <option value="custom">Other...</option>
+                </select>
+                <textarea class="w-full text-body-sm p-2 border-outline-variant rounded mb-2 h-16 bg-white" placeholder="Specific notes..."></textarea>
+                <div class="flex justify-end gap-2">
+                    <button onclick="this.closest('.reject-reason-box').remove()" class="text-[10px] uppercase font-bold text-outline hover:text-on-surface">Cancel</button>
+                    <button class="text-[10px] uppercase font-bold text-error hover:text-red-700">Confirm Reject</button>
+                </div>
+            `;
+            
+            // Positioning logic for this absolute box
+            const rect = btn.getBoundingClientRect();
+            td.style.position = 'relative';
+            td.appendChild(wrapper);
+        }
+
+        // Close modal on escape
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('receipt-modal');
+                if (!modal.classList.contains('hidden')) modal.classList.add('hidden');
+            }
+        });
+    </script>
+
+</body></html>

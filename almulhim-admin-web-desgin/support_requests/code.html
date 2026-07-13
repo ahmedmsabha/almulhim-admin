@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Support Requests | Mulhim Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f2f4f6",
+                    "surface-bright": "#f7f9fb",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "outline-variant": "#c7c4d8",
+                    "on-secondary-fixed": "#131b2e",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "on-primary-fixed": "#0f0069",
+                    "on-background": "#191c1e",
+                    "surface-container": "#eceef0",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-primary-container": "#dad7ff",
+                    "outline": "#777587",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb695",
+                    "surface-variant": "#e0e3e5",
+                    "inverse-surface": "#2d3133",
+                    "surface-dim": "#d8dadc",
+                    "on-tertiary-fixed": "#351000",
+                    "tertiary": "#7e3000",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary-container": "#4f46e5",
+                    "tertiary-container": "#a44100",
+                    "on-secondary-container": "#5c647a",
+                    "surface": "#f7f9fb",
+                    "on-error": "#ffffff",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "primary": "#3525cd",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#e2dfff",
+                    "on-surface": "#191c1e",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed": "#dae2fd",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-high": "#e6e8ea",
+                    "on-tertiary-fixed-variant": "#7b2f00",
+                    "on-surface-variant": "#464555",
+                    "tertiary-fixed": "#ffdbcc",
+                    "on-tertiary-container": "#ffd2be",
+                    "secondary-container": "#dae2fd",
+                    "surface-tint": "#4d44e3",
+                    "inverse-primary": "#c3c0ff",
+                    "secondary": "#565e74",
+                    "background": "#f7f9fb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar_width": "280px",
+                    "topbar_height": "64px",
+                    "gutter": "24px",
+                    "container_padding": "32px",
+                    "stack_md": "16px",
+                    "stack_sm": "8px",
+                    "stack_lg": "24px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Hanken Grotesk"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-md": ["JetBrains Mono"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "arabic-body": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "arabic-body": ["16px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #F8FAFC;
+            color: #191c1e;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #E2E8F0;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #CBD5E1;
+        }
+        .rtl-container {
+            direction: rtl;
+            text-align: right;
+        }
+        .thread-container {
+            height: calc(100vh - 64px - 140px);
+        }
+    </style>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body class="font-body-md overflow-hidden">
+<!-- Side Navigation Shell -->
+<aside class="w-[280px] h-screen fixed left-0 top-0 bg-surface-container-lowest border-r border-outline-variant flex flex-col py-gutter px-4 z-[60]">
+<div class="mb-10 px-4">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Mulhim Admin</h1>
+<p class="text-body-sm text-on-secondary-container">Tawjihi Admin</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Navigation Items Mapping -->
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md">Students</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md">Plans</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">subscriptions</span>
+<span class="font-body-md">Subscriptions</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-body-md">Content</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span class="font-body-md">Announcements</span>
+</a>
+<!-- Active Support Tab -->
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-primary font-semibold border-r-2 border-primary bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+<span class="font-body-md">Support</span>
+</a>
+
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Top Utility Bar Shell -->
+<header class="h-[64px] fixed top-0 right-0 left-[280px] bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-gutter z-50">
+<div class="flex items-center gap-4 flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-secondary-container">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg py-2 pl-10 pr-4 focus:ring-2 focus:ring-primary-container text-body-md outline-none" placeholder="Search support tickets, names or IDs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-on-secondary-container hover:text-primary transition-transform scale-95 active:scale-90">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-secondary-container hover:text-primary transition-transform scale-95 active:scale-90">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="font-body-md font-semibold leading-none">Teacher Admin</p>
+<p class="text-body-sm text-on-secondary-container leading-none mt-1">Status: Online</p>
+</div>
+<div class="w-10 h-10 rounded-full border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional studio headshot of a friendly female administrative support agent with a clean modern aesthetic, soft rim lighting, set against a minimal light gray architectural background, representative of the high-end corporate modernism design style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo1PDMZIiJP8S5cJ8pLC_rYio_Adk8W8wrF7ce6ubafo9JsomTXo41iUEVloG88pNtJ0-UFniKY-ejl08gWfNfepPggR1lcSesk-cxbNuky8CUwkim3S3A_deAkt-EIzEQb7vj3xancl8aC4zhdBAm9iGr67z-8x0gMaB7_80HOHycWxn03wtIX9r0vJg-3LkOMh5mRm9AyWPya7ylzOBKzbNmSBySP53O__SvNf1i2cAnTKz2V6Lw"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[280px] mt-[64px] h-[calc(100vh-64px)] overflow-hidden flex flex-col bg-background">
+<!-- KPI Row -->
+<section class="p-container_padding pb-0 grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Open Tickets KPI -->
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<p class="text-label-md font-label-md text-on-secondary-container uppercase">Open Tickets</p>
+<div class="flex items-baseline gap-2 mt-1">
+<h3 class="text-display-lg font-display-lg text-primary">14</h3>
+<span class="text-error text-body-sm font-semibold flex items-center">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+                            +3%
+                        </span>
+</div>
+</div>
+<div class="absolute bottom-0 right-0 left-0 h-12 px-2 opacity-50 group-hover:opacity-100 transition-opacity">
+<svg class="w-full h-full" viewbox="0 0 100 20">
+<path d="M0,15 Q10,10 20,12 T40,5 T60,14 T80,8 T100,10" fill="none" stroke="#4f46e5" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+<!-- Avg Response Time KPI -->
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<p class="text-label-md font-label-md text-on-secondary-container uppercase">Avg Response Time</p>
+<div class="flex items-baseline gap-2 mt-1">
+<h3 class="text-display-lg font-display-lg text-primary">2.4h</h3>
+<span class="text-on-tertiary-fixed-variant text-body-sm font-semibold flex items-center">
+<span class="material-symbols-outlined text-[16px]">trending_down</span>
+                            -15%
+                        </span>
+</div>
+</div>
+<div class="absolute bottom-0 right-0 left-0 h-12 px-2 opacity-50 group-hover:opacity-100 transition-opacity">
+<svg class="w-full h-full" viewbox="0 0 100 20">
+<path d="M0,10 Q10,15 20,5 T40,12 T60,8 T80,18 T100,5" fill="none" stroke="#4f46e5" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+<!-- Resolved Today KPI -->
+<div class="bg-surface-container-lowest border border-outline-variant p-5 rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<p class="text-label-md font-label-md text-on-secondary-container uppercase">Resolved Today</p>
+<div class="flex items-baseline gap-2 mt-1">
+<h3 class="text-display-lg font-display-lg text-primary">32</h3>
+<span class="text-on-tertiary-fixed-variant text-body-sm font-semibold flex items-center">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+                            Goal met
+                        </span>
+</div>
+</div>
+<div class="absolute bottom-0 right-0 left-0 h-12 px-2 opacity-50 group-hover:opacity-100 transition-opacity">
+<svg class="w-full h-full" viewbox="0 0 100 20">
+<path d="M0,18 Q15,10 30,15 T60,5 T90,12 T100,5" fill="none" stroke="#4f46e5" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+</section>
+<!-- Two-Panel Split Layout -->
+<section class="flex-1 flex overflow-hidden p-container_padding">
+<div class="w-full h-full flex bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<!-- Left Panel: Ticket List -->
+<div class="w-1/3 border-r border-outline-variant flex flex-col h-full bg-surface-container-lowest">
+<div class="p-4 border-b border-outline-variant space-y-4">
+<div class="flex gap-2">
+<button class="px-4 py-1.5 rounded-full bg-primary text-on-primary text-body-sm font-semibold">All</button>
+<button class="px-4 py-1.5 rounded-full hover:bg-surface-container-low text-on-secondary-container text-body-sm transition-colors">Open</button>
+<button class="px-4 py-1.5 rounded-full hover:bg-surface-container-low text-on-secondary-container text-body-sm transition-colors">Closed</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<!-- Ticket Item 1 (Active) -->
+<div class="p-4 border-b border-outline-variant bg-surface-container-low border-l-4 border-primary cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-1">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex-shrink-0 overflow-hidden ring-2 ring-white">
+<img class="w-full h-full object-cover" data-alt="Portrait of a young male Middle Eastern student in casual attire, looking directly at the camera with a calm expression. The image has a clean, airy feel with soft natural light, consistent with high-density corporate SaaS interfaces. Colors are neutral and muted." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyT6THZ33r_MQ7XHgAHhQ4lI8bt2hUrVrBft1WsvzO8rAZp4lPWB-PCZjp49QC-zoS2FB53FadzXLafPL2jr-4Ysf7lTu-FugkWU6Q2zZyWYQDorqmGMbjX12-WnTz7wYPgPB-e2BpTz9ZF3FKpxWoZ_H5EDpdQdhESdES97bEay6mirqm-O-7jM-NxGaOnV9GSuSbZSF3p5AMj_CfjY836tYWMp96mxvHa2lgfVT4PPQy43CGZa8A"/>
+</div>
+<div>
+<h4 class="font-semibold text-body-md">Ahmed Al-Farsi</h4>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-on-secondary-container">smartphone</span>
+<span class="text-body-sm text-on-secondary-container">Mobile App</span>
+</div>
+</div>
+</div>
+<span class="text-label-md text-on-secondary-container opacity-70">12:45</span>
+</div>
+<div class="rtl-container mt-2">
+<p class="text-body-md text-on-surface-variant font-arabic-body line-clamp-1" dir="rtl" lang="ar">مرحباً، لدي مشكلة في تفعيل الاشتراك الخاص بي. هل يمكنكم المساعدة؟</p>
+</div>
+<div class="mt-2 flex items-center justify-end">
+<div class="w-2.5 h-2.5 bg-primary rounded-full"></div>
+</div>
+</div>
+<!-- Ticket Item 2 -->
+<div class="p-4 border-b border-outline-variant hover:bg-surface-container hover:bg-opacity-50 cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-1">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex-shrink-0 overflow-hidden ring-2 ring-white">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of a young female student with glasses, smiling softly. Set against a minimalist office background with soft bokeh, using a light-mode corporate aesthetic. The overall mood is helpful and academic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMuhTwcfwqs7Ekx7HiudeuQ5ZGfobU4CM9qS40ap5Z-3mF7xmDEOJFZaqF4yVU5ko7GYW6O4biYy7FLZ8SgIpRX9QsYeLoQhxFYu4I-yNa8E4PBmMHwrNj0muG7yYngSALJCzBV5Wv_PtSF17KOdjCyTK5eYGyywRRPIU_YMWQYS81XcxtWuRejg6Hb5F-4-Ue1SC15jPIluNT3TgVuos72ivh-JdgbLlkeIkxDkZozDWxk4YvIu2p"/>
+</div>
+<div>
+<h4 class="font-semibold text-body-md">Layla Hassan</h4>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-on-secondary-container">desktop_windows</span>
+<span class="text-body-sm text-on-secondary-container">Web Dashboard</span>
+</div>
+</div>
+</div>
+<span class="text-label-md text-on-secondary-container opacity-70">10:12</span>
+</div>
+<div class="rtl-container mt-2">
+<p class="text-body-md text-on-secondary-container font-arabic-body line-clamp-1" dir="rtl" lang="ar">لا أستطيع تحميل ملفات الدرس الرابع، تظهر لي رسالة خطأ دائماً.</p>
+</div>
+</div>
+<!-- Ticket Item 3 -->
+<div class="p-4 border-b border-outline-variant hover:bg-surface-container hover:bg-opacity-50 cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-1">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex-shrink-0 overflow-hidden ring-2 ring-white">
+<img class="w-full h-full object-cover" data-alt="Portrait of an older male student with a professional demeanor, looking focused. High-key studio lighting with a neutral gray background. Sharp, clean photography suitable for an enterprise dashboard UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvkBcBrJ0rekG62j_WuzJlnaJ8Rt0CyAL2BO5Je8WlH3gmfY1PW2bkR6__jsWXUxuwXwekfqcddSTEqXGJfuQ059OtqEhWcI6IF0Tw4HXWEnzrlIaSRHVA9W6saoLNn63dNM8AhIV9i3upvlHxqzu2k3RUmxLqGvF1RGYtIcuRC-zqCxt1fpQdFJ9Psi9rfDK5eXcQYl4IRYGvbz05TsKQQ5FT-jzRL0cbf9rP0SR4b1Fg6rJBB833"/>
+</div>
+<div>
+<h4 class="font-semibold text-body-md">Omar Zaid</h4>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-on-secondary-container">smartphone</span>
+<span class="text-body-sm text-on-secondary-container">Mobile App</span>
+</div>
+</div>
+</div>
+<span class="text-label-md text-on-secondary-container opacity-70">Yesterday</span>
+</div>
+<div class="rtl-container mt-2">
+<p class="text-body-md text-on-secondary-container font-arabic-body line-clamp-1" dir="rtl" lang="ar">كيف يمكنني تغيير كلمة المرور الخاصة بي من التطبيق؟</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Conversation Thread -->
+<div class="flex-1 flex flex-col h-full relative bg-surface-bright">
+<!-- Thread Header -->
+<div class="px-6 py-4 border-b border-outline-variant flex items-center justify-between bg-surface-container-lowest">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a young male Middle Eastern student in casual attire, looking directly at the camera with a calm expression. The image has a clean, airy feel with soft natural light, consistent with high-density corporate SaaS interfaces. Colors are neutral and muted." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeo5VhkZdHLU4iHriRBhURv-FWhJpZ8QgclkOyyyMxv_2Gdc30aGqqOrX2zuHrbBtM6lNlyNn2zNDzE5EydKDm7j7eAUr0Y5h8ItZCGOYn7EAg6h7JpkTBeTUijleP3Oz7LVo3ddHAel0krHxPgXIZUFh4gzWA3837oMnXryWVspeBHqgObuotSLhFQ1IrwVKPSEnpoiT7BnkbCNgzB-sHoElTQJ9ObDGSvZJ1yreA6JM99Oy0e4T_"/>
+</div>
+<div>
+<h4 class="font-semibold text-body-lg">Ahmed Al-Farsi</h4>
+<p class="text-body-sm text-on-secondary-container flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                                    High Priority • ID #82941
+                                </p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg hover:bg-surface-container-low text-on-secondary-container transition-colors">
+<span class="material-symbols-outlined">print</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-surface-container-low text-on-secondary-container transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Messages Content -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar thread-container">
+<!-- Date Divider -->
+<div class="flex items-center justify-center">
+<div class="px-4 py-1 rounded-full bg-surface-container border border-outline-variant text-label-md text-on-secondary-container">Today, June 24</div>
+</div>
+<!-- Student Message (RTL Arabic Bubble) -->
+<div class="flex flex-col items-start max-w-[80%] rtl-container self-end mr-0 ml-auto">
+<div class="bg-surface-container-highest text-on-surface-variant p-4 rounded-2xl rounded-tr-none font-arabic-body text-arabic-body">
+                                مرحباً، لدي مشكلة في تفعيل الاشتراك الخاص بي. قمت بالدفع عبر البطاقة الائتمانية منذ ساعتين ولكن الحساب لا يزال يظهر كحساب مجاني. هل يمكنكم المساعدة في تفعيل الباقة الاحترافية؟
+                            </div>
+<span class="text-label-md text-on-secondary-container mt-1 mr-2">12:45 PM</span>
+</div>
+<!-- Admin Response (Placeholder / Visual Guide) -->
+<div class="flex flex-col items-start max-w-[80%]">
+<div class="bg-primary text-on-primary p-4 rounded-2xl rounded-tl-none font-body-md">
+                                Hello Ahmed! We're sorry to hear about the delay. I'm checking our payment logs right now to verify your transaction. Just a moment please.
+                            </div>
+<span class="text-label-md text-on-secondary-container mt-1 ml-2">12:52 PM</span>
+</div>
+<!-- Student Response -->
+<div class="flex flex-col items-start max-w-[80%] rtl-container self-end mr-0 ml-auto">
+<div class="bg-surface-container-highest text-on-surface-variant p-4 rounded-2xl rounded-tr-none font-arabic-body text-arabic-body" dir="rtl" lang="ar">
+                                شكراً جزيلاً لردكم السريع. أنا بانتظاركم.
+                            </div>
+<span class="text-label-md text-on-secondary-container mt-1 mr-2">12:53 PM</span>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-4 bg-surface-container-lowest border-t border-outline-variant">
+<div class="relative border border-outline-variant rounded-xl focus-within:ring-2 focus-within:ring-primary-container transition-all">
+<textarea dir="rtl" lang="ar" class="w-full p-4 bg-transparent border-none focus:ring-0 text-body-md resize-none" placeholder="Type your reply here..." rows="3"></textarea>
+<div class="flex items-center justify-between p-3 border-t border-outline-variant bg-surface-bright rounded-b-xl">
+<div class="flex items-center gap-2">
+<button class="p-1.5 rounded-md hover:bg-surface-container-low text-on-secondary-container">
+<span class="material-symbols-outlined text-[20px]">attach_file</span>
+</button>
+<button class="p-1.5 rounded-md hover:bg-surface-container-low text-on-secondary-container">
+<span class="material-symbols-outlined text-[20px]">sentiment_satisfied</span>
+</button>
+<button class="p-1.5 rounded-md hover:bg-surface-container-low text-on-secondary-container">
+<span class="material-symbols-outlined text-[20px]">image</span>
+</button>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 rounded-lg bg-surface-variant text-on-surface-variant text-body-md font-semibold hover:bg-outline-variant transition-colors">
+                                        Close Ticket
+                                    </button>
+<button class="px-5 py-2 rounded-lg bg-primary-container text-on-primary text-body-md font-semibold flex items-center gap-2 hover:bg-primary transition-all scale-100 active:scale-95 shadow-lg shadow-primary/20">
+                                        Send Reply
+                                        <span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- FIXED: Arabic RTL support for message content -->
+<div class="mt-4 p-4 bg-surface-container-lowest border border-outline-variant rounded-lg" dir="rtl" lang="ar">
+<p class="font-arabic-body text-arabic-body text-on-surface text-right leading-relaxed" dir="rtl" lang="ar">السلام عليكم، لدي مشكلة في تفعيل الاشتراك بعد رفع إيصال الدفع. الرجاء المساعدة.</p>
+<p class="text-body-sm text-on-surface-variant text-right mt-2" dir="rtl" lang="ar">طالب · غزة</p>
+</div>
+
+</main>
+<script>
+        // Micro-interactions and UX logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const ticketItems = document.querySelectorAll('.w-1\/3 .cursor-pointer');
+            
+            ticketItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Remove active state from all
+                    ticketItems.forEach(i => {
+                        i.classList.remove('bg-surface-container-low', 'border-l-4', 'border-primary');
+                        i.classList.add('hover:bg-surface-container', 'hover:bg-opacity-50');
+                    });
+                    
+                    // Add active state to clicked
+                    item.classList.add('bg-surface-container-low', 'border-l-4', 'border-primary');
+                    item.classList.remove('hover:bg-surface-container', 'hover:bg-opacity-50');
+                });
+            });
+
+            // Auto-scroll to bottom of thread
+            const threadContainer = document.querySelector('.thread-container');
+            threadContainer.scrollTop = threadContainer.scrollHeight;
+        });
+    </script>
+</body></html>

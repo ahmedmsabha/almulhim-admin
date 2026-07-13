@@ -1,0 +1,4 @@
+interface:
+  display_name: "Check"
+  short_description: "Prove a change works, or review it, before merge"
+  default_prompt: "Use $check to confirm this change before merge — 'verify' to run the real app, 'review' for a fresh-model code review."

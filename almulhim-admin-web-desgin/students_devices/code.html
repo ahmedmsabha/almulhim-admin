@@ -1,0 +1,548 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Mulhim Admin - Students &amp; Devices</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        
+        /* Custom Scrollbar for high-density tables */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #E2E8F0;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #CBD5E1;
+        }
+
+        /* Guide lines for nested structures */
+        .guide-line {
+            position: relative;
+        }
+        .guide-line::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: #E2E8F0;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed-dim": "#ffb695",
+                      "on-primary-container": "#dad7ff",
+                      "outline": "#777587",
+                      "error-container": "#ffdad6",
+                      "tertiary": "#7e3000",
+                      "inverse-surface": "#2d3133",
+                      "inverse-on-surface": "#eff1f3",
+                      "on-tertiary-fixed-variant": "#7b2f00",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#351000",
+                      "background": "#f7f9fb",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed": "#131b2e",
+                      "secondary-fixed": "#dae2fd",
+                      "surface-container-highest": "#e0e3e5",
+                      "surface": "#f7f9fb",
+                      "surface-container-high": "#e6e8ea",
+                      "on-tertiary-container": "#ffd2be",
+                      "surface-variant": "#e0e3e5",
+                      "tertiary-container": "#a44100",
+                      "surface-container": "#eceef0",
+                      "outline-variant": "#c7c4d8",
+                      "on-primary": "#ffffff",
+                      "on-secondary-container": "#5c647a",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "secondary-container": "#dae2fd",
+                      "surface-tint": "#4d44e3",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed": "#ffdbcc",
+                      "secondary-fixed-dim": "#bec6e0",
+                      "on-background": "#191c1e",
+                      "on-surface": "#191c1e",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#f7f9fb",
+                      "primary-container": "#4f46e5",
+                      "primary": "#3525cd",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed": "#0f0069",
+                      "error": "#ba1a1a",
+                      "primary-fixed": "#e2dfff",
+                      "surface-dim": "#d8dadc",
+                      "secondary": "#565e74",
+                      "surface-container-low": "#f2f4f6",
+                      "on-secondary-fixed-variant": "#3f465c",
+                      "inverse-primary": "#c3c0ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "container_padding": "32px",
+                      "topbar_height": "64px",
+                      "stack_lg": "24px",
+                      "stack_sm": "8px",
+                      "gutter": "24px",
+                      "stack_md": "16px",
+                      "sidebar_width": "280px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Hanken Grotesk"],
+                      "arabic-body": ["Inter"],
+                      "display-lg": ["Hanken Grotesk"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Hanken Grotesk"],
+                      "body-sm": ["Inter"],
+                      "label-md": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "arabic-body": ["16px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+<!-- Side Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-container-lowest border-r border-outline-variant flex flex-col py-6 px-4 z-50">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">Mulhim Admin</h1>
+<p class="text-xs text-on-surface-variant uppercase tracking-wider">Tawjihi Admin</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto custom-scrollbar">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-primary font-bold border-r-2 border-primary bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="">Students</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="">Plans</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded" href="#">
+<span class="material-symbols-outlined">event_repeat</span>
+<span class="">Subscriptions</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded" href="#">
+<span class="material-symbols-outlined">library_books</span>
+<span class="">Content</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span class="">Announcements</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="">Support</span>
+</a>
+
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-low transition-colors rounded" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant">
+<div class="flex items-center gap-3 px-2">
+<img class="w-10 h-10 rounded-full border border-outline-variant object-cover" data-alt="A professional headshot of a senior system administrator in a clean modern office, soft bokeh background, high-end photography, neutral tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPxxvAJyOnBI9QNZDliUk_gxVR4MFyHYEAmwhr6JUkPDC0dA9RR8wu0KTkDP3e6HBqsVJJ-XuZtMZifsoo321ik-W6btfC9jv85fSY7WB0B3tn8VsWUqIaFIYd_Zp7o6eA07C-2kcplK5Th8zNEtNdr-jJKTswZU2veuDNiReOuo5fWQ0uNI3PqLfUM0VdtiSvNXTj5RRCwD3Y55WytvDIVqFrcLHa4srZFNeq9fCifVYSxHpBuhl1">
+<div>
+<p class="font-bold text-body-md">Ustadh Ahmed</p>
+<p class="text-xs text-on-surface-variant">Teacher Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top Utility Bar Shell -->
+<header class="fixed top-0 right-0 h-16 w-[calc(100%-280px)] bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-container_padding z-40">
+<div class="flex items-center gap-4 flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-body-md focus:ring-2 focus:ring-primary" placeholder="Search students, devices, or hashes..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="hover:bg-surface-container-low p-2 rounded-full transition-all">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+<button class="hover:bg-surface-container-low p-2 rounded-full transition-all">
+<span class="material-symbols-outlined text-on-surface-variant">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] mt-16 p-container_padding">
+<!-- Dashboard Header -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface">Students &amp; Devices</h2>
+<p class="text-on-surface-variant font-body-md mt-1">Manage enterprise enrollment and active hardware bindings.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline rounded-lg font-bold text-body-md hover:bg-surface-container-low transition-colors" onclick="alert('Exporting data...')">
+<span class="material-symbols-outlined">download</span> Export CSV
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg font-bold text-body-md transition-all">
+<span class="material-symbols-outlined">person_add</span> View Students
+                </button>
+</div>
+</div>
+<!-- Bento Grid Stats (Optional Contextual Flourish) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-8">
+<div class="bg-surface-container-lowest p-6 border border-outline-variant rounded-xl">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-primary">group</span>
+<span class="text-xs font-label-md text-primary bg-primary/10 px-2 py-0.5 rounded-full">+12%</span>
+</div>
+<h4 class="text-on-surface-variant font-label-md uppercase">Total Students</h4>
+<p class="font-display-lg text-headline-md mt-1">1,284</p>
+</div>
+<div class="bg-surface-container-lowest p-6 border border-outline-variant rounded-xl">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-tertiary">devices</span>
+<span class="text-xs font-label-md text-tertiary bg-tertiary/10 px-2 py-0.5 rounded-full">Stable</span>
+</div>
+<h4 class="text-on-surface-variant font-label-md uppercase">Active Bindings</h4>
+<p class="font-display-lg text-headline-md mt-1">2,102</p>
+</div>
+<div class="bg-surface-container-lowest p-6 border border-outline-variant rounded-xl">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-error">security</span>
+<span class="text-xs font-label-md text-error bg-error/10 px-2 py-0.5 rounded-full">-2.4%</span>
+</div>
+<h4 class="text-on-surface-variant font-label-md uppercase">Security Resets</h4>
+<p class="font-display-lg text-headline-md mt-1">45</p>
+</div>
+<div class="bg-surface-container-lowest p-6 border border-outline-variant rounded-xl">
+<div class="flex justify-between items-start mb-2">
+<span class="material-symbols-outlined text-secondary">verified</span>
+<span class="text-xs font-label-md text-secondary bg-secondary/10 px-2 py-0.5 rounded-full">98%</span>
+</div>
+<h4 class="text-on-surface-variant font-label-md uppercase">Sync Health</h4>
+<p class="font-display-lg text-headline-md mt-1">Optimal</p>
+</div>
+</div>
+<!-- Student Master Table Section -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden mb-8">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-headline-sm text-headline-sm">Enrollment Directory</h3>
+<div class="flex gap-2">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-lowest border border-outline-variant rounded-md text-body-sm">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                        Filter By Region
+                    </div>
+</div>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50 border-b border-outline-variant">
+<th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Student Profile</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Contact</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Telegram</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Region</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 font-label-md text-on-surface-variant uppercase tracking-wider text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Table Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group cursor-pointer" onclick="toggleDrillDown('user-1')">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-xs">SM</div>
+<div>
+<div class="font-bold text-on-surface">Sara Abu Khader</div>
+<div class="text-xs text-on-surface-variant font-label-md">ID: ST-9021</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-body-md">sarah.m@enterprise.io</div>
+<div class="text-xs text-on-surface-variant font-label-md">+1 (555) 092-4412</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-primary hover:underline">@smiller_official</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">Gaza</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 font-label-md text-[10px] rounded uppercase" style="background-color: rgb(22, 163, 74); color: white;">Active</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">keyboard_arrow_down</span>
+</td>
+</tr>
+<!-- Drill-down Row 1 -->
+<tr class="hidden bg-surface-container-low/30" id="user-1">
+<td class="px-12 py-6" colspan="6">
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<h4 class="font-bold text-body-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">devices</span>
+                                            Active Device Bindings
+                                        </h4>
+<button class="px-4 py-2 border border-error text-error rounded font-bold text-xs uppercase tracking-widest hover:bg-error hover:text-on-error transition-all" onclick="event.stopPropagation(); alert('Resetting all devices for Sara Abu Khader...')">
+                                            Reset All Bindings
+                                        </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Device Card Web -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-4 flex justify-between items-start">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary mt-1">laptop_mac</span>
+<div>
+<p class="font-bold text-body-md">Web Platform</p>
+<p class="text-xs text-on-surface-variant font-label-md mt-1 break-all">HASH: 4f9e8a7d6c5b4a3f2e1d0c9b8a7f6e5d</p>
+<p class="text-[10px] text-on-surface-variant mt-2">Last accessed: Oct 24, 14:22 UTC</p>
+</div>
+</div>
+<button class="text-error hover:bg-error-container p-2 rounded transition-colors" onclick="event.stopPropagation(); alert('Device Reset Initiated')" title="Reset Device">
+<span class="material-symbols-outlined">restart_alt</span>
+</button>
+</div>
+<!-- Device Card Mobile -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-4 flex justify-between items-start">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary mt-1">smartphone</span>
+<div>
+<p class="font-bold text-body-md">Mobile App (iOS)</p>
+<p class="text-xs text-on-surface-variant font-label-md mt-1 break-all">HASH: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9</p>
+<p class="text-[10px] text-on-surface-variant mt-2">Last accessed: Oct 23, 09:15 UTC</p>
+</div>
+</div>
+<button class="text-error hover:bg-error-container p-2 rounded transition-colors" onclick="event.stopPropagation(); alert('Device Reset Initiated')" title="Reset Device">
+<span class="material-symbols-outlined">restart_alt</span>
+</button>
+</div>
+</div>
+</div>
+</td>
+</tr>
+<!-- Table Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group cursor-pointer" onclick="toggleDrillDown('user-2')">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-bold text-xs">JH</div>
+<div>
+<div class="font-bold text-on-surface">James Huang</div>
+<div class="text-xs text-on-surface-variant font-label-md">ID: ST-1154</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-body-md">james.h@techcorp.jp</div>
+<div class="text-xs text-on-surface-variant font-label-md">+81 03-1234-5678</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-primary hover:underline">@jhuang_dev</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">West Bank</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 font-label-md text-[10px] rounded uppercase" style="background-color: rgb(245, 158, 11); color: white;">Pending Approval</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">keyboard_arrow_down</span>
+</td>
+</tr>
+<!-- Drill-down Row 2 (Visible by default for demonstration) -->
+<tr class="bg-surface-container-low/30" id="user-2">
+<td class="px-12 py-6" colspan="6">
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<h4 class="font-bold text-body-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">devices</span>
+                                            Active Device Bindings
+                                        </h4>
+<button class="px-4 py-2 border border-error text-error rounded font-bold text-xs uppercase tracking-widest hover:bg-error hover:text-on-error transition-all">
+                                            Reset All Bindings
+                                        </button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Device Card Web -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-4 flex justify-between items-start">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary mt-1">laptop_mac</span>
+<div>
+<p class="font-bold text-body-md">Web Platform</p>
+<p class="text-xs text-on-surface-variant font-label-md mt-1 break-all">HASH: b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6</p>
+<p class="text-[10px] text-on-surface-variant mt-2">Last accessed: Oct 24, 18:45 UTC</p>
+</div>
+</div>
+<button class="text-error hover:bg-error-container p-2 rounded transition-colors" title="Reset Device">
+<span class="material-symbols-outlined">restart_alt</span>
+</button>
+</div>
+<div class="border border-dashed border-outline-variant rounded p-4 flex items-center justify-center text-on-surface-variant text-body-sm italic">
+                                            No second device registered
+                                        </div>
+</div>
+</div>
+</td>
+</tr>
+<!-- Table Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group cursor-pointer" onclick="toggleDrillDown('user-3')">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-xs">EL</div>
+<div>
+<div class="font-bold text-on-surface">Elena Lopez</div>
+<div class="text-xs text-on-surface-variant font-label-md">ID: ST-4421</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-body-md">elena.lopez@madrid.es</div>
+<div class="text-xs text-on-surface-variant font-label-md">+34 912 345 678</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-primary hover:underline">@elena_madrid</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">Gaza</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 font-label-md text-[10px] rounded uppercase" style="background-color: rgb(100, 116, 139); color: white;">Expired</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">keyboard_arrow_down</span>
+</td>
+</tr>
+<tr class="hidden bg-surface-container-low/30" id="user-3">
+<td class="px-12 py-6 text-center text-on-surface-variant italic" colspan="6">
+                                Loading device data...
+                            </td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 border-t border-outline-variant flex justify-between items-center text-body-sm text-on-surface-variant">
+<span class="">Showing 1-10 of 1,284 students</span>
+<div class="flex gap-1">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-surface-container-low">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant bg-primary text-on-primary">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-surface-container-low">3</button>
+<span class="px-2">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant hover:bg-surface-container-low">129</button>
+</div>
+</div>
+</div>
+<!-- Devices Bulk Management Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-headline-sm text-headline-sm">Active Bindings Map</h3>
+<p class="text-body-sm text-on-surface-variant mt-1">Global distribution of registered device hardware.</p>
+</div>
+<button class="text-primary font-bold text-xs flex items-center gap-1 hover:underline">
+                        View by Region <span class="material-symbols-outlined text-xs">open_in_new</span>
+</button>
+</div>
+<div class="h-64 rounded-lg bg-surface-container-low overflow-hidden border border-outline-variant relative">
+<img class="w-full h-full object-cover grayscale opacity-60" data-location="London" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmpq3FOL3v8fIoPruTSpS2nBcRYmqwp4vWPsU7XcgU1mG8OLLFFIscCgp6qh9UeqJQkWNoi5CpQDaaq03Echdlraj1ozEiCOR67twZzHGxQSYIWGSIxpqu4k0sBDMbC7CTlgAiOGcvhIdo9Sledq1FMEjc9P-Tmc5NXifGcdNWmDweGH8rX07S5IRek6sqw3I0PwTUp6chbYWnVWZxH_j6VOeofquPB1ee_Fr0biOkuu9y4ShzrT2y">
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 to-transparent flex items-center justify-center">
+<div class="flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-4xl text-primary animate-pulse">location_on</span>
+<span class="font-label-md text-on-surface tracking-tighter">MAP ENGINE ACTIVE</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<h3 class="font-headline-sm text-headline-sm mb-4">Quick Bulk Actions</h3>
+<div class="space-y-4">
+<div class="p-4 bg-error-container/20 border border-error/20 rounded-lg">
+<div class="flex items-center gap-3 mb-2 text-error">
+<span class="material-symbols-outlined">warning</span>
+<span class="font-bold text-body-md">Emergency Reset</span>
+</div>
+<p class="text-xs text-on-surface-variant mb-4">Instantly unbind ALL devices for all students. This cannot be undone.</p>
+<button class="w-full py-2 bg-error text-on-error rounded font-bold uppercase tracking-widest text-xs transition-all" onclick="confirm('Are you sure you want to RESET ALL DEVICES for the entire organization?')">
+                            RESET ALL (GLOBAL)
+                        </button>
+</div>
+<button class="w-full p-4 border border-outline-variant rounded-lg flex items-center justify-between hover:bg-surface-container-low transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">cloud_sync</span>
+<span class="font-bold text-body-md text-on-surface">Refresh Device Status</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</button>
+<button class="w-full p-4 border border-outline-variant rounded-lg flex items-center justify-between hover:bg-surface-container-low transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">phonelink_erase</span>
+<span class="font-bold text-body-md text-on-surface">Clear Stale Bindings</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Micro-interactions Script -->
+<script>
+        function toggleDrillDown(id) {
+            const row = document.getElementById(id);
+            const isHidden = row.classList.contains('hidden');
+            
+            // Close other drill-downs if any (keeping it clean)
+            document.querySelectorAll('[id^="user-"]').forEach(r => r.classList.add('hidden'));
+            
+            if (isHidden) {
+                row.classList.remove('hidden');
+            } else {
+                row.classList.add('hidden');
+            }
+        }
+
+        // Initialize tooltips or minor animation observers here
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Mulhim Admin Initialized");
+        });
+    </script>
+
+</body></html>

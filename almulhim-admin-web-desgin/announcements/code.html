@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Announcements - Mulhim Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .rtl { direction: rtl; }
+        .ltr { direction: ltr; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f2f4f6",
+                        "surface-bright": "#f7f9fb",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "outline-variant": "#c7c4d8",
+                        "on-secondary-fixed": "#131b2e",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "on-primary-fixed": "#0f0069",
+                        "on-background": "#191c1e",
+                        "surface-container": "#eceef0",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-primary-container": "#dad7ff",
+                        "outline": "#777587",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "surface-variant": "#e0e3e5",
+                        "inverse-surface": "#2d3133",
+                        "surface-dim": "#d8dadc",
+                        "on-tertiary-fixed": "#351000",
+                        "tertiary": "#7e3000",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary-container": "#4f46e5",
+                        "tertiary-container": "#a44100",
+                        "on-secondary-container": "#5c647a",
+                        "surface": "#f7f9fb",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "primary": "#3525cd",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#e2dfff",
+                        "on-surface": "#191c1e",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#dae2fd",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "on-surface-variant": "#464555",
+                        "tertiary-fixed": "#ffdbcc",
+                        "on-tertiary-container": "#ffd2be",
+                        "secondary-container": "#dae2fd",
+                        "surface-tint": "#4d44e3",
+                        "inverse-primary": "#c3c0ff",
+                        "secondary": "#565e74",
+                        "background": "#f7f9fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "8px",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar_width": "280px",
+                        "topbar_height": "64px",
+                        "gutter": "24px",
+                        "container_padding": "32px",
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    }
+                }
+            }
+        }
+    </script>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body class="bg-background text-on-background font-body-md">
+<!-- Side Navigation Bar -->
+<aside class="w-[280px] h-screen fixed left-0 top-0 bg-surface-container-lowest border-r border-outline-variant flex flex-col py-gutter px-4 z-50">
+<div class="mb-10 px-2 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[24px]">admin_panel_settings</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Mulhim Admin</h1>
+<p class="font-body-sm text-body-sm text-on-secondary-container">Tawjihi Admin</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Navigation Items Mapping -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-md text-body-md">Students</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-body-md text-body-md">Plans</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="subscriptions">subscriptions</span>
+<span class="font-body-md text-body-md">Subscriptions</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-body-md text-body-md">Content</span>
+</a>
+<!-- ACTIVE TAB: Announcements -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-primary font-semibold border-r-2 border-primary bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="campaign" style="font-variation-settings: 'FILL' 1;">campaign</span>
+<span class="font-body-md text-body-md">Announcements</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-secondary-container hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="h-[64px] fixed top-0 right-0 left-[280px] z-40 bg-surface-container-lowest border-b border-outline-variant flex items-center justify-between px-gutter">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg py-2 pl-10 pr-4 text-body-md focus:ring-2 focus:ring-primary-container outline-none transition-all" placeholder="Search announcements..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-2 text-on-secondary-container hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<div class="w-2 h-2 bg-error rounded-full -ml-3 -mt-3 border-2 border-surface-container-lowest"></div>
+</button>
+<div class="h-6 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="font-body-md text-body-md font-semibold text-on-surface">Ustadh Ahmed</p>
+<p class="font-body-sm text-body-sm text-on-secondary-container">Teacher Admin</p>
+</div>
+<div class="w-10 h-10 rounded-full border border-outline-variant bg-cover bg-center" data-alt="A professional studio portrait of a confident middle-aged executive with a warm smile, wearing a dark navy business suit and standing against a soft gray backdrop. The lighting is diffused and professional, conveying a sense of leadership and trust in a modern corporate setting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAtqRpzlBU17xqv6nvAtmV-j9oHlE-hADme0xDr7rSDwv48K92pYioH2l8Hd1FtNJ-opQF5WKPBttMt6EsBRuTYl2763DS7UALyoIykJcGY_V7EarJaB6RwJ065Ksg9CvLrKZKXyGJjuMRm_sdnhHKNMl-TufuXpepltvBhOLCHtAlIY6eVPNBOObc1e1nAwKdQC22CHzHK84lc99X7jDuWPy3xd_9CZwrBfjuKDE9YVoM9UGqGxxaS')"></div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[280px] mt-[64px] p-container_padding">
+<div class="max-w-7xl mx-auto space-y-gutter">
+<!-- Page Header -->
+<div class="flex items-end justify-between">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Announcements</h2>
+<p class="font-body-md text-body-md text-on-secondary-container">Create and manage regional broadcast messages.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-surface-container rounded-lg text-on-surface font-semibold hover:bg-surface-container-high transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">save</span>
+                        Save Draft
+                    </button>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-lg font-semibold hover:bg-primary-container transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">send</span>
+                        Publish
+                    </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- Left Column: Rich Text Composer -->
+<div class="lg:col-span-7 space-y-6">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<div class="mb-6 space-y-4">
+<div>
+<label class="block font-body-sm text-body-sm text-on-secondary-container mb-2">Announcement Subject</label>
+<input class="w-full bg-white border border-outline-variant rounded-lg p-3 text-body-md focus:border-primary-container focus:ring-2 focus:ring-primary-container outline-none transition-all" placeholder="Enter announcement title..." type="text"/>
+</div>
+<div class="flex gap-6 items-center">
+<div>
+<label class="block font-body-sm text-body-sm text-on-secondary-container mb-2">Target Region</label>
+<div class="flex p-1 bg-surface-container rounded-lg gap-1">
+<button class="px-4 py-1.5 rounded-md text-body-sm font-semibold bg-white text-primary">Both</button>
+<button class="px-4 py-1.5 rounded-md text-body-sm font-semibold text-on-secondary-container hover:bg-surface-container-high transition-colors">Gaza</button>
+<button class="px-4 py-1.5 rounded-md text-body-sm font-semibold text-on-secondary-container hover:bg-surface-container-high transition-colors">West Bank</button>
+</div>
+</div>
+<div class="flex-1">
+<label class="block font-body-sm text-body-sm text-on-secondary-container mb-2">Priority Level</label>
+<select class="w-full bg-white border border-outline-variant rounded-lg p-2.5 text-body-md focus:border-primary-container outline-none">
+<option>Standard</option>
+<option>High Priority</option>
+<option>Urgent</option>
+</select>
+</div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<label class="block font-body-sm text-body-sm text-on-secondary-container">Message Content (Arabic)</label>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">format_bold</span></button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">format_italic</span></button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">format_list_bulleted</span></button>
+</div>
+</div>
+<textarea class="w-full h-64 bg-white border border-outline-variant rounded-lg p-4 text-body-md rtl focus:border-primary-container focus:ring-2 focus:ring-primary-container outline-none transition-all resize-none" placeholder="اكتب محتوى الإعلان هنا باللغة العربية..." dir="rtl" lang="ar" placeholder="اكتب نص الإعلان بالعربية..."></textarea>
+</div>
+<div class="mt-6">
+<label class="block font-body-sm text-body-sm text-on-secondary-container mb-2">Featured Image</label>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-8 flex flex-col items-center justify-center gap-3 bg-surface-container-low hover:bg-surface-container hover:border-primary transition-all cursor-pointer">
+<div class="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">cloud_upload</span>
+</div>
+<div class="text-center">
+<p class="font-body-md text-body-md font-semibold text-on-surface">Click to upload or drag and drop</p>
+<p class="font-body-sm text-body-sm text-on-secondary-container">PNG, JPG or WEBP (Max. 2MB)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Past Announcements Table -->
+<div class="lg:col-span-5 space-y-6">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col h-full max-h-[820px]">
+<div class="p-6 border-b border-outline-variant flex items-center justify-between bg-surface-container-lowest">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Recent History</h3>
+<button class="text-primary font-semibold text-body-sm hover:underline">View All</button>
+</div>
+<div class="flex-1 overflow-auto">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-surface-container-low z-10">
+<tr>
+<th class="px-4 py-3 text-label-md font-label-md text-on-secondary-container uppercase">Subject</th>
+<th class="px-4 py-3 text-label-md font-label-md text-on-secondary-container uppercase">Region</th>
+<th class="px-4 py-3 text-label-md font-label-md text-on-secondary-container uppercase text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-4 py-4 rtl text-right">
+<p class="font-body-md text-body-md font-semibold text-on-surface" dir="rtl" lang="ar">تحديثات الجدول الدراسي للفصل القادم</p>
+<p class="font-body-sm text-body-sm text-on-secondary-container ltr">Oct 24, 2023</p>
+</td>
+<td class="px-4 py-4">
+<span class="px-2 py-0.5 bg-secondary-fixed text-on-secondary-fixed rounded text-[11px] font-bold">WB</span>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<span class="px-2 py-1 bg-green-100 text-green-700 rounded text-[10px] font-bold uppercase tracking-wider">Published</span>
+<div class="flex opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 text-on-secondary-container hover:text-primary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="p-1 text-on-secondary-container hover:text-error"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-4 py-4 rtl text-right">
+<p class="font-body-md text-body-md font-semibold text-on-surface" dir="rtl" lang="ar">إجراءات الأمان الجديدة في المختبرات</p>
+<p class="font-body-sm text-body-sm text-on-secondary-container ltr">Oct 22, 2023</p>
+</td>
+<td class="px-4 py-4">
+<span class="px-2 py-0.5 bg-primary-fixed text-on-primary-fixed rounded text-[11px] font-bold">BOTH</span>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<span class="px-2 py-1 bg-surface-container-high text-on-secondary-container rounded text-[10px] font-bold uppercase tracking-wider">Draft</span>
+<div class="flex opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 text-on-secondary-container hover:text-primary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="p-1 text-on-secondary-container hover:text-error"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-4 py-4 rtl text-right">
+<p class="font-body-md text-body-md font-semibold text-on-surface" dir="rtl" lang="ar">منح دراسية جديدة متاحة للطلاب المتفوقين</p>
+<p class="font-body-sm text-body-sm text-on-secondary-container ltr">Oct 18, 2023</p>
+</td>
+<td class="px-4 py-4">
+<span class="px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed rounded text-[11px] font-bold">GAZA</span>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<span class="px-2 py-1 bg-green-100 text-green-700 rounded text-[10px] font-bold uppercase tracking-wider">Published</span>
+<div class="flex opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 text-on-secondary-container hover:text-primary"><span class="material-symbols-outlined text-[18px]">visibility</span></button>
+<button class="p-1 text-on-secondary-container hover:text-error"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container transition-colors group">
+<td class="px-4 py-4 rtl text-right">
+<p class="font-body-md text-body-md font-semibold text-on-surface" dir="rtl" lang="ar">ورشة عمل: ريادة الأعمال الرقمية</p>
+<p class="font-body-sm text-body-sm text-on-secondary-container ltr">Oct 15, 2023</p>
+</td>
+<td class="px-4 py-4">
+<span class="px-2 py-0.5 bg-primary-fixed text-on-primary-fixed rounded text-[11px] font-bold">BOTH</span>
+</td>
+<td class="px-4 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<span class="px-2 py-1 bg-green-100 text-green-700 rounded text-[10px] font-bold uppercase tracking-wider">Published</span>
+<div class="flex opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 text-on-secondary-container hover:text-primary"><span class="material-symbols-outlined text-[18px]">visibility</span></button>
+<button class="p-1 text-on-secondary-container hover:text-error"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Statistics/KPIs Footer in Right Column -->
+<div class="p-6 bg-surface-container-low grid grid-cols-2 gap-4 border-t border-outline-variant">
+<div class="bg-white p-3 rounded-lg border border-outline-variant">
+<p class="text-label-md font-label-md text-on-secondary-container">TOTAL REACH</p>
+<div class="flex items-baseline gap-2">
+<h4 class="text-headline-sm font-headline-sm text-on-surface">12.4k</h4>
+<span class="text-[10px] text-emerald-700 font-bold">+5.2%</span>
+</div>
+</div>
+<div class="bg-white p-3 rounded-lg border border-outline-variant">
+<p class="text-label-md font-label-md text-on-secondary-container">OPEN RATE</p>
+<div class="flex items-baseline gap-2">
+<h4 class="text-headline-sm font-headline-sm text-on-surface">78%</h4>
+<span class="text-[10px] text-primary font-bold">Stable</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interaction for Region Toggles
+        const regionButtons = document.querySelectorAll('.flex.p-1.bg-surface-container button');
+        regionButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                regionButtons.forEach(b => {
+                    b.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+                    b.classList.add('text-on-secondary-container', 'hover:bg-surface-container-high');
+                });
+                btn.classList.add('bg-white', 'text-primary', 'shadow-sm');
+                btn.classList.remove('text-on-secondary-container', 'hover:bg-surface-container-high');
+            });
+        });
+
+        // Simple published toast simulation
+        const publishBtn = document.querySelector('button.bg-primary');
+        publishBtn.addEventListener('click', () => {
+            const originalContent = publishBtn.innerHTML;
+            publishBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-[20px]">sync</span> Publishing...`;
+            publishBtn.disabled = true;
+            publishBtn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                publishBtn.innerHTML = `<span class="material-symbols-outlined text-[20px]">check_circle</span> Sent!`;
+                publishBtn.classList.replace('bg-primary', 'bg-green-600');
+                
+                setTimeout(() => {
+                    publishBtn.innerHTML = originalContent;
+                    publishBtn.classList.replace('bg-green-600', 'bg-primary');
+                    publishBtn.disabled = false;
+                    publishBtn.style.opacity = '1';
+                }, 2000);
+            }, 1200);
+        });
+    </script>
+</body></html>

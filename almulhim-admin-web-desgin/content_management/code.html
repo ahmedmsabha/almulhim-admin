@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Content Management Module | Mulhim Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#ffb695",
+                    "on-primary-container": "#dad7ff",
+                    "outline": "#777587",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#7e3000",
+                    "inverse-surface": "#2d3133",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-tertiary-fixed-variant": "#7b2f00",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#351000",
+                    "background": "#f7f9fb",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed": "#131b2e",
+                    "secondary-fixed": "#dae2fd",
+                    "surface-container-highest": "#e0e3e5",
+                    "surface": "#f7f9fb",
+                    "surface-container-high": "#e6e8ea",
+                    "on-tertiary-container": "#ffd2be",
+                    "surface-variant": "#e0e3e5",
+                    "tertiary-container": "#a44100",
+                    "surface-container": "#eceef0",
+                    "outline-variant": "#c7c4d8",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#5c647a",
+                    "on-surface-variant": "#464555",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "secondary-container": "#dae2fd",
+                    "surface-tint": "#4d44e3",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#ffdbcc",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "on-background": "#191c1e",
+                    "on-surface": "#191c1e",
+                    "on-error": "#ffffff",
+                    "surface-bright": "#f7f9fb",
+                    "primary-container": "#4f46e5",
+                    "primary": "#3525cd",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed": "#0f0069",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#e2dfff",
+                    "surface-dim": "#d8dadc",
+                    "secondary": "#565e74",
+                    "surface-container-low": "#f2f4f6",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "inverse-primary": "#c3c0ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container_padding": "32px",
+                    "topbar_height": "64px",
+                    "stack_lg": "24px",
+                    "stack_sm": "8px",
+                    "gutter": "24px",
+                    "stack_md": "16px",
+                    "sidebar_width": "280px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Hanken Grotesk"],
+                    "arabic-body": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"],
+                    "label-md": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "arabic-body": ["16px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #f7f9fb; font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .guide-line { position: relative; }
+        .guide-line::before { content: ''; position: absolute; left: -15px; top: 0; bottom: 0; width: 1px; background: #E2E8F0; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .accordion-open .accordion-content { max-height: 2000px; }
+        .rotate-icon { transition: transform 0.2s ease-in-out; }
+        .accordion-open .rotate-icon { transform: rotate(90deg); }
+        .rtl-text { direction: rtl; }
+    </style>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full w-[280px] bg-surface-container-lowest border-r border-outline-variant flex flex-col py-6 px-4 z-50">
+<div class="mb-10 px-2">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">Mulhim Admin</h1>
+<p class="font-body-md text-body-md text-on-surface-variant opacity-70">Tawjihi Admin</p>
+</div>
+<div class="space-y-1 flex-1 overflow-y-auto">
+
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span> Settings
+            </a>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 h-16 w-[calc(100%-280px)] bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-8 z-40">
+<div class="flex items-center gap-4">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">Content</span>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-1.5 text-body-md focus:ring-2 focus:ring-primary w-64" placeholder="Search curricula..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-low rounded-full p-2 transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-outline-variant">
+<div class="text-right">
+<p class="font-body-md font-semibold">Ustadh Ahmed</p>
+<p class="font-body-sm text-on-surface-variant">Teacher Admin</p>
+</div>
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a young business administrator in a well-lit office, with clean minimalist desk in the background. The aesthetic is bright and modern, using high-key lighting and a palette of whites and soft blues to match a corporate SaaS environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVOD6Xn4YLYr_WdSXYeEVSWLA2P0uptWmZxOPxPTOQBOh-PjmbXwRaafU6j07kuOlMZUCb2Jm_xj10Kl7cSkNOC5D09Xq_mW9WByoZGuL2fs7ed9rvt8PIPV66CI5eSHrvm5PVi60zdhj1Yb4acG18JSOFxyQW65CxM2Xiof1oNk3Dgp8-YfzDLqekB-cbMoBpDIF9sxOaeiUhUxLFUaYeBYuJIMhxtLOjtzB4ZqW57Q7H98SNLoxH"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[280px] pt-24 px-8 pb-12">
+<div class="max-w-[1200px] mx-auto space-y-8">
+<!-- Header Action Row -->
+<div class="flex justify-between items-end">
+<div>
+<nav class="flex gap-2 text-body-sm text-on-surface-variant mb-2">
+<span>Content</span>
+<span>/</span>
+<span class="text-primary font-medium">Curriculum Management</span>
+</nav>
+<h2 class="font-display-lg text-display-lg text-on-surface">Course Structure</h2>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 border border-primary text-primary font-semibold rounded-lg hover:bg-primary-fixed transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="add_circle">add_circle</span>
+                        New Unit
+                    </button>
+<button class="px-4 py-2 bg-primary text-on-primary font-semibold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="publish">publish</span>
+                        Deploy Changes
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout for Content Area -->
+<div class="grid grid-cols-12 gap-6 items-start">
+<!-- Tree Structure Pane (Col 8) -->
+<div class="col-span-8 space-y-4">
+<!-- Unit Card (Accordion) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden accordion-item accordion-open">
+<div class="p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-low transition-colors border-b border-outline-variant" onclick="toggleAccordion(this)">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined rotate-icon text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-fixed-variant font-label-md text-label-md rounded uppercase">Unit 01</span>
+<h3 class="font-headline-sm text-headline-sm">Foundations of Modern Algebra</h3>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-body-sm text-on-surface-variant">12 Chapters • 48 Lessons</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+<div class="accordion-content p-6 pl-12 space-y-6">
+<!-- Chapter level -->
+<div class="guide-line space-y-4">
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="folder_open">folder_open</span>
+<h4 class="font-body-lg font-semibold">Chapter 1.1: Linear Equations</h4>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-primary hover:bg-primary-fixed rounded">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<!-- Lesson Items -->
+<div class="pl-5 space-y-3">
+<!-- Lesson Row 1 -->
+<div class="flex items-center justify-between bg-white border border-outline-variant p-3 rounded-lg hover:border-primary transition-all group">
+<div class="flex items-center gap-4 flex-1">
+<div class="w-10 h-10 rounded bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="play_circle">play_circle</span>
+</div>
+<div>
+<p class="font-arabic-body text-arabic-body rtl-text font-medium text-right" dir="rtl" lang="ar">مقدمة في المعادلات الخطية ذات المتغير الواحد</p>
+<p class="font-body-sm text-on-surface-variant">Video • 12:45</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<!-- Region Selector -->
+<div class="flex items-center gap-1 bg-surface-container rounded-lg p-1">
+<button class="px-2 py-1 text-[11px] font-bold rounded bg-primary text-white">Gaza</button>
+<button class="px-2 py-1 text-[11px] font-bold rounded hover:bg-white transition-colors">WB</button>
+</div>
+<!-- Publish Toggle -->
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-on-surface-variant">PUBLISH</span>
+<button class="w-10 h-5 rounded-full bg-primary relative p-1" onclick="this.classList.toggle('bg-primary'); this.classList.toggle('bg-outline-variant')">
+<div class="w-3 h-3 bg-white rounded-full absolute right-1"></div>
+</button>
+</div>
+<!-- Lock Toggle -->
+<button class="flex items-center gap-1 px-3 py-1.5 border border-outline-variant rounded-lg text-on-surface-variant hover:text-primary hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="lock_open">lock_open</span>
+<span class="font-label-md text-label-md">FREE</span>
+</button>
+<span class="material-symbols-outlined text-on-surface-variant cursor-grab" data-icon="drag_indicator">drag_indicator</span>
+</div>
+</div>
+<!-- Lesson Row 2 -->
+<div class="flex items-center justify-between bg-white border border-outline-variant p-3 rounded-lg hover:border-primary transition-all group">
+<div class="flex items-center gap-4 flex-1">
+<div class="w-10 h-10 rounded bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<div>
+<p class="font-arabic-body text-arabic-body rtl-text font-medium text-right" dir="rtl" lang="ar">تمارين وتطبيقات عملية على الجبر</p>
+<p class="font-body-sm text-on-surface-variant">PDF • 4.2 MB</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-1 bg-surface-container rounded-lg p-1">
+<button class="px-2 py-1 text-[11px] font-bold rounded hover:bg-white transition-colors">Gaza</button>
+<button class="px-2 py-1 text-[11px] font-bold rounded bg-primary text-white">WB</button>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-on-surface-variant">PUBLISH</span>
+<button class="w-10 h-5 rounded-full bg-outline-variant relative p-1">
+<div class="w-3 h-3 bg-white rounded-full absolute left-1"></div>
+</button>
+</div>
+<button class="flex items-center gap-1 px-3 py-1.5 bg-primary-fixed border border-primary-fixed-dim rounded-lg text-primary">
+<span class="material-symbols-outlined text-[18px]" data-icon="lock">lock</span>
+<span class="font-label-md text-label-md">PREMIUM</span>
+</button>
+<span class="material-symbols-outlined text-on-surface-variant cursor-grab" data-icon="drag_indicator">drag_indicator</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Second Unit (Collapsed) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden accordion-item">
+<div class="p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-low transition-colors" onclick="toggleAccordion(this)">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined rotate-icon text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+<span class="px-2 py-0.5 bg-surface-container-highest text-on-surface-variant font-label-md text-label-md rounded uppercase">Unit 02</span>
+<h3 class="font-headline-sm text-headline-sm">Geometric Principles</h3>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-body-sm text-on-surface-variant">8 Chapters • 32 Lessons</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+<div class="accordion-content"></div>
+</div>
+</div>
+<!-- Media Upload Pane (Col 4) -->
+<div class="col-span-4 space-y-6">
+<div class="bg-white border border-outline-variant rounded-xl p-6">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="cloud_upload">cloud_upload</span>
+<h3 class="font-headline-sm text-headline-sm">Media Vault</h3>
+</div>
+<p class="font-body-sm text-on-surface-variant mb-6">Drag and drop assets here to prepare them for lesson assignment.</p>
+<!-- Video Upload Zone -->
+<div class="mb-6">
+<label class="block font-label-md text-label-md text-slate-600 mb-2">VIDEO CONTENT (MAX 1GB)</label>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-8 text-center hover:border-primary transition-all cursor-pointer group">
+<span class="material-symbols-outlined text-4xl text-outline-variant group-hover:text-primary mb-3" data-icon="movie">movie</span>
+<p class="font-body-md font-medium">Drop .mp4 or .mkv files</p>
+<p class="font-body-sm text-on-surface-variant mt-1">High fidelity processing enabled</p>
+</div>
+<!-- Active Upload Example -->
+<div class="mt-4 p-3 bg-surface-container rounded-lg">
+<div class="flex justify-between text-body-sm mb-2">
+<span class="font-medium truncate pr-4">lecture_algebra_v2.mp4</span>
+<span class="text-primary font-bold">72%</span>
+</div>
+<div class="w-full h-1.5 bg-outline-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[72%] transition-all duration-500"></div>
+</div>
+</div>
+</div>
+<!-- PDF Upload Zone -->
+<div>
+<label class="block font-label-md text-label-md text-slate-600 mb-2">DOCUMENT ASSETS (MAX 50MB)</label>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-8 text-center hover:border-primary transition-all cursor-pointer group">
+<span class="material-symbols-outlined text-4xl text-outline-variant group-hover:text-primary mb-3" data-icon="description">description</span>
+<p class="font-body-md font-medium">Drop PDF worksheets</p>
+<p class="font-body-sm text-on-surface-variant mt-1">Ready for Gaza/WB distribution</p>
+</div>
+</div>
+</div>
+<!-- Usage Stats Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-4 uppercase tracking-wider">Storage Usage</h4>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between font-body-sm mb-1">
+<span>Cloud Storage</span>
+<span class="font-medium">420GB / 1TB</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[42%]"></div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant flex items-center justify-between">
+<div>
+<p class="font-headline-sm text-headline-sm">2,410</p>
+<p class="font-body-sm text-on-surface-variant">Active Assets</p>
+</div>
+<div class="w-12 h-12">
+<!-- Sparkline Placeholder using SVG -->
+<svg class="w-full h-full" viewbox="0 0 100 40">
+<path d="M0 35 L20 25 L40 30 L60 10 L80 15 L100 5" fill="none" stroke="#3525cd" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="fixed bottom-4 right-4 max-w-sm p-3 bg-surface-container-lowest border border-outline-variant rounded-lg text-body-sm" dir="rtl" lang="ar">
+<span class="text-on-surface-variant" dir="rtl" lang="ar">مثال عنوان درس:</span>
+<span class="text-on-surface font-medium" dir="rtl" lang="ar"> الوحدة الأولى — الجبر</span>
+</div>
+</main>
+<script>
+        function toggleAccordion(element) {
+            const parent = element.closest('.accordion-item');
+            parent.classList.toggle('accordion-open');
+        }
+
+        // Lightweight interaction for the toggles
+        document.querySelectorAll('button[role="switch"]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const isSelected = btn.getAttribute('aria-checked') === 'true';
+                btn.setAttribute('aria-checked', !isSelected);
+            });
+        });
+    </script>
+</body></html>

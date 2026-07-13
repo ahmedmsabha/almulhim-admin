@@ -1,0 +1,483 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Mulhim Admin | Dashboard Analytics</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#ffb695",
+                    "on-primary-container": "#dad7ff",
+                    "outline": "#777587",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#7e3000",
+                    "inverse-surface": "#2d3133",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-tertiary-fixed-variant": "#7b2f00",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#351000",
+                    "background": "#f7f9fb",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed": "#131b2e",
+                    "secondary-fixed": "#dae2fd",
+                    "surface-container-highest": "#e0e3e5",
+                    "surface": "#f7f9fb",
+                    "surface-container-high": "#e6e8ea",
+                    "on-tertiary-container": "#ffd2be",
+                    "surface-variant": "#e0e3e5",
+                    "tertiary-container": "#a44100",
+                    "surface-container": "#eceef0",
+                    "outline-variant": "#c7c4d8",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#5c647a",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "secondary-container": "#dae2fd",
+                    "surface-tint": "#4d44e3",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#ffdbcc",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "on-background": "#191c1e",
+                    "on-surface": "#191c1e",
+                    "on-error": "#ffffff",
+                    "surface-bright": "#f7f9fb",
+                    "primary-container": "#4f46e5",
+                    "primary": "#3525cd",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed": "#0f0069",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#e2dfff",
+                    "surface-dim": "#d8dadc",
+                    "secondary": "#565e74",
+                    "surface-container-low": "#f2f4f6",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "inverse-primary": "#c3c0ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container_padding": "32px",
+                    "topbar_height": "64px",
+                    "stack_lg": "24px",
+                    "stack_sm": "8px",
+                    "gutter": "24px",
+                    "stack_md": "16px",
+                    "sidebar_width": "280px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Hanken Grotesk"],
+                    "arabic-body": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"],
+                    "label-md": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "arabic-body": ["16px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f7f9fb;
+            color: #191c1e;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .sparkline-container {
+            height: 40px;
+            width: 100%;
+        }
+    </style>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- SideNavBar Anchor -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline flex flex-col py-6 px-4 z-50">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed-dim leading-none">Mulhim Admin</h1>
+<p class="text-on-surface-variant text-[11px] uppercase tracking-wider font-semibold mt-1">Tawjihi Admin</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1 overflow-y-auto hide-scrollbar">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-primary dark:text-inverse-primary font-bold border-r-2 border-primary bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="">Students</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="">Plans</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">event_repeat</span>
+<span class="">Subscriptions</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">library_books</span>
+<span class="">Content</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span class="">Announcements</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="">Support</span>
+</a>
+
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant">
+<div class="flex items-center gap-3 px-2">
+<img alt="SaaS Admin Logo" class="w-10 h-10 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLUfEZoFnEMQG2vR4fPX6sy_s9gT_T_urAhhQZljNT8y-kRkiM42_JU2Zb7cui2xi9dvdki2_2zuNKrVZEksAscZw7vgx-dqenSzymR70m6y2-DzaNV8vQdPUHvtnT7mYmom9faAsv5ZulFAbyf9lWQovx2PTVVSbaLjBPWut1bC7Vxtm1cPCwB5DBKiDoyZnWkFTauDhhFAkKSRPn2ZnujAw5cYlJHwPEDMVE6Tjw9IGYPiKYoQCI">
+<div class="flex-1 min-w-0">
+<p class="text-body-sm font-bold text-on-surface truncate">Ustadh Ahmed</p>
+<p class="text-[11px] text-on-surface-variant truncate">Teacher Administrator</p>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- TopNavBar Anchor -->
+<header class="fixed top-0 right-0 h-16 w-[calc(100%-280px)] bg-surface-container-lowest dark:bg-inverse-surface border-b border-outline-variant dark:border-outline flex justify-between items-center px-container_padding z-40" style="transform: translateY(0px);">
+<div class="flex items-center gap-8 w-full max-w-xl">
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface dark:text-inverse-on-surface shrink-0">Mulhim Admin</h2>
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-body-md focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all outline-none" placeholder="Search analytics, students, or orders..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-low dark:hover:bg-surface-container-high rounded-full p-2 transition-all duration-200 relative">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<button class="hover:bg-surface-container-low dark:hover:bg-surface-container-high rounded-full p-1 flex items-center gap-2 transition-all duration-200">
+<img alt="User Profile" class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIWIfMUYZdyRnFzKQ6EjMxO78oWwnOS5FyX9o9ES1w0gN4eVxkgPOC16LchKsgbm8J6URsZBrSTb3MBYt6dDNrdxqVbo6OxyXT-QoNlcbNcOYbHiW2u5DwpxmYRbDUIYw5gmLSsQGvWbRZ6h2L4nZwxrKSarZBdVLnVqjC11oPLBv4tdMRBJB8Sh2gMi8jIZ2pfBH63S6Ir7gEt5BCxw9T1Pzq2C6pyAWWWLioStnQ5gQPIV6bvB2g">
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] pt-24 px-container_padding pb-12 min-h-screen">
+<!-- Header Section -->
+<div class="mb-8 flex justify-between items-end">
+<div>
+<p class="text-primary font-bold text-label-md uppercase tracking-widest mb-1">Overview</p>
+<h3 class="font-display-lg text-display-lg text-on-surface">Analytics Dashboard</h3>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-surface-container-low hover:bg-surface-container-high text-on-surface font-semibold rounded-lg flex items-center gap-2 transition-colors border border-outline-variant">
+<span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                    Last 30 Days
+                </button>
+<button class="px-4 py-2 bg-primary text-on-primary hover:bg-primary-container font-semibold rounded-lg flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                    Export Report
+                </button>
+</div>
+</div>
+<!-- KPI Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-8">
+<!-- Total Students -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 text-primary rounded-lg">
+<span class="material-symbols-outlined">group</span>
+</div>
+<span class="text-emerald-700 flex items-center text-label-md bg-emerald-50 px-2 py-1 rounded">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                        12%
+                    </span>
+</div>
+<h4 class="text-on-surface-variant font-label-md text-label-md uppercase mb-1">Total Students</h4>
+<p class="font-headline-md text-headline-md text-on-surface">14,285</p>
+<div class="mt-4 sparkline-container">
+<svg class="w-full h-full stroke-primary fill-none stroke-[2]" viewBox="0 0 100 40">
+<path d="M0,35 Q10,10 20,30 T40,20 T60,25 T80,10 T100,20" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+<!-- Active Subscriptions -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant transition-all group" style="transform: translateY(0px);">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-secondary/10 text-secondary rounded-lg">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<span class="text-emerald-700 flex items-center text-label-md bg-emerald-50 px-2 py-1 rounded">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                        8.4%
+                    </span>
+</div>
+<h4 class="text-on-surface-variant font-label-md text-label-md uppercase mb-1">Active Subscriptions</h4>
+<p class="font-headline-md text-headline-md text-on-surface">8,920</p>
+<div class="mt-4 sparkline-container">
+<svg class="w-full h-full stroke-secondary fill-none stroke-[2]" viewBox="0 0 100 40">
+<path d="M0,30 Q15,35 30,20 T50,25 T70,10 T90,30 T100,5" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+<!-- Pending Approvals (Amber/Orange Highlighted) -->
+<div class="bg-tertiary-fixed p-6 rounded-xl border-2 border-tertiary-container transition-all group relative overflow-hidden">
+<div class="absolute -right-2 -top-2 opacity-10">
+<span class="material-symbols-outlined text-[100px]">pending_actions</span>
+</div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="p-2 bg-tertiary-container text-on-tertiary-fixed rounded-lg">
+<span class="material-symbols-outlined">hourglass_empty</span>
+</div>
+<span class="text-tertiary font-bold text-label-md bg-tertiary-fixed-dim/30 px-2 py-1 rounded">
+                        Urgent
+                    </span>
+</div>
+<h4 class="text-on-tertiary-fixed-variant font-label-md text-label-md uppercase mb-1">Pending Approvals</h4>
+<p class="font-headline-md text-headline-md text-on-tertiary-fixed">142</p>
+<p class="text-body-sm text-on-tertiary-fixed-variant mt-2">Requires immediate review</p>
+</div>
+<!-- Open Support Tickets -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-error-container text-error rounded-lg">
+<span class="material-symbols-outlined">support_agent</span>
+</div>
+<span class="text-error flex items-center text-label-md bg-error-container/50 px-2 py-1 rounded">
+                        +3.1%
+                    </span>
+</div>
+<h4 class="text-on-surface-variant font-label-md text-label-md uppercase mb-1">Open Support Tickets</h4>
+<p class="font-headline-md text-headline-md text-on-surface">56</p>
+<div class="mt-4 sparkline-container">
+<svg class="w-full h-full stroke-error fill-none stroke-[2]" viewBox="0 0 100 40">
+<path d="M0,20 Q10,30 20,20 T40,25 T60,15 T80,35 T100,20" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Charts Bento Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Line Chart: Subscription Growth -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-xl border border-outline-variant">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Subscription Growth</h4>
+<p class="text-body-sm text-on-surface-variant">Daily user registrations vs renewals (PostHog Event Data)</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-label-md">New</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="text-label-md">Renewals</span>
+</div>
+</div>
+</div>
+<div class="relative h-64 w-full">
+<!-- Fake Line Chart using SVG -->
+<svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 800 200">
+<!-- Grid Lines -->
+<line stroke="#E2E8F0" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="50" y2="50"></line>
+<line stroke="#E2E8F0" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="100" y2="100"></line>
+<line stroke="#E2E8F0" stroke-dasharray="4" stroke-width="1" x1="0" x2="800" y1="150" y2="150"></line>
+<!-- Primary Line (New) -->
+<path d="M0,180 L50,160 L100,170 L150,130 L200,140 L250,90 L300,110 L350,60 L400,80 L450,40 L500,70 L550,50 L600,60 L650,30 L700,50 L750,20 L800,40" fill="none" stroke="#3525cd" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Secondary Line (Renewals) -->
+<path d="M0,195 L50,185 L100,190 L150,175 L200,180 L250,165 L300,170 L350,155 L400,160 L450,145 L500,150 L550,135 L600,140 L650,125 L700,130 L750,115 L800,120" fill="none" stroke="#565e74" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<!-- X-Axis Labels -->
+<div class="flex justify-between mt-4 text-label-md text-on-surface-variant font-medium">
+<span class="">Jan 01</span>
+<span class="">Jan 08</span>
+<span class="">Jan 15</span>
+<span class="">Jan 22</span>
+<span class="">Jan 29</span>
+</div>
+</div>
+</div>
+<!-- Bar Chart: Region Distribution -->
+<div class="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant flex flex-col">
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">Region Distribution</h4>
+<p class="text-body-sm text-on-surface-variant mb-8">Active users by administrative region</p>
+<div class="flex-1 flex flex-col justify-center space-y-6">
+<!-- Gaza -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="font-bold text-on-surface">Gaza Strip</span>
+<span class="text-label-md text-on-surface-variant">5,842 (41%)</span>
+</div>
+<div class="w-full h-3 bg-surface-container-low rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 41%"></div>
+</div>
+</div>
+<!-- West Bank -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="font-bold text-on-surface">West Bank</span>
+<span class="text-label-md text-on-surface-variant">8,443 (59%)</span>
+</div>
+<div class="w-full h-3 bg-surface-container-low rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full transition-all duration-1000" style="width: 59%"></div>
+</div>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-outline-variant">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">public</span>
+</div>
+<div>
+<p class="text-body-sm font-bold text-on-surface">Global Reach</p>
+<p class="text-[11px] text-on-surface-variant">Tracking 2 primary territories</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Transactions/Events Section -->
+<div class="mt-8 bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low/30">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Recent Student Activity</h4>
+<button class="text-primary font-bold text-body-sm hover:underline">View All Students</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low/50 text-label-md uppercase tracking-wider text-on-surface-variant">
+<th class="px-6 py-4 font-medium">Student Name</th>
+<th class="px-6 py-4 font-medium">Region</th>
+<th class="px-6 py-4 font-medium">Subscription Plan</th>
+<th class="px-6 py-4 font-medium">Status</th>
+<th class="px-6 py-4 font-medium text-right">Last Login</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-xs">AA</div>
+<span class="font-medium text-on-surface">Ahmed Al-Sayed</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">Gaza</td>
+<td class="px-6 py-4">
+<span class="bg-primary/10 text-primary px-2 py-1 rounded text-label-md font-bold uppercase">Premium Yearly</span>
+</td>
+<td class="px-6 py-4">
+<span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[11px] font-bold uppercase border border-green-200">Active</span>
+</td>
+<td class="px-6 py-4 text-right text-on-surface-variant font-label-md">2 mins ago</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary font-bold text-xs">LM</div>
+<span class="font-medium text-on-surface">Leila Mansour</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">West Bank</td>
+<td class="px-6 py-4">
+<span class="bg-secondary/10 text-secondary px-2 py-1 rounded text-label-md font-bold uppercase">Standard Monthly</span>
+</td>
+<td class="px-6 py-4">
+<span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-[11px] font-bold uppercase border border-yellow-200">Pending Review</span>
+</td>
+<td class="px-6 py-4 text-right text-on-surface-variant font-label-md">15 mins ago</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-fixed-dim flex items-center justify-center text-primary font-bold text-xs">YQ</div>
+<span class="font-medium text-on-surface">Yousef Qassim</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">Gaza</td>
+<td class="px-6 py-4">
+<span class="bg-primary/10 text-primary px-2 py-1 rounded text-label-md font-bold uppercase">Basic Term</span>
+</td>
+<td class="px-6 py-4">
+<span class="bg-tertiary-fixed text-tertiary px-2 py-0.5 rounded-full text-[11px] font-bold uppercase border border-tertiary-container">Pending Approval</span>
+</td>
+<td class="px-6 py-4 text-right text-on-surface-variant font-label-md">1 hour ago</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors"><td class="px-6 py-4"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary font-bold text-xs">MK</div><span class="font-medium text-on-surface">Mariam Khalil</span></div></td><td class="px-6 py-4 text-on-surface-variant">West Bank</td><td class="px-6 py-4"><span class="bg-secondary/10 text-secondary px-2 py-1 rounded text-label-md font-bold uppercase">Free</span></td><td class="px-6 py-4"><span class="bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded-full text-[11px] font-bold uppercase border border-outline-variant">Expired</span></td><td class="px-6 py-4 text-right text-on-surface-variant font-label-md">2 days ago</td></tr></tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- Micro-interaction Scripts -->
+<script>
+        // Simple hover effects for cards
+        const cards = document.querySelectorAll('.bg-surface-container-lowest');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Search bar focus interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        const searchIcon = document.querySelector('.absolute.left-3');
+        
+        searchInput.addEventListener('focus', () => {
+            searchIcon.classList.add('text-primary');
+        });
+        
+        searchInput.addEventListener('blur', () => {
+            searchIcon.classList.remove('text-primary');
+        });
+    </script>
+
+</body></html>
