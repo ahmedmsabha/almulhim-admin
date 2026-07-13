@@ -12,6 +12,11 @@ import {
 import { useForm } from "react-hook-form";
 
 import {
+  LessonMediaPreviewButton,
+  LessonMediaPreviewDialog,
+} from "@/components/content/LessonMediaPreviewDialog";
+
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -81,6 +86,11 @@ type EditTarget =
   | { kind: "pdf"; item: AdminPdf }
   | null;
 
+type PreviewTarget =
+  | { kind: "video"; id: string; title: string }
+  | { kind: "pdf"; id: string; title: string }
+  | null;
+
 export function LessonMediaSection({ detail }: LessonMediaSectionProps) {
   const videoInputRef = useRef<HTMLInputElement>(null);
   const pdfInputRef = useRef<HTMLInputElement>(null);
@@ -91,6 +101,7 @@ export function LessonMediaSection({ detail }: LessonMediaSectionProps) {
   );
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget>(null);
   const [editTarget, setEditTarget] = useState<EditTarget>(null);
+  const [previewTarget, setPreviewTarget] = useState<PreviewTarget>(null);
 
   const uploadVideo = useUploadLessonVideo();
   const uploadPdf = useUploadLessonPdf();
@@ -304,6 +315,16 @@ export function LessonMediaSection({ detail }: LessonMediaSectionProps) {
                     </p>
                   </div>
                   <div className="flex shrink-0 gap-1">
+                    <LessonMediaPreviewButton
+                      label="Preview video"
+                      onClick={() =>
+                        setPreviewTarget({
+                          kind: "video",
+                          id: video.id,
+                          title: video.title ?? "Untitled video",
+                        })
+                      }
+                    />
                     <Button
                       type="button"
                       size="icon-sm"
@@ -386,6 +407,16 @@ export function LessonMediaSection({ detail }: LessonMediaSectionProps) {
                     </p>
                   </div>
                   <div className="flex shrink-0 gap-1">
+                    <LessonMediaPreviewButton
+                      label="Preview PDF"
+                      onClick={() =>
+                        setPreviewTarget({
+                          kind: "pdf",
+                          id: pdf.id,
+                          title: pdf.title ?? "Untitled PDF",
+                        })
+                      }
+                    />
                     <Button
                       type="button"
                       size="icon-sm"
@@ -566,6 +597,11 @@ export function LessonMediaSection({ detail }: LessonMediaSectionProps) {
           </form>
         </DialogContent>
       </Dialog>
+
+      <LessonMediaPreviewDialog
+        target={previewTarget}
+        onClose={() => setPreviewTarget(null)}
+      />
 
       <AlertDialog
         open={deleteTarget !== null}

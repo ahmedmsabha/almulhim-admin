@@ -11,6 +11,7 @@ import {
   parseContentMediaDeleted,
   parseContentSearchResponse,
   parseMediaUploadUrlResponse,
+  parseMediaViewUrlResponse,
 } from "@/lib/content/parse-content";
 import type {
   AdminChapterDetail,
@@ -30,6 +31,7 @@ import type {
   CreateLessonBody,
   CreateUnitBody,
   MediaUploadUrlResponse,
+  MediaViewUrlResponse,
   UpdateChapterBody,
   UpdateLessonBody,
   UpdatePdfBody,
@@ -262,6 +264,34 @@ export async function deleteVideo(
     method: "DELETE",
   });
   return parseContentMediaDeleted(payload, path);
+}
+
+export function videoPlaybackUrlPath(videoId: string) {
+  return `/content/admin/videos/${videoId}/playback-url`;
+}
+
+export async function fetchVideoPlaybackUrl(
+  token: string,
+  videoId: string,
+): Promise<MediaViewUrlResponse> {
+  const path = videoPlaybackUrlPath(videoId);
+  requireToken(token, path);
+  const payload = await apiFetch<unknown>(path, { token });
+  return parseMediaViewUrlResponse(payload, path);
+}
+
+export function pdfViewUrlPath(pdfId: string) {
+  return `/content/admin/pdfs/${pdfId}/view-url`;
+}
+
+export async function fetchPdfViewUrl(
+  token: string,
+  pdfId: string,
+): Promise<MediaViewUrlResponse> {
+  const path = pdfViewUrlPath(pdfId);
+  requireToken(token, path);
+  const payload = await apiFetch<unknown>(path, { token });
+  return parseMediaViewUrlResponse(payload, path);
 }
 
 export async function createPdfUploadUrl(

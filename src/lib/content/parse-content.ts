@@ -16,6 +16,7 @@ import type {
   ContentSearchResponse,
   LessonAccessLevel,
   MediaUploadUrlResponse,
+  MediaViewUrlResponse,
 } from "@/lib/content/types";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -163,6 +164,17 @@ export function isMediaUploadUrlResponse(
   );
 }
 
+export function isMediaViewUrlResponse(
+  value: unknown,
+): value is MediaViewUrlResponse {
+  if (!isRecord(value)) return false;
+  return (
+    typeof value.url === "string" &&
+    value.url.trim().length > 0 &&
+    typeof value.expiresInSeconds === "number"
+  );
+}
+
 export function isContentMediaDeleted(
   value: unknown,
 ): value is ContentMediaDeleted {
@@ -270,6 +282,20 @@ export function parseMediaUploadUrlResponse(
     throw new ApiError({
       kind: "parse",
       message: `[content] invalid MediaUploadUrlResponse from ${path}`,
+      path,
+    });
+  }
+  return value;
+}
+
+export function parseMediaViewUrlResponse(
+  value: unknown,
+  path: string,
+): MediaViewUrlResponse {
+  if (!isMediaViewUrlResponse(value)) {
+    throw new ApiError({
+      kind: "parse",
+      message: `[content] invalid MediaViewUrlResponse from ${path}`,
       path,
     });
   }

@@ -88,6 +88,11 @@ export type MediaUploadUrlResponse = {
   expiresInSeconds: number;
 };
 
+export type MediaViewUrlResponse = {
+  url: string;
+  expiresInSeconds: number;
+};
+
 export type ContentMediaDeleted = {
   deleted: true;
   id: string;

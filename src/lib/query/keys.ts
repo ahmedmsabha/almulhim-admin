@@ -44,6 +44,10 @@ export const adminKeys = {
       [...adminKeys.content.all(), "chapter", id] as const,
     lesson: (id: string) =>
       [...adminKeys.content.all(), "lesson", id] as const,
+    videoPlaybackUrl: (id: string) =>
+      [...adminKeys.content.all(), "videoPlaybackUrl", id] as const,
+    pdfViewUrl: (id: string) =>
+      [...adminKeys.content.all(), "pdfViewUrl", id] as const,
   },
   announcements: {
     all: () => [...adminKeys.all, "announcements"] as const,
