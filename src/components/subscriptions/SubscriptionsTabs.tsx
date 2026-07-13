@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import type { SubscriptionsTab } from "@/lib/subscriptions/types";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type SubscriptionsTabsProps = {
   activeTab: SubscriptionsTab;
@@ -45,6 +46,7 @@ export function SubscriptionsTabs({
 }: SubscriptionsTabsProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
 
   return (
     <div
@@ -58,7 +60,7 @@ export function SubscriptionsTabs({
         aria-selected={activeTab === "pending"}
         className={tabClass(activeTab === "pending")}
       >
-        {labelWithCount("Pending Queue", pendingCount)}
+        {labelWithCount(t("subscriptions.tabs.pending"), pendingCount)}
       </Link>
       <Link
         href={tabHref(pathname, searchParams, "archived")}
@@ -66,7 +68,7 @@ export function SubscriptionsTabs({
         aria-selected={activeTab === "archived"}
         className={tabClass(activeTab === "archived")}
       >
-        {labelWithCount("Archived Decisions", archivedCount)}
+        {labelWithCount(t("subscriptions.tabs.archived"), archivedCount)}
       </Link>
       <Link
         href={tabHref(pathname, searchParams, "ai_logs")}
@@ -74,7 +76,7 @@ export function SubscriptionsTabs({
         aria-selected={activeTab === "ai_logs"}
         className={tabClass(activeTab === "ai_logs")}
       >
-        {labelWithCount("AI Logs", aiLogsCount)}
+        {labelWithCount(t("subscriptions.tabs.aiLogs"), aiLogsCount)}
       </Link>
     </div>
   );

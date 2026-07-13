@@ -37,6 +37,7 @@ import {
   useCreatePlan,
   useUpdatePlan,
 } from "@/lib/plans/use-plan-mutations";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type PlanFormDialogProps = {
   open: boolean;
@@ -74,6 +75,7 @@ export function PlanFormDialog({
   const create = useCreatePlan();
   const update = useUpdatePlan();
   const pending = create.isPending || update.isPending;
+  const { t, lang } = useTranslation();
 
   const form = useForm<PlanFormInput, unknown, PlanFormValues>({
     resolver: zodResolver(planFormSchema),
@@ -119,7 +121,7 @@ export function PlanFormDialog({
         form.setError("root", {
           message: isApiError(error)
             ? error.message
-            : "Could not save the plan. Try again.",
+            : (lang === "ar" ? "فشل حفظ الخطة. حاول مرة أخرى." : "Could not save the plan. Try again."),
         });
       }
     }
@@ -130,12 +132,12 @@ export function PlanFormDialog({
       <DialogContent className="sm:max-w-lg" showCloseButton>
         <DialogHeader>
           <DialogTitle className="font-display text-headline-sm">
-            {isEdit ? "Edit Plan" : "Add New Plan"}
+            {isEdit ? t("plans.form.editPlan") : t("plans.form.createPlan")}
           </DialogTitle>
           <DialogDescription>
             {isEdit
-              ? "Update pricing, duration, and availability for this tier."
-              : "Configure details for a new subscription tier."}
+              ? (lang === "ar" ? "تحديث الأسعار والمدة والتوافر لهذه الفئة." : "Update pricing, duration, and availability for this tier.")
+              : (lang === "ar" ? "تكوين تفاصيل فئة اشتراك جديدة." : "Configure details for a new subscription tier.")}
           </DialogDescription>
         </DialogHeader>
 
@@ -146,10 +148,10 @@ export function PlanFormDialog({
         >
           <FieldGroup>
             <Field data-invalid={!!form.formState.errors.name || undefined}>
-              <FieldLabel htmlFor="plan-name">Plan Name</FieldLabel>
+              <FieldLabel htmlFor="plan-name">{t("plans.form.planName")}</FieldLabel>
               <Input
                 id="plan-name"
-                placeholder="e.g. Premium Yearly"
+                placeholder={lang === "ar" ? "مثال: الباقة السنوية" : "e.g. Premium Yearly"}
                 aria-invalid={!!form.formState.errors.name || undefined}
                 {...form.register("name")}
               />
@@ -159,11 +161,11 @@ export function PlanFormDialog({
             <Field
               data-invalid={!!form.formState.errors.description || undefined}
             >
-              <FieldLabel htmlFor="plan-description">Description</FieldLabel>
+              <FieldLabel htmlFor="plan-description">{t("plans.form.description")}</FieldLabel>
               <Textarea
                 id="plan-description"
                 rows={3}
-                placeholder="Optional short description"
+                placeholder={lang === "ar" ? "وصف قصير اختياري" : "Optional short description"}
                 aria-invalid={
                   !!form.formState.errors.description || undefined
                 }
@@ -178,7 +180,7 @@ export function PlanFormDialog({
               <Field
                 data-invalid={!!form.formState.errors.priceMajor || undefined}
               >
-                <FieldLabel htmlFor="plan-price">Price (ILS)</FieldLabel>
+                <FieldLabel htmlFor="plan-price">{t("plans.form.priceIls")}</FieldLabel>
                 <Input
                   id="plan-price"
                   type="number"
@@ -191,8 +193,9 @@ export function PlanFormDialog({
                   {...form.register("priceMajor")}
                 />
                 <p className="text-body-sm text-on-surface-variant">
-                  Enter the price in Israeli Shekels. The table shows ILS, USD,
-                  and EGP from live rates.
+                  {lang === "ar"
+                    ? "أدخل السعر بالشيكل الإسرائيلي. يوضح الجدول الشيكل والدولار والجنيه من الأسعار الحية."
+                    : "Enter the price in Israeli Shekels. The table shows ILS, USD, and EGP from live rates."}
                 </p>
                 <FieldError>
                   {form.formState.errors.priceMajor?.message}
@@ -204,7 +207,7 @@ export function PlanFormDialog({
                   !!form.formState.errors.durationDays || undefined
                 }
               >
-                <FieldLabel htmlFor="plan-duration">Duration (Days)</FieldLabel>
+                <FieldLabel htmlFor="plan-duration">{t("plans.form.durationDays")}</FieldLabel>
                 <Input
                   id="plan-duration"
                   type="number"
@@ -225,7 +228,7 @@ export function PlanFormDialog({
             <Field
               data-invalid={!!form.formState.errors.sortOrder || undefined}
             >
-              <FieldLabel htmlFor="plan-sort">Sort Order</FieldLabel>
+              <FieldLabel htmlFor="plan-sort">{t("plans.form.sortOrder")}</FieldLabel>
               <Input
                 id="plan-sort"
                 type="number"
@@ -243,9 +246,9 @@ export function PlanFormDialog({
             {isEdit ? (
               <Field orientation="horizontal">
                 <div className="flex flex-1 flex-col gap-1">
-                  <FieldLabel htmlFor="plan-active">Set as Active</FieldLabel>
+                  <FieldLabel htmlFor="plan-active">{t("plans.form.isActive")}</FieldLabel>
                   <p className="text-body-sm text-on-surface-variant">
-                    Make this plan available for purchase
+                    {lang === "ar" ? "إتاحة هذه الخطة للشراء" : "Make this plan available for purchase"}
                   </p>
                 </div>
                 <Controller
@@ -277,10 +280,10 @@ export function PlanFormDialog({
               disabled={pending}
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {t("plans.form.cancel")}
             </Button>
             <Button type="submit" className="flex-1" disabled={pending}>
-              {pending ? "Saving…" : "Save Plan"}
+              {pending ? t("plans.form.saving") : t("plans.form.save")}
             </Button>
           </DialogFooter>
         </form>

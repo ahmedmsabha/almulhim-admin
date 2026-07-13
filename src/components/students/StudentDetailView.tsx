@@ -29,7 +29,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { isApiError } from "@/lib/api/errors";
-import { REGION_LABELS } from "@/lib/domain/region";
 import type {
   AdminDeviceBindingListResponse,
   AdminDeviceBindingResponse,
@@ -45,15 +44,11 @@ import {
   useStudentLifecycle,
   type StudentLifecycleAction,
 } from "@/lib/students/use-student-mutations";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type StudentDetailViewProps = {
   student: StudentListItem;
   bindings: AdminDeviceBindingListResponse;
-};
-
-const DEVICE_LABELS: Record<DeviceType, string> = {
-  web: "Web Platform",
-  mobile: "Mobile App",
 };
 
 type ConfirmState =
@@ -108,33 +103,49 @@ export function StudentDetailView({
   const hasAnyBinding = bindings.bindings.length > 0;
   const isDeactivated = Boolean(student.deactivatedAt);
   const busy = reset.isPending || lifecycle.isPending;
+  const { t, lang } = useTranslation();
+
+  const DEVICE_LABELS: Record<DeviceType, string> = {
+    web: lang === "ar" ? "منصة الويب" : "Web Platform",
+    mobile: lang === "ar" ? "تطبيق الهاتف" : "Mobile App",
+  };
 
   function confirmTitle() {
     if (!confirm) return "";
     if (confirm.kind === "lifecycle") {
-      if (confirm.action === "deactivate") return "Deactivate this student?";
-      if (confirm.action === "reactivate") return "Reactivate this student?";
-      return "Delete this student permanently?";
+      if (confirm.action === "deactivate") return t("students.confirmDeactivateTitle");
+      if (confirm.action === "reactivate") return t("students.confirmReactivateTitle");
+      return t("students.confirmDeleteTitle");
     }
-    if (confirm.vars.scope === "all") return "Reset all bindings";
-    return `Reset ${DEVICE_LABELS[confirm.vars.deviceType]}`;
+    if (confirm.vars.scope === "all") return t("students.resetAllBindings");
+    return `${lang === "ar" ? "إعادة تعيين" : "Reset"} ${DEVICE_LABELS[confirm.vars.deviceType]}`;
   }
 
   function confirmDescription() {
     if (!confirm) return "";
     if (confirm.kind === "lifecycle") {
       if (confirm.action === "deactivate") {
-        return `Soft-block ${student.fullName} in Nest and ban their Clerk user (${student.clerkId}). They cannot use student routes until reactivated.`;
+        return lang === "ar"
+          ? `حظر مؤقت لـ ${student.fullName} في Nest وحظر مستخدم Clerk الخاص بهم (${student.clerkId}). لن يتمكنوا من استخدام مسارات الطلاب حتى يتم إعادة تفعيلهم.`
+          : `Soft-block ${student.fullName} in Nest and ban their Clerk user (${student.clerkId}). They cannot use student routes until reactivated.`;
       }
       if (confirm.action === "reactivate") {
-        return `Clear the Nest soft-block for ${student.fullName} and unban Clerk user ${student.clerkId}.`;
+        return lang === "ar"
+          ? `إلغاء الحظر المؤقت في Nest لـ ${student.fullName} وإلغاء حظر مستخدم Clerk ${student.clerkId}.`
+          : `Clear the Nest soft-block for ${student.fullName} and unban Clerk user ${student.clerkId}.`;
       }
-      return `Hard-delete ${student.fullName} from Nest (subscriptions, devices, support, downloads cascade) and delete Clerk user ${student.clerkId}. This cannot be undone.`;
+      return lang === "ar"
+        ? `حذف نهائي لـ ${student.fullName} من Nest (حذف الاشتراكات والأجهزة والدعم والتحميلات) وحذف مستخدم Clerk ${student.clerkId}. لا يمكن التراجع عن هذا الإجراء.`
+        : `Hard-delete ${student.fullName} from Nest (subscriptions, devices, support, downloads cascade) and delete Clerk user ${student.clerkId}. This cannot be undone.`;
     }
     if (confirm.vars.scope === "all") {
-      return `This unbinds every device for ${student.fullName}. They must rebind web and mobile before using protected content.`;
+      return lang === "ar"
+        ? `سيؤدي هذا إلى إلغاء ربط جميع الأجهزة لـ ${student.fullName}. يجب عليهم إعادة ربط الويب والهاتف قبل استخدام المحتوى المحمي.`
+        : `This unbinds every device for ${student.fullName}. They must rebind web and mobile before using protected content.`;
     }
-    return `This unbinds the ${DEVICE_LABELS[confirm.vars.deviceType]} device for ${student.fullName}. They must rebind that device to continue.`;
+    return lang === "ar"
+      ? `سيؤدي هذا إلى إلغاء ربط جهاز ${DEVICE_LABELS[confirm.vars.deviceType]} لـ ${student.fullName}. يجب عليهم إعادة ربط هذا الجهاز للمتابعة.`
+      : `This unbinds the ${DEVICE_LABELS[confirm.vars.deviceType]} device for ${student.fullName}. They must rebind that device to continue.`;
   }
 
   const dialogPending =
@@ -148,12 +159,12 @@ export function StudentDetailView({
           className="inline-flex w-fit items-center gap-1.5 text-body-sm text-on-surface-variant hover:text-on-surface"
         >
           <ArrowLeftIcon className="size-4" />
-          Back to students
+          {t("students.backToStudents")}
         </Link>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-label-md uppercase tracking-wider text-on-surface-variant">
-              Students
+              {t("students.eyebrow")}
             </p>
             <h1 className="font-display text-display-lg text-on-surface">
               {student.fullName}
@@ -163,7 +174,7 @@ export function StudentDetailView({
             </p>
             {isDeactivated ? (
               <p className="mt-2 text-body-sm font-medium text-status-suspended">
-                Deactivated {formatTimestamp(student.deactivatedAt)}
+                {t("students.deactivatedLabel")} {formatTimestamp(student.deactivatedAt)}
               </p>
             ) : null}
           </div>
@@ -180,7 +191,7 @@ export function StudentDetailView({
                     setConfirm({ kind: "lifecycle", action: "reactivate" })
                   }
                 >
-                  Reactivate
+                  {t("students.reactivate")}
                 </Button>
               ) : (
                 <Button
@@ -192,7 +203,7 @@ export function StudentDetailView({
                     setConfirm({ kind: "lifecycle", action: "deactivate" })
                   }
                 >
-                  Deactivate
+                  {t("students.deactivate")}
                 </Button>
               )}
               <Button
@@ -205,7 +216,7 @@ export function StudentDetailView({
                   setConfirm({ kind: "lifecycle", action: "delete" })
                 }
               >
-                Delete
+                {t("students.delete")}
               </Button>
             </div>
           </div>
@@ -223,38 +234,38 @@ export function StudentDetailView({
       <Card className="rounded-xl border border-outline-variant bg-surface-container-lowest ring-0">
         <CardHeader>
           <CardTitle className="text-headline-sm font-display text-on-surface">
-            Profile
+            {t("students.profile")}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <dt className="text-label-md uppercase tracking-wider text-on-surface-variant">
-                Phone
+                {t("students.phone")}
               </dt>
               <dd className="mt-1 text-body-md text-on-surface">
-                {student.phone ?? "None"}
+                {student.phone ?? (lang === "ar" ? "لا يوجد" : "None")}
               </dd>
             </div>
             <div>
               <dt className="text-label-md uppercase tracking-wider text-on-surface-variant">
-                Telegram
+                {t("students.telegram")}
               </dt>
               <dd className="mt-1 text-body-md text-on-surface">
-                {student.telegram ?? "None"}
+                {student.telegram ?? (lang === "ar" ? "لا يوجد" : "None")}
               </dd>
             </div>
             <div>
               <dt className="text-label-md uppercase tracking-wider text-on-surface-variant">
-                Region
+                {t("students.region")}
               </dt>
               <dd className="mt-1 text-body-md text-on-surface">
-                {REGION_LABELS[student.region]}
+                {t(`common.regions.${student.region}`)}
               </dd>
             </div>
             <div>
               <dt className="text-label-md uppercase tracking-wider text-on-surface-variant">
-                Nest user ID
+                {t("students.nestUserId")}
               </dt>
               <dd className="mt-1 break-all font-mono text-body-sm text-on-surface-variant">
                 {student.id}
@@ -262,7 +273,7 @@ export function StudentDetailView({
             </div>
             <div className="sm:col-span-2">
               <dt className="text-label-md uppercase tracking-wider text-on-surface-variant">
-                Clerk user ID
+                {t("students.clerkUserId")}
               </dt>
               <dd className="mt-1 break-all font-mono text-body-sm text-on-surface-variant">
                 {student.clerkId}
@@ -276,7 +287,7 @@ export function StudentDetailView({
         <CardHeader className="flex flex-row items-center justify-between gap-4">
           <CardTitle className="flex items-center gap-2 text-headline-sm font-display text-on-surface">
             <DevicesIcon className="text-primary" />
-            Active Device Bindings
+            {t("students.activeDeviceBindings")}
           </CardTitle>
           <Button
             type="button"
@@ -288,7 +299,7 @@ export function StudentDetailView({
               setConfirm({ kind: "device", vars: { scope: "all" } })
             }
           >
-            Reset all bindings
+            {t("students.resetAllBindings")}
           </Button>
         </CardHeader>
         <CardContent>
@@ -304,7 +315,7 @@ export function StudentDetailView({
                     key={deviceType}
                     className="flex min-h-28 items-center justify-center rounded-lg border border-dashed border-outline-variant p-4 text-body-sm text-on-surface-variant italic"
                   >
-                    No {DEVICE_LABELS[deviceType].toLowerCase()} registered
+                    {t("students.noDeviceRegistered").replace("{device}", DEVICE_LABELS[deviceType].toLowerCase())}
                   </div>
                 );
               }
@@ -321,10 +332,10 @@ export function StudentDetailView({
                         {DEVICE_LABELS[deviceType]}
                       </p>
                       <p className="mt-2 text-[10px] text-on-surface-variant">
-                        Bound: {formatTimestamp(binding.boundAt)}
+                        {lang === "ar" ? "ارتبط في: " : "Bound: "}{formatTimestamp(binding.boundAt)}
                       </p>
                       <p className="mt-1 text-[10px] text-on-surface-variant">
-                        Last seen: {formatTimestamp(binding.lastSeenAt)}
+                        {lang === "ar" ? "آخر ظهور: " : "Last seen: "}{formatTimestamp(binding.lastSeenAt)}
                       </p>
                     </div>
                   </div>
@@ -334,8 +345,8 @@ export function StudentDetailView({
                     size="icon"
                     disabled={busy}
                     className="text-error hover:bg-error-container"
-                    title={`Reset ${DEVICE_LABELS[deviceType]}`}
-                    aria-label={`Reset ${DEVICE_LABELS[deviceType]}`}
+                    title={`${lang === "ar" ? "إعادة تعيين" : "Reset"} ${DEVICE_LABELS[deviceType]}`}
+                    aria-label={`${lang === "ar" ? "إعادة تعيين" : "Reset"} ${DEVICE_LABELS[deviceType]}`}
                     onClick={() =>
                       setConfirm({
                         kind: "device",
@@ -376,7 +387,7 @@ export function StudentDetailView({
             </p>
           ) : null}
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={dialogPending}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={dialogPending}>{t("students.confirmCancel")}</AlertDialogCancel>
             <AlertDialogAction
               variant="destructive"
               disabled={dialogPending || !confirm}
@@ -396,13 +407,13 @@ export function StudentDetailView({
             >
               {dialogPending
                 ? confirm?.kind === "lifecycle" && confirm.action === "delete"
-                  ? "Deleting…"
+                  ? (lang === "ar" ? "جاري الحذف…" : "Deleting…")
                   : confirm?.kind === "lifecycle"
-                    ? "Saving…"
-                    : "Resetting…"
+                    ? (lang === "ar" ? "جاري الحفظ…" : "Saving…")
+                    : (lang === "ar" ? "جاري إعادة التعيين…" : "Resetting…")
                 : confirm?.kind === "lifecycle" && confirm.action === "delete"
-                  ? "Delete permanently"
-                  : "Confirm"}
+                  ? (lang === "ar" ? "حذف نهائي" : "Delete permanently")
+                  : t("students.confirmOk")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

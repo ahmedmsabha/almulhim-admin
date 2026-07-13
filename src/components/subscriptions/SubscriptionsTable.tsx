@@ -32,6 +32,7 @@ import {
   parseVerificationResult,
   type VerificationOutcome,
 } from "@/lib/subscriptions/parse-verification-result";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { cn } from "@/lib/utils";
 
 type SubscriptionsTableProps = {
@@ -47,10 +48,10 @@ function initials(fullName: string) {
     .join("");
 }
 
-function formatSubmittedAt(iso: string) {
+function formatSubmittedAt(iso: string, lang: string) {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("en-GB", {
+  return new Intl.DateTimeFormat(lang === "ar" ? "ar-EG" : "en-GB", {
     timeZone: "UTC",
     day: "numeric",
     month: "short",
@@ -61,6 +62,21 @@ function formatSubmittedAt(iso: string) {
   }).format(date);
 }
 
+function getAiSummary(summary: string, lang: string) {
+  if (lang !== "ar") return summary;
+  const s = summary.trim();
+  if (s === "Awaiting AI") return "بانتظار الذكاء الاصطناعي";
+  if (s === "AI skipped") return "تم تخطي التحقق الذكي";
+  if (s === "All checks passed") return "اجتازت جميع الفحوصات";
+  if (s === "One check failed") return "فشل أحد الفحوصات";
+  if (s === "Review needed") return "بحاجة إلى مراجعة";
+  if (s === "Document matches") return "المستند مطابق";
+  if (s === "Awaiting AI verification") return "بانتظار التحقق بالذكاء الاصطناعي";
+  if (s === "AI checks passed") return "اجتازت فحوصات الذكاء الاصطناعي";
+  if (s === "AI checks need review") return "فحوصات الذكاء الاصطناعي بحاجة لمراجعة";
+  return s;
+}
+
 function AiCell({
   outcome,
   summary,
@@ -68,6 +84,7 @@ function AiCell({
   outcome: VerificationOutcome | null;
   summary: string;
 }) {
+  const { lang } = useTranslation();
   const Icon =
     outcome === "pass"
       ? CheckCircleIcon
@@ -88,13 +105,14 @@ function AiCell({
       )}
     >
       {Icon ? <Icon className="size-5 shrink-0" weight="fill" aria-hidden /> : null}
-      <span>{summary}</span>
+      <span>{getAiSummary(summary, lang)}</span>
     </div>
   );
 }
 
 export function SubscriptionsTable({ data }: SubscriptionsTableProps) {
   const { subscriptions } = data;
+  const { t, lang } = useTranslation();
 
   if (subscriptions.length === 0) {
     return (
@@ -103,9 +121,11 @@ export function SubscriptionsTable({ data }: SubscriptionsTableProps) {
           <EmptyMedia variant="icon">
             <QueueIcon />
           </EmptyMedia>
-          <EmptyTitle className="text-on-surface">No pending subscriptions</EmptyTitle>
+          <EmptyTitle className="text-on-surface">{t("subscriptions.table.empty")}</EmptyTitle>
           <EmptyDescription>
-            Try a different search, or check back when students submit receipts.
+            {lang === "ar"
+              ? "حاول إجراء بحث آخر، أو تحقق لاحقاً عندما يرسل الطلاب إيصالاتهم."
+              : "Try a different search, or check back when students submit receipts."}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -117,22 +137,22 @@ export function SubscriptionsTable({ data }: SubscriptionsTableProps) {
       <TableHeader>
         <TableRow className="border-outline-variant bg-surface-container-low/50 hover:bg-surface-container-low/50">
           <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-            Student Name
+            {t("subscriptions.table.student")}
           </TableHead>
           <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-            Plan
+            {t("subscriptions.table.plan")}
           </TableHead>
           <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-            Submitted Date
+            {t("subscriptions.table.receiptDate")}
           </TableHead>
           <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-            Status
+            {t("subscriptions.table.status")}
           </TableHead>
           <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-            AI Verification
+            {t("subscriptions.table.aiValidation")}
           </TableHead>
-          <TableHead className="px-6 py-4 text-right text-label-md uppercase tracking-wider text-on-surface-variant">
-            Actions
+          <TableHead className="px-6 py-4 text-right rtl:text-left text-label-md uppercase tracking-wider text-on-surface-variant">
+            {t("subscriptions.table.actions")}
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -170,7 +190,7 @@ export function SubscriptionsTable({ data }: SubscriptionsTableProps) {
                 {row.plan.name}
               </TableCell>
               <TableCell className="px-6 py-4 text-body-md text-on-surface">
-                {formatSubmittedAt(row.createdAt)}
+                {formatSubmittedAt(row.createdAt, lang)}
               </TableCell>
               <TableCell className="px-6 py-4">
                 <StatusBadge status={row.status} />
@@ -179,15 +199,15 @@ export function SubscriptionsTable({ data }: SubscriptionsTableProps) {
                 <AiCell outcome={ai.outcome} summary={ai.summary} />
               </TableCell>
               <TableCell className="px-6 py-4">
-                <div className="flex justify-end gap-1">
+                <div className="flex justify-end rtl:justify-start gap-1">
                   <Link
                     href={detailHref}
                     className={cn(
                       buttonVariants({ variant: "ghost", size: "icon-sm" }),
                       "rounded-lg text-on-surface-variant",
                     )}
-                    aria-label={`View receipt for ${row.student.fullName}`}
-                    title="View receipt"
+                    aria-label={`${lang === "ar" ? "عرض إيصال" : "View receipt for"} ${row.student.fullName}`}
+                    title={lang === "ar" ? "عرض الإيصال" : "View receipt"}
                   >
                     <EyeIcon />
                   </Link>

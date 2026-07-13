@@ -25,6 +25,7 @@ import { formatPlanPriceTriple } from "@/lib/plans/money";
 import type { AdminPlan } from "@/lib/plans/types";
 import { useIlsFxRates } from "@/lib/plans/use-fx-rates";
 import { useUpdatePlan } from "@/lib/plans/use-plan-mutations";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { cn } from "@/lib/utils";
 
 type PlansTableProps = {
@@ -36,6 +37,7 @@ function ActiveToggle({ plan }: { plan: AdminPlan }) {
   const update = useUpdatePlan();
   const [optimistic, setOptimistic] = useState(plan.isActive);
   const checked = update.isPending ? optimistic : plan.isActive;
+  const { lang } = useTranslation();
 
   useEffect(() => {
     setOptimistic(plan.isActive);
@@ -45,7 +47,7 @@ function ActiveToggle({ plan }: { plan: AdminPlan }) {
     <Switch
       checked={checked}
       disabled={update.isPending}
-      aria-label={`${plan.isActive ? "Disable" : "Enable"} ${plan.name}`}
+      aria-label={`${lang === "ar" ? (plan.isActive ? "تعطيل" : "تفعيل") : (plan.isActive ? "Disable" : "Enable")} ${plan.name}`}
       onCheckedChange={(next) => {
         setOptimistic(next);
         update.mutate(
@@ -86,6 +88,7 @@ function PlanPriceCell({
 
 export function PlansTable({ plans, onEdit }: PlansTableProps) {
   const fxQuery = useIlsFxRates();
+  const { t, lang } = useTranslation();
 
   if (plans.length === 0) {
     return (
@@ -94,14 +97,25 @@ export function PlansTable({ plans, onEdit }: PlansTableProps) {
           <EmptyMedia variant="icon">
             <StackIcon />
           </EmptyMedia>
-          <EmptyTitle className="text-on-surface">No plans yet</EmptyTitle>
+          <EmptyTitle className="text-on-surface">{t("plans.table.noPlans")}</EmptyTitle>
           <EmptyDescription>
-            Create a subscription plan to offer students paid access tiers.
+            {t("plans.table.noPlansHint")}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
     );
   }
+
+  const dateStr = fxQuery.data ? ` (${fxQuery.data.date})` : "";
+  const ratesStr = fxQuery.isPending
+    ? (lang === "ar" ? " (جاري تحميل الأسعار…)" : " (loading rates…)")
+    : fxQuery.isError
+    ? (lang === "ar" ? " (الأسعار غير متوفرة)" : " (rates unavailable)")
+    : "";
+
+  const footerText = lang === "ar"
+    ? `عرض ${plans.length} من أصل ${plans.length} خطط اشتراك. مخزنة بالشيكل؛ الدولار والجنيه للعرض فقط من أسعار الصرف الحية${dateStr}${ratesStr}.`
+    : `Showing ${plans.length} of ${plans.length} subscription plans. Stored in ILS; USD and EGP are display-only from live FX${dateStr}${ratesStr}.`;
 
   return (
     <>
@@ -109,22 +123,22 @@ export function PlansTable({ plans, onEdit }: PlansTableProps) {
         <TableHeader>
           <TableRow className="border-outline-variant bg-surface-container-low/50 hover:bg-surface-container-low/50">
             <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-              Plan Name
+              {t("plans.table.name")}
             </TableHead>
             <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-              Price (ILS / USD / EGP)
+              {t("plans.table.price")}
             </TableHead>
             <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-              Duration (Days)
+              {t("plans.table.duration")}
             </TableHead>
             <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-              Sort
+              {t("plans.table.sort")}
             </TableHead>
             <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-              Active
+              {t("plans.table.active")}
             </TableHead>
             <TableHead className="px-6 py-4 text-right text-label-md uppercase tracking-wider text-on-surface-variant">
-              Actions
+              {t("plans.table.actions")}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -166,7 +180,7 @@ export function PlansTable({ plans, onEdit }: PlansTableProps) {
                   type="button"
                   variant="ghost"
                   size="icon"
-                  aria-label={`Edit ${plan.name}`}
+                  aria-label={`${lang === "ar" ? "تعديل" : "Edit"} ${plan.name}`}
                   onClick={() => onEdit(plan)}
                 >
                   <PencilSimpleIcon />
@@ -178,11 +192,7 @@ export function PlansTable({ plans, onEdit }: PlansTableProps) {
       </Table>
       <div className="border-t border-outline-variant bg-surface-container-low px-6 py-4">
         <p className="text-body-sm text-on-surface-variant">
-          Showing {plans.length} of {plans.length} subscription plans. Stored in
-          ILS; USD and EGP are display-only from live FX
-          {fxQuery.data ? ` (${fxQuery.data.date})` : ""}
-          {fxQuery.isPending ? " (loading rates…)" : ""}
-          {fxQuery.isError ? " (rates unavailable)" : ""}.
+          {footerText}
         </p>
       </div>
     </>

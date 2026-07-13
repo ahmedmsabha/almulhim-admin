@@ -19,21 +19,15 @@ import {
 } from "@/components/ui/chart";
 import type { DashboardStats } from "@/lib/dashboard/mock-data";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
-
-const chartConfig = {
-  count: {
-    label: "New subscriptions",
-    color: "var(--color-primary)",
-  },
-} satisfies ChartConfig;
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type SubscriptionGrowthChartProps = {
   data: DashboardStats["subscriptionGrowth"];
 };
 
-function formatTick(date: string) {
+function formatTick(date: string, lang: string) {
   const d = new Date(`${date}T00:00:00.000Z`);
-  return d.toLocaleDateString("en-US", {
+  return d.toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US", {
     month: "short",
     day: "2-digit",
     timeZone: "UTC",
@@ -41,15 +35,24 @@ function formatTick(date: string) {
 }
 
 export function SubscriptionGrowthChart({ data }: SubscriptionGrowthChartProps) {
+  const { t, lang } = useTranslation();
+
+  const chartConfig = {
+    count: {
+      label: t("dashboard.charts.newSubscriptions"),
+      color: "var(--color-primary)",
+    },
+  } satisfies ChartConfig;
+
   return (
     <Card className="rounded-xl border border-outline-variant bg-surface-container-lowest py-0 ring-0 lg:col-span-2">
       <CardHeader className="flex flex-row items-start justify-between gap-4 px-8 pt-8">
         <div>
           <CardTitle className="text-headline-sm font-display text-on-surface">
-            Subscription Growth
+            {t("dashboard.charts.subscriptionGrowth")}
           </CardTitle>
           <CardDescription className="text-body-sm text-on-surface-variant">
-            New subscriptions per day (last 30 days)
+            {t("dashboard.charts.growthDescription")}
           </CardDescription>
         </div>
       </CardHeader>
@@ -57,9 +60,9 @@ export function SubscriptionGrowthChart({ data }: SubscriptionGrowthChartProps) 
         {data.length === 0 ? (
           <Empty className="min-h-64 rounded-xl border border-dashed border-outline-variant">
             <EmptyHeader>
-              <EmptyTitle className="text-on-surface">No growth data</EmptyTitle>
+              <EmptyTitle className="text-on-surface">{t("dashboard.charts.noGrowthData")}</EmptyTitle>
               <EmptyDescription>
-                Subscription growth will appear once events are available.
+                {t("dashboard.charts.growthHint")}
               </EmptyDescription>
             </EmptyHeader>
           </Empty>
@@ -76,7 +79,7 @@ export function SubscriptionGrowthChart({ data }: SubscriptionGrowthChartProps) 
                 tickLine={false}
                 axisLine={false}
                 tickMargin={12}
-                tickFormatter={formatTick}
+                tickFormatter={(tick) => formatTick(tick, lang)}
               />
               <ChartTooltip content={<ChartTooltipContent />} />
               <ChartLegend content={<ChartLegendContent />} />

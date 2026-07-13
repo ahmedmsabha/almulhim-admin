@@ -1,3 +1,5 @@
+"use client";
+
 import { GlobeSimpleIcon } from "@phosphor-icons/react/dist/ssr";
 
 import {
@@ -9,10 +11,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import {
-  REGION_LABELS,
-  type DashboardStats,
-} from "@/lib/dashboard/mock-data";
+import type { DashboardStats } from "@/lib/dashboard/mock-data";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { cn } from "@/lib/utils";
 
 type RegionDistributionProps = {
@@ -20,16 +20,17 @@ type RegionDistributionProps = {
 };
 
 export function RegionDistribution({ data }: RegionDistributionProps) {
+  const { t } = useTranslation();
   const total = data.reduce((sum, row) => sum + row.count, 0);
 
   return (
     <Card className="flex flex-col rounded-xl border border-outline-variant bg-surface-container-lowest py-0 ring-0">
       <CardHeader className="px-8 pt-8">
         <CardTitle className="text-headline-sm font-display text-on-surface">
-          Region Distribution
+          {t("dashboard.charts.regionDistribution")}
         </CardTitle>
         <CardDescription className="text-body-sm text-on-surface-variant">
-          Students by administrative region
+          {t("dashboard.charts.studentsByRegion")}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col justify-center gap-6 px-8">
@@ -41,7 +42,7 @@ export function RegionDistribution({ data }: RegionDistributionProps) {
             <div key={row.region} className="flex flex-col gap-2">
               <div className="flex items-end justify-between">
                 <span className="font-bold text-on-surface">
-                  {REGION_LABELS[row.region]}
+                  {t(`common.regions.${row.region}`)}
                 </span>
                 <span className="text-label-md text-on-surface-variant">
                   {row.count.toLocaleString("en-US")} ({percent}%)
@@ -67,9 +68,11 @@ export function RegionDistribution({ data }: RegionDistributionProps) {
             <GlobeSimpleIcon />
           </div>
           <div>
-            <p className="text-body-sm font-bold text-on-surface">Global Reach</p>
+            <p className="text-body-sm font-bold text-on-surface">
+              {t("dashboard.charts.globalReach")}
+            </p>
             <p className="text-[11px] text-on-surface-variant">
-              Tracking 2 primary territories
+              {t("dashboard.charts.territoriesHint")}
             </p>
           </div>
         </div>

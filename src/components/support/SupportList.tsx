@@ -11,11 +11,11 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import {
-  formatSupportTime,
   initialsFromName,
   looksArabic,
 } from "@/lib/support/format";
 import type { AdminSupportRequestResponse } from "@/lib/support/types";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { cn } from "@/lib/utils";
 
 type SupportListProps = {
@@ -25,12 +25,48 @@ type SupportListProps = {
   isRefreshing?: boolean;
 };
 
+function formatSupportTimeLocalized(iso: string, lang: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "—";
+
+  const now = new Date("2026-07-13T18:00:00.000Z");
+  const sameDay =
+    date.getUTCFullYear() === now.getUTCFullYear() &&
+    date.getUTCMonth() === now.getUTCMonth() &&
+    date.getUTCDate() === now.getUTCDate();
+
+  if (sameDay) {
+    return date.toLocaleTimeString(lang === "ar" ? "ar-EG" : "en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "UTC",
+    });
+  }
+
+  const yesterday = new Date(now);
+  yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+  const isYesterday =
+    date.getUTCFullYear() === yesterday.getUTCFullYear() &&
+    date.getUTCMonth() === yesterday.getUTCMonth() &&
+    date.getUTCDate() === yesterday.getUTCDate();
+
+  if (isYesterday) return lang === "ar" ? "أمس" : "Yesterday";
+
+  return date.toLocaleDateString(lang === "ar" ? "ar-EG" : "en-GB", {
+    day: "numeric",
+    month: "short",
+    timeZone: "UTC",
+  });
+}
+
 export function SupportList({
   requests,
   selectedId,
   onSelect,
   isRefreshing = false,
 }: SupportListProps) {
+  const { lang } = useTranslation();
+
   if (requests.length === 0) {
     return (
       <Empty className="min-h-56 flex-1 rounded-none border-0 px-6">
@@ -38,9 +74,11 @@ export function SupportList({
           <EmptyMedia variant="icon">
             <ChatCircleIcon />
           </EmptyMedia>
-          <EmptyTitle className="text-on-surface">No requests found</EmptyTitle>
+          <EmptyTitle className="text-on-surface">
+            {lang === "ar" ? "لم يتم العثور على طلبات" : "No requests found"}
+          </EmptyTitle>
           <EmptyDescription>
-            No support requests match these filters.
+            {lang === "ar" ? "لا توجد طلبات دعم تطابق هذه التصفية." : "No support requests match these filters."}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -61,7 +99,7 @@ export function SupportList({
             className="size-3.5 animate-spin"
             aria-hidden
           />
-          <span>Updating…</span>
+          <span>{lang === "ar" ? "جاري التحديث…" : "Updating…"}</span>
         </div>
       ) : null}
       <ul
@@ -95,29 +133,29 @@ export function SupportList({
                       {initialsFromName(request.student.fullName)}
                     </span>
                     <div className="min-w-0">
-                      <p className="truncate font-semibold text-body-md text-on-surface">
+                      <p className="truncate font-semibold text-body-md text-on-surface text-start rtl:text-right">
                         {request.student.fullName}
                       </p>
-                      <p className="truncate text-body-sm text-on-surface-variant">
+                      <p className="truncate text-body-sm text-on-surface-variant text-start rtl:text-right">
                         {request.subject}
                       </p>
                     </div>
                   </div>
                   <span className="shrink-0 text-label-md text-on-surface-variant opacity-70">
-                    {formatSupportTime(request.createdAt)}
+                    {formatSupportTimeLocalized(request.createdAt, lang)}
                   </span>
                 </div>
                 <p
                   className={cn(
-                    "line-clamp-1 text-body-md text-on-surface-variant",
-                    previewArabic && "text-end",
+                    "line-clamp-1 text-body-md text-on-surface-variant text-start rtl:text-right",
+                    previewArabic && "text-end rtl:text-right",
                   )}
                   dir={previewArabic ? "rtl" : "ltr"}
                   lang={previewArabic ? "ar" : undefined}
                 >
                   {request.message}
                 </p>
-                <div className="flex justify-end">
+                <div className="flex justify-end rtl:justify-start">
                   <TicketStatusBadge status={request.status} />
                 </div>
               </button>

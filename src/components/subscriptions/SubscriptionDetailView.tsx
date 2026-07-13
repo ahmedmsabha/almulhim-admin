@@ -32,10 +32,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { isApiError } from "@/lib/api/errors";
-import { REGION_LABELS, type Region } from "@/lib/domain/region";
 import { buildVerificationPanel } from "@/lib/subscriptions/parse-verification-result";
 import type { AdminSubscriptionResponse } from "@/lib/subscriptions/types";
 import { useSubscriptionReview } from "@/lib/subscriptions/use-subscription-mutations";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { cn } from "@/lib/utils";
 
 type SubscriptionDetailViewProps = {
@@ -48,11 +48,11 @@ type SubscriptionDetailViewProps = {
 type ConfirmKind = "approve" | "suspend" | null;
 type ReviewAttempt = "approve" | "reject" | "suspend";
 
-function formatTimestamp(iso: string | null) {
+function formatTimestamp(iso: string | null, lang: string) {
   if (!iso) return "—";
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("en-GB", {
+  return new Intl.DateTimeFormat(lang === "ar" ? "ar-EG" : "en-GB", {
     timeZone: "UTC",
     day: "numeric",
     month: "short",
@@ -63,9 +63,9 @@ function formatTimestamp(iso: string | null) {
   }).format(date);
 }
 
-function formatPrice(amount: number, currency: string) {
+function formatPrice(amount: number, currency: string, lang: string) {
   try {
-    return new Intl.NumberFormat("en-GB", {
+    return new Intl.NumberFormat(lang === "ar" ? "ar-EG" : "en-GB", {
       style: "currency",
       currency,
       minimumFractionDigits: 2,
@@ -75,15 +75,31 @@ function formatPrice(amount: number, currency: string) {
   }
 }
 
-function regionLabel(region: string) {
-  if (region in REGION_LABELS) {
-    return REGION_LABELS[region as Region];
-  }
-  return region;
-}
-
 function isPendingStatus(status: AdminSubscriptionResponse["status"]) {
   return status === "pending_review" || status === "pending_approval";
+}
+
+function getAiSummary(summary: string, lang: string) {
+  if (lang !== "ar") return summary;
+  const s = summary.trim();
+  if (s === "Awaiting AI") return "بانتظار الذكاء الاصطناعي";
+  if (s === "AI skipped") return "تم تخطي التحقق الذكي";
+  if (s === "All checks passed") return "اجتازت جميع الفحوصات";
+  if (s === "One check failed") return "فشل أحد الفحوصات";
+  if (s === "Review needed") return "بحاجة إلى مراجعة";
+  if (s === "Document matches") return "المستند مطابق";
+  if (s === "Awaiting AI verification") return "بانتظار التحقق بالذكاء الاصطناعي";
+  if (s === "AI checks passed") return "اجتازت فحوصات الذكاء الاصطناعي";
+  if (s === "AI checks need review") return "فحوصات الذكاء الاصطناعي بحاجة لمراجعة";
+  return s;
+}
+
+function getCheckLabel(key: string, label: string, lang: string) {
+  if (lang !== "ar") return label;
+  if (key === "recipientMatch") return "مطابقة المستلم";
+  if (key === "senderMatch") return "مطابقة المرسل";
+  if (key === "notDuplicate") return "ليس مكرراً";
+  return label;
 }
 
 export function SubscriptionDetailView({
@@ -99,15 +115,20 @@ export function SubscriptionDetailView({
   const ai = buildVerificationPanel(subscription.verificationResult);
   const pendingActions = isPendingStatus(subscription.status);
   const canSuspend = subscription.status === "active";
+  const { t, lang } = useTranslation();
 
   function mutationError(prefix: string) {
     if (!review.isError) return null;
-    if (!isApiError(review.error)) return `${prefix} failed. Try again.`;
+    if (!isApiError(review.error)) {
+      return lang === "ar" ? `${prefix === "Suspend" ? "تعليق" : "قبول"} فشل. حاول مرة أخرى.` : `${prefix} failed. Try again.`;
+    }
     if (review.error.status === 403) {
-      return `You are not allowed to ${prefix.toLowerCase()} this subscription.`;
+      return lang === "ar"
+        ? `ليس لديك صلاحية لـ ${prefix === "Suspend" ? "تعليق" : "قبول"} هذا الاشتراك.`
+        : `You are not allowed to ${prefix.toLowerCase()} this subscription.`;
     }
     if (review.error.status === 404) {
-      return "This subscription no longer exists.";
+      return lang === "ar" ? "هذا الاشتراك لم يعد موجوداً." : "This subscription no longer exists.";
     }
     return review.error.message;
   }
@@ -125,12 +146,12 @@ export function SubscriptionDetailView({
           className="inline-flex w-fit items-center gap-1.5 text-body-sm text-on-surface-variant hover:text-on-surface"
         >
           <ArrowLeftIcon className="size-4" aria-hidden />
-          Back to queue
+          {t("subscriptions.backToQueue")}
         </Link>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex flex-col gap-2">
             <p className="text-label-md uppercase tracking-wider text-on-surface-variant">
-              Receipt review
+              {t("subscriptions.titles.pending")}
             </p>
             <h1 className="font-display text-headline-lg font-bold text-on-surface">
               {subscription.student.fullName}
@@ -147,7 +168,7 @@ export function SubscriptionDetailView({
         <Card className="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest py-0 ring-0">
           <CardHeader className="border-b border-outline-variant px-6 py-4">
             <CardTitle className="text-headline-sm font-display text-on-surface">
-              Verification document
+              {t("subscriptions.detail.verificationDocument")}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6">
@@ -156,7 +177,7 @@ export function SubscriptionDetailView({
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={receiptUrl}
-                alt={`Payment receipt for ${subscription.student.fullName}`}
+                alt={`${lang === "ar" ? "إيصال الدفع لـ" : "Payment receipt for"} ${subscription.student.fullName}`}
                 className="aspect-[3/4] w-full rounded-lg border border-outline-variant object-contain bg-surface-container-high"
               />
             ) : (
@@ -166,11 +187,11 @@ export function SubscriptionDetailView({
                   aria-hidden
                 />
                 <p className="text-body-md text-on-surface-variant">
-                  {receiptError ?? "Receipt image is not available."}
+                  {receiptError ?? (lang === "ar" ? "صورة الإيصال غير متوفرة." : "Receipt image is not available.")}
                 </p>
                 {onRetryReceipt ? (
                   <Button type="button" variant="outline" onClick={onRetryReceipt}>
-                    Retry receipt URL
+                    {lang === "ar" ? "إعادة محاولة جلب رابط الإيصال" : "Retry receipt URL"}
                   </Button>
                 ) : null}
               </div>
@@ -182,37 +203,38 @@ export function SubscriptionDetailView({
           <Card className="rounded-xl border border-outline-variant bg-surface-container-lowest py-0 ring-0">
             <CardHeader className="border-b border-outline-variant px-6 py-4">
               <CardTitle className="text-headline-sm font-display text-on-surface">
-                Submission details
+                {t("subscriptions.detail.submissionDetails")}
               </CardTitle>
             </CardHeader>
             <CardContent className="grid gap-4 px-6 py-5 text-body-md">
-              <DetailRow label="Plan" value={subscription.plan.name} />
+              <DetailRow label={t("subscriptions.table.plan")} value={subscription.plan.name} />
               <DetailRow
-                label="Price"
+                label={t("subscriptions.detail.price")}
                 value={formatPrice(
                   subscription.plan.priceAmount,
                   subscription.plan.currency,
+                  lang,
                 )}
               />
               <DetailRow
-                label="Sender name"
+                label={t("subscriptions.detail.senderName")}
                 value={subscription.receiptSenderName ?? "—"}
               />
               <DetailRow
-                label="Phone"
+                label={t("students.phone")}
                 value={subscription.student.phoneNumber || "—"}
               />
               <DetailRow
-                label="Region"
-                value={regionLabel(subscription.student.region)}
+                label={t("students.region")}
+                value={t(`common.regions.${subscription.student.region}`)}
               />
               <DetailRow
-                label="Submitted"
-                value={formatTimestamp(subscription.createdAt)}
+                label={t("subscriptions.detail.submitted")}
+                value={formatTimestamp(subscription.createdAt, lang)}
               />
               {subscription.rejectionReason ? (
                 <DetailRow
-                  label="Rejection reason"
+                  label={t("subscriptions.detail.rejectionReason")}
                   value={subscription.rejectionReason}
                 />
               ) : null}
@@ -222,7 +244,7 @@ export function SubscriptionDetailView({
           <Card className="rounded-xl border border-outline-variant bg-surface-container-lowest py-0 ring-0">
             <CardHeader className="border-b border-outline-variant px-6 py-4">
               <CardTitle className="text-headline-sm font-display text-on-surface">
-                AI verification
+                {t("subscriptions.table.aiValidation")}
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4 px-6 py-5">
@@ -243,12 +265,16 @@ export function SubscriptionDetailView({
                   <WarningCircleIcon className="mt-0.5 size-5 shrink-0" weight="fill" />
                 ) : null}
                 <div className="flex flex-col gap-1">
-                  <p className="font-bold text-body-md">{ai.summary}</p>
+                  <p className="font-bold text-body-md">{getAiSummary(ai.summary, lang)}</p>
                   {ai.model ? (
-                    <p className="text-body-sm opacity-80">Model: {ai.model}</p>
+                    <p className="text-body-sm opacity-80">
+                      {lang === "ar" ? "النموذج: " : "Model: "}{ai.model}
+                    </p>
                   ) : null}
                   {ai.aiEnabled === false ? (
-                    <p className="text-body-sm opacity-80">AI was skipped for this receipt.</p>
+                    <p className="text-body-sm opacity-80">
+                      {lang === "ar" ? "تم تخطي التحقق الذكي لهذا الإيصال." : "AI was skipped for this receipt."}
+                    </p>
                   ) : null}
                 </div>
               </div>
@@ -262,7 +288,7 @@ export function SubscriptionDetailView({
                     >
                       <div className="flex items-center justify-between gap-3">
                         <p className="text-label-md uppercase tracking-wider text-on-surface-variant">
-                          {row.label}
+                          {getCheckLabel(row.key, row.label, lang)}
                         </p>
                         <span
                           className={cn(
@@ -272,17 +298,19 @@ export function SubscriptionDetailView({
                               : "text-status-rejected",
                           )}
                         >
-                          {row.check.passed ? "Passed" : "Failed"}
+                          {row.check.passed
+                            ? (lang === "ar" ? "ناجح" : "Passed")
+                            : (lang === "ar" ? "فاشل" : "Failed")}
                         </span>
                       </div>
                       {row.check.detected ? (
                         <p className="mt-2 text-body-md text-on-surface">
-                          Detected: {row.check.detected}
+                          {lang === "ar" ? "المكتشف: " : "Detected: "}{row.check.detected}
                         </p>
                       ) : null}
                       {row.check.expected ? (
                         <p className="mt-1 text-body-sm text-on-surface-variant">
-                          Expected: {row.check.expected}
+                          {lang === "ar" ? "المتوقع: " : "Expected: "}{row.check.expected}
                         </p>
                       ) : null}
                       {row.check.reason ? (
@@ -297,7 +325,7 @@ export function SubscriptionDetailView({
 
               {ai.transactionReference ? (
                 <p className="text-body-sm text-on-surface-variant">
-                  Transaction ref:{" "}
+                  {lang === "ar" ? "مرجع المعاملة: " : "Transaction ref: "}{" "}
                   <span className="font-medium text-on-surface">
                     {ai.transactionReference}
                   </span>
@@ -328,7 +356,7 @@ export function SubscriptionDetailView({
                       setConfirm("approve");
                     }}
                   >
-                    Approve
+                    {t("subscriptions.detail.approve")}
                   </Button>
                   <Button
                     type="button"
@@ -341,7 +369,7 @@ export function SubscriptionDetailView({
                       setRejectOpen(true);
                     }}
                   >
-                    Reject
+                    {t("subscriptions.detail.reject")}
                   </Button>
                 </div>
               ) : null}
@@ -357,13 +385,14 @@ export function SubscriptionDetailView({
                     setConfirm("suspend");
                   }}
                 >
-                  Suspend subscription
+                  {t("subscriptions.detail.suspend")}
                 </Button>
               ) : null}
               {!pendingActions && !canSuspend ? (
                 <p className="text-body-md text-on-surface-variant">
-                  This subscription is not awaiting a receipt decision. Approve and
-                  reject apply to pending rows; suspend applies when status is active.
+                  {lang === "ar"
+                    ? "هذا الاشتراك لا ينتظر قراراً بشأن الإيصال. ينطبق القبول والرفض على الصفوف المعلقة؛ وينطبق التعليق عندما تكون الحالة نشطة."
+                    : "This subscription is not awaiting a receipt decision. Approve and reject apply to pending rows; suspend applies when status is active."}
                 </p>
               ) : null}
               {inlineReviewError ? (
@@ -386,17 +415,23 @@ export function SubscriptionDetailView({
           <AlertDialogHeader>
             <AlertDialogTitle>
               {confirm === "suspend"
-                ? "Suspend this subscription?"
-                : "Approve this subscription?"}
+                ? (lang === "ar" ? "تعليق هذا الاشتراك؟" : "Suspend this subscription?")
+                : (lang === "ar" ? "قبول هذا الاشتراك؟" : "Approve this subscription?")}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {confirm === "suspend"
-                ? `Suspend paid access for ${subscription.student.fullName}. Nest will mark the subscription suspended.`
-                : `Approve the receipt for ${subscription.student.fullName} on ${subscription.plan.name}. Nest will activate the subscription.`}
+                ? (lang === "ar"
+                    ? `تعليق الوصول المدفوع لـ ${subscription.student.fullName}. سيقوم Nest بتحديد الاشتراك كـ معلق.`
+                    : `Suspend paid access for ${subscription.student.fullName}. Nest will mark the subscription suspended.`)
+                : (lang === "ar"
+                    ? `الموافقة على إيصال ${subscription.student.fullName} للباقة ${subscription.plan.name}. سيقوم Nest بتفعيل الاشتراك.`
+                    : `Approve the receipt for ${subscription.student.fullName} on ${subscription.plan.name}. Nest will activate the subscription.`)}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={review.isPending}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={review.isPending}>
+              {t("students.confirmCancel")}
+            </AlertDialogCancel>
             <AlertDialogAction
               variant={confirm === "suspend" ? "destructive" : "default"}
               disabled={review.isPending || !confirm}
@@ -414,11 +449,11 @@ export function SubscriptionDetailView({
             >
               {review.isPending
                 ? confirm === "suspend"
-                  ? "Suspending…"
-                  : "Approving…"
+                  ? (lang === "ar" ? "جاري التعليق…" : "Suspending…")
+                  : (lang === "ar" ? "جاري الموافقة…" : "Approving…")
                 : confirm === "suspend"
-                  ? "Confirm suspend"
-                  : "Confirm approve"}
+                  ? (lang === "ar" ? "تأكيد التعليق" : "Confirm suspend")
+                  : (lang === "ar" ? "تأكيد الموافقة" : "Confirm approve")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -438,7 +473,7 @@ export function SubscriptionDetailView({
         pending={review.isPending}
         errorMessage={
           rejectOpen && review.isError && lastAttempt === "reject"
-            ? rejectMutationErrorMessage(review.error)
+            ? rejectMutationErrorMessage(review.error, lang)
             : undefined
         }
         onSubmit={(reason) => {

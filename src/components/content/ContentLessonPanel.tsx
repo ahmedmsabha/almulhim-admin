@@ -22,6 +22,7 @@ import { isApiError } from "@/lib/api/errors";
 import { titleLooksArabic } from "@/lib/content/filter-tree";
 import type { AdminLessonDetail } from "@/lib/content/types";
 import { ACCESS_LEVEL_LABELS } from "@/lib/content/types";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { cn } from "@/lib/utils";
 
 type ContentLessonPanelProps = {
@@ -43,6 +44,8 @@ export function ContentLessonPanel({
   error,
   onEditLesson,
 }: ContentLessonPanelProps) {
+  const { t, lang } = useTranslation();
+
   if (!lessonId) {
     return (
       <Empty className="min-h-72 rounded-xl border border-outline-variant bg-surface-container-lowest">
@@ -50,9 +53,13 @@ export function ContentLessonPanel({
           <EmptyMedia variant="icon">
             <BookOpenIcon />
           </EmptyMedia>
-          <EmptyTitle className="text-on-surface">Select a lesson</EmptyTitle>
+          <EmptyTitle className="text-on-surface">
+            {lang === "ar" ? "اختر درساً" : "Select a lesson"}
+          </EmptyTitle>
           <EmptyDescription>
-            Choose a lesson from the tree to review publish state and media.
+            {lang === "ar"
+              ? "اختر درساً من الشجرة لمراجعة حالة النشر والوسائط."
+              : "Choose a lesson from the tree to review publish state and media."}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -66,10 +73,13 @@ export function ContentLessonPanel({
           <EmptyMedia variant="icon">
             <WarningCircleIcon />
           </EmptyMedia>
-          <EmptyTitle className="text-on-surface">Lesson not found</EmptyTitle>
+          <EmptyTitle className="text-on-surface">
+            {lang === "ar" ? "الدرس غير موجود" : "Lesson not found"}
+          </EmptyTitle>
           <EmptyDescription>
-            This lessonId is not in the current tree. The tree is unchanged;
-            pick another lesson.
+            {lang === "ar"
+              ? "معرّف الدرس هذا ليس في الشجرة الحالية. الشجرة لم تتغير، اختر درساً آخر."
+              : "This lessonId is not in the current tree. The tree is unchanged; pick another lesson."}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -96,14 +106,18 @@ export function ContentLessonPanel({
             <WarningCircleIcon />
           </EmptyMedia>
           <EmptyTitle className="text-on-surface">
-            {notFound ? "Lesson not found" : "Could not load lesson"}
+            {notFound
+              ? (lang === "ar" ? "الدرس غير موجود" : "Lesson not found")
+              : (lang === "ar" ? "فشل تحميل الدرس" : "Could not load lesson")}
           </EmptyTitle>
           <EmptyDescription>
             {notFound
-              ? "The API returned 404 for this lesson. The tree is still available."
+              ? (lang === "ar"
+                  ? "أرجعت واجهة برمجة التطبيقات الخطأ 404 لهذا الدرس. الشجرة لا تزال متاحة."
+                  : "The API returned 404 for this lesson. The tree is still available.")
               : isApiError(error)
                 ? error.message
-                : "Retry by selecting the lesson again."}
+                : (lang === "ar" ? "أعد المحاولة باختيار الدرس مرة أخرى." : "Retry by selecting the lesson again.")}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -111,6 +125,9 @@ export function ContentLessonPanel({
   }
 
   const arabic = titleLooksArabic(detail.title);
+  const translatedAccessLevel = lang === "ar"
+    ? (detail.accessLevel === "preview" ? "مجاني (عام)" : "مميز (مدفوع)")
+    : ACCESS_LEVEL_LABELS[detail.accessLevel];
 
   return (
     <div className="flex flex-col gap-6 rounded-xl border border-outline-variant bg-surface-container-lowest p-6">
@@ -118,7 +135,7 @@ export function ContentLessonPanel({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <p className="mb-1 font-label-md text-label-md text-on-surface-variant uppercase">
-              Lesson detail
+              {lang === "ar" ? "تفاصيل الدرس" : "Lesson detail"}
             </p>
             <h3
               className={cn(
@@ -137,7 +154,7 @@ export function ContentLessonPanel({
                 type="button"
                 size="icon-sm"
                 variant="ghost"
-                aria-label="Edit lesson"
+                aria-label={lang === "ar" ? "تعديل الدرس" : "Edit lesson"}
                 onClick={onEditLesson}
               >
                 <PencilSimpleIcon />
@@ -152,7 +169,7 @@ export function ContentLessonPanel({
           </div>
         </div>
         <Badge variant="outline" className="w-fit">
-          {ACCESS_LEVEL_LABELS[detail.accessLevel]}
+          {translatedAccessLevel}
         </Badge>
       </div>
 

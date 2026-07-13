@@ -13,11 +13,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { REGION_LABELS, REGIONS, type Region } from "@/lib/domain/region";
+import { REGIONS, type Region } from "@/lib/domain/region";
 import {
   SUBSCRIPTION_STATUS_LABELS,
   type SubscriptionStatus,
 } from "@/lib/domain/subscription-status";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 const STATUS_OPTIONS = Object.keys(
   SUBSCRIPTION_STATUS_LABELS
@@ -56,6 +57,7 @@ export function StudentsToolbar({
   const searchParams = useSearchParams();
   const [pending, startTransition] = useTransition();
   const [draftQ, setDraftQ] = useState(q);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setDraftQ(q);
@@ -88,13 +90,13 @@ export function StudentsToolbar({
       data-pending={pending ? "" : undefined}
     >
       <div className="relative w-full max-w-sm">
-        <MagnifyingGlassIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-on-surface-variant" />
+        <MagnifyingGlassIcon className="pointer-events-none absolute top-1/2 left-3 rtl:right-3 rtl:left-auto size-4 -translate-y-1/2 text-on-surface-variant" />
         <Input
           value={draftQ}
           onChange={(event) => setDraftQ(event.target.value)}
-          placeholder="Search name, email, phone, Telegram…"
-          aria-label="Search students"
-          className="h-9 rounded-lg border-outline-variant bg-surface-container-lowest pl-9 text-body-sm"
+          placeholder={t("students.searchPlaceholder")}
+          aria-label={t("students.searchPlaceholder")}
+          className="h-9 rounded-lg border-outline-variant bg-surface-container-lowest pl-9 rtl:pl-4 rtl:pr-9 text-body-sm"
         />
       </div>
       <div className="flex flex-wrap gap-2">
@@ -110,14 +112,14 @@ export function StudentsToolbar({
             className="h-9 min-w-40 rounded-lg border-outline-variant bg-surface-container-lowest text-body-sm"
             aria-label="Filter by region"
           >
-            <SelectValue placeholder="All regions" />
+            <SelectValue placeholder={t("students.allRegions")} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="all">All regions</SelectItem>
+              <SelectItem value="all">{t("students.allRegions")}</SelectItem>
               {REGIONS.map((item) => (
                 <SelectItem key={item} value={item}>
-                  {REGION_LABELS[item]}
+                  {t(`common.regions.${item}`)}
                 </SelectItem>
               ))}
             </SelectGroup>
@@ -135,14 +137,14 @@ export function StudentsToolbar({
             className="h-9 min-w-44 rounded-lg border-outline-variant bg-surface-container-lowest text-body-sm"
             aria-label="Filter by subscription status"
           >
-            <SelectValue placeholder="All statuses" />
+            <SelectValue placeholder={t("students.allStatuses")} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="all">All statuses</SelectItem>
+              <SelectItem value="all">{t("students.allStatuses")}</SelectItem>
               {STATUS_OPTIONS.map((item) => (
                 <SelectItem key={item} value={item}>
-                  {SUBSCRIPTION_STATUS_LABELS[item]}
+                  {t(`common.subscriptionStatuses.${item}`)}
                 </SelectItem>
               ))}
             </SelectGroup>
@@ -159,7 +161,7 @@ export function StudentsToolbar({
               })
             }
           />
-          Show deactivated
+          {t("students.includeDeactivated")}
         </label>
       </div>
     </div>

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import type { Region } from "@/lib/domain/region";
 import type { SubscriptionStatus } from "@/lib/domain/subscription-status";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import type { StudentListResponse } from "@/lib/students/mock-data";
 
 type StudentsViewProps = {
@@ -27,13 +28,15 @@ export function StudentsView({
   status,
   includeDeactivated,
 }: StudentsViewProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader
-          eyebrow="Students"
-          title="Students & Devices"
-          description="Manage enrollment and open a student for device bindings."
+          eyebrow={t("students.eyebrow")}
+          title={t("students.title")}
+          description={t("students.description")}
           className="mb-0"
         />
         <StudentsHeaderActions />
@@ -42,7 +45,7 @@ export function StudentsView({
         <CardHeader className="gap-0 border-b border-outline-variant px-0 py-0">
           <div className="flex items-center justify-between px-6 py-4">
             <CardTitle className="text-headline-sm font-display text-on-surface">
-              Enrollment Directory
+              {t("students.enrollmentDirectory")}
             </CardTitle>
           </div>
           <StudentsToolbar

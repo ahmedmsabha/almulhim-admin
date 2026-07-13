@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/empty";
 import { CONTENT_REGION_LABELS } from "@/lib/content/types";
 import type { AdminAnnouncementSummary } from "@/lib/announcements/types";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { cn } from "@/lib/utils";
 
 type AnnouncementsListProps = {
@@ -22,17 +23,23 @@ type AnnouncementsListProps = {
   onNew: () => void;
 };
 
-function formatDate(iso: string) {
+function formatDate(iso: string, lang: string) {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return iso;
-  return date.toLocaleDateString(undefined, {
+  return date.toLocaleDateString(lang === "ar" ? "ar-EG" : "en-GB", {
     year: "numeric",
     month: "short",
     day: "numeric",
   });
 }
 
-function regionShort(region: AdminAnnouncementSummary["region"]) {
+function regionShort(region: AdminAnnouncementSummary["region"], lang: string) {
+  if (lang === "ar") {
+    if (region === "gaza") return "غزة";
+    if (region === "west_bank") return "الضفة";
+    if (region === "both") return "الكل";
+    return region;
+  }
   if (region === "gaza") return "GAZA";
   if (region === "west_bank") return "WB";
   return "BOTH";
@@ -44,11 +51,13 @@ export function AnnouncementsList({
   onSelect,
   onNew,
 }: AnnouncementsListProps) {
+  const { t, lang } = useTranslation();
+
   return (
     <div className="flex max-h-[820px] flex-col overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest">
       <div className="flex items-center justify-between gap-3 border-b border-outline-variant px-6 py-4">
         <h3 className="font-display text-headline-sm font-semibold text-on-surface">
-          Recent history
+          {lang === "ar" ? "السجل الأخير" : "Recent history"}
         </h3>
         <Button
           type="button"
@@ -58,7 +67,7 @@ export function AnnouncementsList({
           onClick={onNew}
         >
           <PlusIcon className="size-4" aria-hidden />
-          New
+          {lang === "ar" ? "جديد" : "New"}
         </Button>
       </div>
 
@@ -69,30 +78,31 @@ export function AnnouncementsList({
               <MegaphoneIcon />
             </EmptyMedia>
             <EmptyTitle className="text-on-surface">
-              No announcements yet
+              {lang === "ar" ? "لا توجد إعلانات بعد" : "No announcements yet"}
             </EmptyTitle>
             <EmptyDescription>
-              Compose one on the left and save. It will appear here as a draft
-              until you publish.
+              {lang === "ar"
+                ? "قم بإنشاء إعلان على اليسار واحفظه. سيظهر هنا كمسودة حتى تقوم بنشره."
+                : "Compose one on the left and save. It will appear here as a draft until you publish."}
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (
         <div className="flex-1 overflow-auto">
           <table
-            className="w-full border-collapse text-left"
+            className="w-full border-collapse text-left rtl:text-right"
             aria-label="Announcement history"
           >
             <thead className="sticky top-0 z-10 bg-surface-container-low">
               <tr>
                 <th className="px-4 py-3 font-label-md text-label-md uppercase text-on-surface-variant">
-                  Subject
+                  {lang === "ar" ? "الموضوع" : "Subject"}
                 </th>
                 <th className="px-4 py-3 font-label-md text-label-md uppercase text-on-surface-variant">
-                  Region
+                  {lang === "ar" ? "المنطقة" : "Region"}
                 </th>
-                <th className="px-4 py-3 text-right font-label-md text-label-md uppercase text-on-surface-variant">
-                  Status
+                <th className="px-4 py-3 text-right rtl:text-left font-label-md text-label-md uppercase text-on-surface-variant">
+                  {lang === "ar" ? "الحالة" : "Status"}
                 </th>
               </tr>
             </thead>
@@ -110,19 +120,18 @@ export function AnnouncementsList({
                     <td className="px-4 py-4">
                       <button
                         type="button"
-                        className="w-full text-start"
+                        className="w-full text-start rtl:text-right"
                         onClick={() => onSelect(item.id)}
                         aria-current={selected ? "true" : undefined}
                       >
                         <p
-                          className="font-body-md text-body-md font-semibold text-on-surface"
-                          dir="rtl"
-                          lang="ar"
+                          className="font-body-md text-body-md font-semibold text-on-surface text-start rtl:text-right"
+                          dir="auto"
                         >
                           {item.title}
                         </p>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant">
-                          {formatDate(item.createdAt)}
+                        <p className="font-body-sm text-body-sm text-on-surface-variant text-start rtl:text-right">
+                          {formatDate(item.createdAt, lang)}
                         </p>
                       </button>
                     </td>
@@ -130,22 +139,22 @@ export function AnnouncementsList({
                       <Badge
                         variant="secondary"
                         className="text-[11px] font-bold"
-                        title={CONTENT_REGION_LABELS[item.region]}
+                        title={t(`common.regions.${item.region}`)}
                       >
-                        {regionShort(item.region)}
+                        {regionShort(item.region, lang)}
                       </Badge>
                     </td>
-                    <td className="px-4 py-4 text-right">
+                    <td className="px-4 py-4 text-right rtl:text-left">
                       {item.isPublished ? (
                         <Badge className="bg-status-active-bg text-[10px] font-bold uppercase tracking-wider text-status-active">
-                          Published
+                          {lang === "ar" ? "منشور" : "Published"}
                         </Badge>
                       ) : (
                         <Badge
                           variant="secondary"
                           className="text-[10px] font-bold uppercase tracking-wider"
                         >
-                          Draft
+                          {lang === "ar" ? "مسودة" : "Draft"}
                         </Badge>
                       )}
                     </td>

@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { REGION_LABELS } from "@/lib/domain/region";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import type { StudentListResponse } from "@/lib/students/mock-data";
 
 type StudentsTableProps = {
@@ -51,6 +51,7 @@ export function StudentsTable({ data }: StudentsTableProps) {
   const from = total === 0 ? 0 : (page - 1) * pageSize + 1;
   const to = Math.min(page * pageSize, total);
   const maxPage = Math.max(1, Math.ceil(total / pageSize) || 1);
+  const { t, lang } = useTranslation();
 
   function goToPage(nextPage: number) {
     const next = new URLSearchParams(searchParams.toString());
@@ -69,9 +70,9 @@ export function StudentsTable({ data }: StudentsTableProps) {
             <EmptyMedia variant="icon">
               <UsersThreeIcon />
             </EmptyMedia>
-            <EmptyTitle className="text-on-surface">No students found</EmptyTitle>
+            <EmptyTitle className="text-on-surface">{t("students.table.noStudents")}</EmptyTitle>
             <EmptyDescription>
-              Try a different search or clear region and status filters.
+              {t("students.table.noStudentsHint")}
             </EmptyDescription>
           </EmptyHeader>
         </Empty>
@@ -80,19 +81,19 @@ export function StudentsTable({ data }: StudentsTableProps) {
           <TableHeader>
             <TableRow className="border-outline-variant bg-surface-container-low/50 hover:bg-surface-container-low/50">
               <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-                Student Profile
+                {t("students.table.student")}
               </TableHead>
               <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-                Contact
+                {lang === "ar" ? "التواصل" : "Contact"}
               </TableHead>
               <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-                Telegram
+                {lang === "ar" ? "تيليجرام" : "Telegram"}
               </TableHead>
               <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-                Region
+                {t("students.table.region")}
               </TableHead>
               <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-                Status
+                {t("students.table.status")}
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -128,7 +129,7 @@ export function StudentsTable({ data }: StudentsTableProps) {
                       {student.email}
                     </span>
                     <span className="font-mono text-[11px] text-on-surface-variant">
-                      {student.phone ?? "No phone"}
+                      {student.phone ?? (lang === "ar" ? "لا يوجد هاتف" : "No phone")}
                     </span>
                   </div>
                 </TableCell>
@@ -139,19 +140,19 @@ export function StudentsTable({ data }: StudentsTableProps) {
                     </span>
                   ) : (
                     <span className="text-body-sm text-on-surface-variant">
-                      None
+                      {lang === "ar" ? "لا يوجد" : "None"}
                     </span>
                   )}
                 </TableCell>
                 <TableCell className="px-6 py-4 text-on-surface-variant">
-                  {REGION_LABELS[student.region]}
+                  {t(`common.regions.${student.region}`)}
                 </TableCell>
                 <TableCell className="px-6 py-4">
                   <div className="flex flex-col items-start gap-1">
                     <StatusBadge status={student.subscriptionStatus} />
                     {student.deactivatedAt ? (
                       <span className="text-[11px] font-medium text-status-suspended">
-                        Deactivated
+                        {t("students.deactivatedLabel")}
                       </span>
                     ) : null}
                   </div>
@@ -163,7 +164,9 @@ export function StudentsTable({ data }: StudentsTableProps) {
       )}
       <div className="flex flex-col gap-3 border-t border-outline-variant px-6 py-4 text-body-sm text-on-surface-variant sm:flex-row sm:items-center sm:justify-between">
         <span>
-          Showing {from}-{to} of {total.toLocaleString()} students
+          {lang === "ar"
+            ? `عرض ${from}-${to} من أصل ${total.toLocaleString("ar-EG")} من الطلاب`
+            : `Showing ${from}-${to} of ${total.toLocaleString("en-US")} students`}
         </span>
         <div className="flex gap-2">
           <Button
@@ -176,7 +179,7 @@ export function StudentsTable({ data }: StudentsTableProps) {
             aria-label="Previous page"
           >
             <CaretLeftIcon data-icon="inline-start" />
-            Prev
+            {lang === "ar" ? "السابق" : "Prev"}
           </Button>
           <Button
             type="button"
@@ -187,7 +190,7 @@ export function StudentsTable({ data }: StudentsTableProps) {
             onClick={() => goToPage(page + 1)}
             aria-label="Next page"
           >
-            Next
+            {lang === "ar" ? "التالي" : "Next"}
             <CaretRightIcon data-icon="inline-end" />
           </Button>
         </div>

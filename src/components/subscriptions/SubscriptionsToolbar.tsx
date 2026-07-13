@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type SubscriptionsToolbarProps = {
   q: string;
@@ -31,6 +32,7 @@ export function SubscriptionsToolbar({ q }: SubscriptionsToolbarProps) {
   const searchParams = useSearchParams();
   const [pending, startTransition] = useTransition();
   const [draftQ, setDraftQ] = useState(q);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setDraftQ(q);
@@ -56,13 +58,13 @@ export function SubscriptionsToolbar({ q }: SubscriptionsToolbarProps) {
       data-pending={pending ? "" : undefined}
     >
       <div className="relative w-full max-w-sm">
-        <MagnifyingGlassIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-on-surface-variant" />
+        <MagnifyingGlassIcon className="pointer-events-none absolute top-1/2 left-3 rtl:right-3 rtl:left-auto size-4 -translate-y-1/2 text-on-surface-variant" />
         <Input
           value={draftQ}
           onChange={(event) => setDraftQ(event.target.value)}
-          placeholder="Search student name or email…"
-          aria-label="Search pending subscriptions"
-          className="h-9 rounded-lg border-outline-variant bg-surface-container-lowest pl-9 text-body-sm"
+          placeholder={t("subscriptions.toolbar.search")}
+          aria-label={t("subscriptions.toolbar.search")}
+          className="h-9 rounded-lg border-outline-variant bg-surface-container-lowest pl-9 rtl:pl-4 rtl:pr-9 text-body-sm"
         />
       </div>
     </div>

@@ -24,6 +24,7 @@ import type {
 } from "@/lib/content/types";
 import { useContentLesson } from "@/lib/content/use-content-lesson";
 import { useContentSearch } from "@/lib/content/use-content-search";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type ContentViewProps = {
   tree: AdminContentTreeResponse;
@@ -73,6 +74,7 @@ export function ContentView({ tree, lessonId, q }: ContentViewProps) {
   const searchParams = useSearchParams();
   const [draftQ, setDraftQ] = useState(q);
   const [dialog, setDialog] = useState<DialogState>(null);
+  const { t, lang } = useTranslation();
 
   useEffect(() => {
     setDraftQ(q);
@@ -146,9 +148,9 @@ export function ContentView({ tree, lessonId, q }: ContentViewProps) {
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        eyebrow="Content"
-        title="Course Structure"
-        description="Create and edit the Unit → Chapter → Lesson tree, publish levels, and manage lesson media."
+        eyebrow={t("content.eyebrow")}
+        title={t("content.title")}
+        description={t("content.description")}
         className="mb-0"
       />
       <div className="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest">
@@ -172,8 +174,8 @@ export function ContentView({ tree, lessonId, q }: ContentViewProps) {
                 actions={treeActions}
                 emptyMessage={
                   hasSearchQuery
-                    ? "No units, chapters, or lessons matched this search."
-                    : "No units in the curriculum yet."
+                    ? (lang === "ar" ? "لم تطابق أي وحدات أو فصول أو دروس هذا البحث." : "No units, chapters, or lessons matched this search.")
+                    : (lang === "ar" ? "لا توجد وحدات في المنهج بعد." : "No units in the curriculum yet.")
                 }
               />
             )}

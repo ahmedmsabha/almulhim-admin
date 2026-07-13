@@ -32,6 +32,7 @@ import {
 } from "@/app/(dashboard)/(gated)/dev/subscriptions/actions";
 import { fetchAllPlans } from "@/lib/plans/fetch-plans";
 import type { AdminPlan } from "@/lib/plans/types";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 const initialState: SeedTestCheckoutState | null = null;
 
@@ -45,6 +46,7 @@ export function SubscriptionTestCheckoutView() {
     seedTestCheckoutAction,
     initialState,
   );
+  const { t, lang } = useTranslation();
 
   useEffect(() => {
     let cancelled = false;
@@ -52,7 +54,11 @@ export function SubscriptionTestCheckoutView() {
       try {
         const token = await getToken();
         if (!token) {
-          if (!cancelled) setPlansError("Sign in again to load plans.");
+          if (!cancelled) {
+            setPlansError(
+              lang === "ar" ? "سجل الدخول مرة أخرى لتحميل الباقات." : "Sign in again to load plans.",
+            );
+          }
           return;
         }
         const list = await fetchAllPlans(token);
@@ -63,7 +69,9 @@ export function SubscriptionTestCheckoutView() {
       } catch (error) {
         if (!cancelled) {
           setPlansError(
-            error instanceof Error ? error.message : "Could not load plans.",
+            error instanceof Error
+              ? error.message
+              : (lang === "ar" ? "لم نتمكن من تحميل الباقات." : "Could not load plans."),
           );
         }
       }
@@ -71,7 +79,7 @@ export function SubscriptionTestCheckoutView() {
     return () => {
       cancelled = true;
     };
-  }, [getToken]);
+  }, [getToken, lang]);
 
   useEffect(() => {
     if (state?.ok) {
@@ -82,23 +90,27 @@ export function SubscriptionTestCheckoutView() {
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        eyebrow="Receipt review"
-        title="Test checkout"
-        description="Submit a real student receipt through Nest (presign → R2 → submit). Gemini (gemini-3.5-flash) runs on the backend, then you land on the same review screen as production."
+        eyebrow={t("subscriptions.titles.pending")}
+        title={lang === "ar" ? "تجربة الدفع" : "Test checkout"}
+        description={
+          lang === "ar"
+            ? "أرسل إيصال طالب حقيقي من خلال Nest (presign ← R2 ← إرسال). يعمل نموذج Gemini (gemini-3.5-flash) في الخلفية، ثم تفتح نفس شاشة المراجعة للإنتاج."
+            : "Submit a real student receipt through Nest (presign → R2 → submit). Gemini (gemini-3.5-flash) runs on the backend, then you land on the same review screen as production."
+        }
         className="mb-0"
       />
 
       <Card className="mx-auto w-full max-w-xl rounded-xl border border-outline-variant bg-surface-container-lowest py-0 ring-0">
         <CardHeader className="border-b border-outline-variant px-6 py-4">
           <CardTitle className="text-headline-sm font-display text-on-surface">
-            Student subscription
+            {lang === "ar" ? "اشتراك الطالب" : "Student subscription"}
           </CardTitle>
         </CardHeader>
         <CardContent className="px-6 py-5">
           <form action={formAction} className="flex flex-col gap-4">
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor="planId">Plan</FieldLabel>
+                <FieldLabel htmlFor="planId">{t("subscriptions.table.plan")}</FieldLabel>
                 <input type="hidden" name="planId" value={planId} />
                 <Select
                   value={planId || null}
@@ -108,7 +120,7 @@ export function SubscriptionTestCheckoutView() {
                   disabled={pending || plans.length === 0}
                 >
                   <SelectTrigger id="planId" className="w-full">
-                    <SelectValue placeholder="Select a plan" />
+                    <SelectValue placeholder={lang === "ar" ? "اختر باقة" : "Select a plan"} />
                   </SelectTrigger>
                   <SelectContent>
                     {plans.map((plan) => (
@@ -123,7 +135,7 @@ export function SubscriptionTestCheckoutView() {
               </Field>
 
               <Field>
-                <FieldLabel htmlFor="senderName">Receipt sender name</FieldLabel>
+                <FieldLabel htmlFor="senderName">{t("subscriptions.detail.senderName")}</FieldLabel>
                 <Input
                   id="senderName"
                   name="senderName"
@@ -136,7 +148,7 @@ export function SubscriptionTestCheckoutView() {
               </Field>
 
               <Field>
-                <FieldLabel htmlFor="receipt">Receipt image</FieldLabel>
+                <FieldLabel htmlFor="receipt">{lang === "ar" ? "صورة الإيصال" : "Receipt image"}</FieldLabel>
                 <Input
                   id="receipt"
                   name="receipt"
@@ -155,12 +167,16 @@ export function SubscriptionTestCheckoutView() {
             ) : null}
             {state?.ok ? (
               <p className="text-body-sm text-status-active" role="status">
-                Submitted for {state.studentEmail}. Opening review…
+                {lang === "ar"
+                  ? `تم الإرسال لـ ${state.studentEmail}. جاري فتح المراجعة…`
+                  : `Submitted for ${state.studentEmail}. Opening review…`}
               </p>
             ) : null}
 
             <Button type="submit" disabled={pending || !planId}>
-              {pending ? "Submitting to Nest…" : "Submit & open review"}
+              {pending
+                ? (lang === "ar" ? "جاري الإرسال إلى Nest…" : "Submitting to Nest…")
+                : (lang === "ar" ? "إرسال وفتح المراجعة" : "Submit & open review")}
             </Button>
           </form>
         </CardContent>

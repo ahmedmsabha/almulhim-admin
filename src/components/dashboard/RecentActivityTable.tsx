@@ -24,6 +24,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { DashboardStats } from "@/lib/dashboard/mock-data";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type RecentActivityTableProps = {
   rows: DashboardStats["recentActivity"];
@@ -38,31 +39,41 @@ function initials(fullName: string) {
     .join("");
 }
 
-function formatRelativeTime(iso: string) {
+function formatRelativeTime(iso: string, lang: string) {
   const then = new Date(iso).getTime();
   if (Number.isNaN(then)) return iso;
   const now = Date.now();
   const diffMs = Math.max(0, now - then);
   const mins = Math.floor(diffMs / 60_000);
-  if (mins < 60) return `${mins} mins ago`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 48) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
-  const days = Math.floor(hours / 24);
-  return `${days} day${days === 1 ? "" : "s"} ago`;
+  if (lang === "ar") {
+    if (mins < 60) return `قبل ${mins} دقيقة`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 48) return `قبل ${hours} ساعة`;
+    const days = Math.floor(hours / 24);
+    return `قبل ${days} يوم`;
+  } else {
+    if (mins < 60) return `${mins} mins ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 48) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+    const days = Math.floor(hours / 24);
+    return `${days} day${days === 1 ? "" : "s"} ago`;
+  }
 }
 
 export function RecentActivityTable({ rows }: RecentActivityTableProps) {
+  const { t, lang } = useTranslation();
+
   return (
     <Card className="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest py-0 ring-0">
       <CardHeader className="flex flex-row items-center justify-between border-b border-outline-variant bg-surface-container-low/30 px-6 py-6">
         <CardTitle className="text-headline-sm font-display text-on-surface">
-          Recent Activity
+          {t("dashboard.recentActivity")}
         </CardTitle>
         <Link
           href="/students"
           className="text-body-sm font-bold text-primary underline-offset-4 hover:underline"
         >
-          View All Students
+          {t("dashboard.viewAllStudents")}
         </Link>
       </CardHeader>
       <CardContent className="px-0">
@@ -72,9 +83,9 @@ export function RecentActivityTable({ rows }: RecentActivityTableProps) {
               <EmptyMedia variant="icon">
                 <UsersThreeIcon />
               </EmptyMedia>
-              <EmptyTitle className="text-on-surface">No recent activity</EmptyTitle>
+              <EmptyTitle className="text-on-surface">{t("dashboard.noRecentActivity")}</EmptyTitle>
               <EmptyDescription>
-                Subscription and support events will show up here.
+                {t("dashboard.activityHint")}
               </EmptyDescription>
             </EmptyHeader>
           </Empty>
@@ -83,13 +94,13 @@ export function RecentActivityTable({ rows }: RecentActivityTableProps) {
             <TableHeader>
               <TableRow className="border-outline-variant bg-surface-container-low/50 hover:bg-surface-container-low/50">
                 <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-                  Student Name
+                  {t("dashboard.studentName")}
                 </TableHead>
                 <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-                  Action
+                  {t("dashboard.action")}
                 </TableHead>
-                <TableHead className="px-6 py-4 text-right text-label-md uppercase tracking-wider text-on-surface-variant">
-                  When
+                <TableHead className="px-6 py-4 text-right rtl:text-left text-label-md uppercase tracking-wider text-on-surface-variant">
+                  {t("dashboard.when")}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -114,8 +125,8 @@ export function RecentActivityTable({ rows }: RecentActivityTableProps) {
                   <TableCell className="px-6 py-4 text-on-surface-variant">
                     {row.action}
                   </TableCell>
-                  <TableCell className="px-6 py-4 text-right font-mono text-label-md text-on-surface-variant">
-                    {formatRelativeTime(row.timestamp)}
+                  <TableCell className="px-6 py-4 text-right rtl:text-left font-mono text-label-md text-on-surface-variant">
+                    {formatRelativeTime(row.timestamp, lang)}
                   </TableCell>
                 </TableRow>
               ))}

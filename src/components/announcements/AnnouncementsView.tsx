@@ -7,6 +7,7 @@ import { AnnouncementsComposer } from "@/components/announcements/AnnouncementsC
 import { AnnouncementsList } from "@/components/announcements/AnnouncementsList";
 import { PageHeader } from "@/components/layout/PageHeader";
 import type { AdminAnnouncementListResponse } from "@/lib/announcements/types";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type AnnouncementsViewProps = {
   data: AdminAnnouncementListResponse;
@@ -34,6 +35,7 @@ export function AnnouncementsView({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
 
   const selected = useMemo(() => {
     if (!selectedId) return null;
@@ -55,9 +57,9 @@ export function AnnouncementsView({
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        eyebrow="Announcements"
-        title="Announcements"
-        description="Create and manage regional broadcast messages."
+        eyebrow={t("announcements.eyebrow")}
+        title={t("announcements.title")}
+        description={t("announcements.description")}
         className="mb-0"
       />
 

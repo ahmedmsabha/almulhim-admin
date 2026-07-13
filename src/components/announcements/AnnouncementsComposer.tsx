@@ -43,6 +43,7 @@ import {
   type ContentRegion,
 } from "@/lib/content/types";
 import { nestFieldErrorsFromApiError } from "@/lib/plans/nest-field-errors";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type AnnouncementsComposerProps = {
   selected: AdminAnnouncementSummary | null;
@@ -56,6 +57,7 @@ export function AnnouncementsComposer({
   const create = useCreateAnnouncement();
   const update = useUpdateAnnouncement();
   const isEdit = Boolean(selected);
+  const { t, lang } = useTranslation();
 
   const form = useForm<AnnouncementFormInput, unknown, AnnouncementFormValues>({
     resolver: zodResolver(announcementFormSchema),
@@ -106,7 +108,7 @@ export function AnnouncementsComposer({
         form.setError("root", {
           message: isApiError(error)
             ? error.message
-            : "Could not save announcement.",
+            : (lang === "ar" ? "تعذر حفظ الإعلان." : "Could not save announcement."),
         });
       }
     }
@@ -122,10 +124,12 @@ export function AnnouncementsComposer({
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h3 className="font-display text-headline-sm font-semibold text-on-surface">
-              {isEdit ? "Edit announcement" : "New announcement"}
+              {isEdit ? t("announcements.form.edit") : t("announcements.form.create")}
             </h3>
             <p className="mt-1 text-body-sm text-on-surface-variant">
-              Title, Arabic body, and region. Publish is separate from Save.
+              {lang === "ar"
+                ? "العنوان، نص الرسالة بالعربية، والمنطقة المستهدفة. النشر منفصل عن الحفظ."
+                : "Title, Arabic body, and region. Publish is separate from Save."}
             </p>
           </div>
           {selected ? (
@@ -140,18 +144,18 @@ export function AnnouncementsComposer({
         <FieldGroup>
           <Field data-invalid={Boolean(form.formState.errors.title)}>
             <FieldLabel htmlFor="announcement-title">
-              Announcement subject
+              {t("announcements.form.title")}
             </FieldLabel>
             <Input
               id="announcement-title"
-              placeholder="Enter announcement title…"
+              placeholder={lang === "ar" ? "أدخل عنوان الإعلان…" : "Enter announcement title…"}
               {...form.register("title")}
             />
             <FieldError>{form.formState.errors.title?.message}</FieldError>
           </Field>
 
           <Field data-invalid={Boolean(form.formState.errors.region)}>
-            <FieldLabel>Target region</FieldLabel>
+            <FieldLabel>{lang === "ar" ? "المنطقة المستهدفة" : "Target region"}</FieldLabel>
             <Controller
               control={form.control}
               name="region"
@@ -174,7 +178,7 @@ export function AnnouncementsComposer({
                         Object.keys(CONTENT_REGION_LABELS) as ContentRegion[]
                       ).map((region) => (
                         <SelectItem key={region} value={region}>
-                          {CONTENT_REGION_LABELS[region]}
+                          {t(`common.regions.${region}`)}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -187,7 +191,7 @@ export function AnnouncementsComposer({
 
           <Field data-invalid={Boolean(form.formState.errors.body)}>
             <FieldLabel htmlFor="announcement-body">
-              Message content (Arabic)
+              {t("announcements.form.body")}
             </FieldLabel>
             <Textarea
               id="announcement-body"
@@ -220,7 +224,11 @@ export function AnnouncementsComposer({
             data-icon="leading"
           >
             <FloppyDiskIcon className="size-4" aria-hidden />
-            {saving ? "Saving…" : isEdit ? "Save changes" : "Save draft"}
+            {saving
+              ? (lang === "ar" ? "جاري الحفظ…" : "Saving…")
+              : isEdit
+              ? t("announcements.form.save")
+              : (lang === "ar" ? "حفظ مسودة" : "Save draft")}
           </Button>
         </div>
       </form>

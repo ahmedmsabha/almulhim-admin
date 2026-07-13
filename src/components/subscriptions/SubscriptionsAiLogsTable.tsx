@@ -32,17 +32,18 @@ import {
   parseVerificationResult,
   type VerificationOutcome,
 } from "@/lib/subscriptions/parse-verification-result";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { cn } from "@/lib/utils";
 
 type SubscriptionsAiLogsTableProps = {
   data: AiVerificationLogListResponse;
 };
 
-function formatVerifiedAt(iso: string | null) {
+function formatVerifiedAt(iso: string | null, lang: string) {
   if (!iso) return "—";
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("en-GB", {
+  return new Intl.DateTimeFormat(lang === "ar" ? "ar-EG" : "en-GB", {
     timeZone: "UTC",
     day: "numeric",
     month: "short",
@@ -53,6 +54,21 @@ function formatVerifiedAt(iso: string | null) {
   }).format(date);
 }
 
+function getAiSummary(summary: string, lang: string) {
+  if (lang !== "ar") return summary;
+  const s = summary.trim();
+  if (s === "Awaiting AI") return "بانتظار الذكاء الاصطناعي";
+  if (s === "AI skipped") return "تم تخطي التحقق الذكي";
+  if (s === "All checks passed") return "اجتازت جميع الفحوصات";
+  if (s === "One check failed") return "فشل أحد الفحوصات";
+  if (s === "Review needed") return "بحاجة إلى مراجعة";
+  if (s === "Document matches") return "المستند مطابق";
+  if (s === "Awaiting AI verification") return "بانتظار التحقق بالذكاء الاصطناعي";
+  if (s === "AI checks passed") return "اجتازت فحوصات الذكاء الاصطناعي";
+  if (s === "AI checks need review") return "فحوصات الذكاء الاصطناعي بحاجة لمراجعة";
+  return s;
+}
+
 function AiCell({
   outcome,
   summary,
@@ -60,6 +76,7 @@ function AiCell({
   outcome: VerificationOutcome | null;
   summary: string;
 }) {
+  const { lang } = useTranslation();
   const Icon =
     outcome === "pass"
       ? CheckCircleIcon
@@ -80,7 +97,7 @@ function AiCell({
       )}
     >
       {Icon ? <Icon className="size-5 shrink-0" weight="fill" aria-hidden /> : null}
-      <span>{summary}</span>
+      <span>{getAiSummary(summary, lang)}</span>
     </div>
   );
 }
@@ -89,6 +106,7 @@ export function SubscriptionsAiLogsTable({
   data,
 }: SubscriptionsAiLogsTableProps) {
   const { logs } = data;
+  const { t, lang } = useTranslation();
 
   if (logs.length === 0) {
     return (
@@ -97,10 +115,11 @@ export function SubscriptionsAiLogsTable({
           <EmptyMedia variant="icon">
             <QueueIcon />
           </EmptyMedia>
-          <EmptyTitle className="text-on-surface">No AI logs yet</EmptyTitle>
+          <EmptyTitle className="text-on-surface">{t("subscriptions.table.empty")}</EmptyTitle>
           <EmptyDescription>
-            Receipts with a Nest `verifiedAt` timestamp appear here after Gemini
-            runs.
+            {lang === "ar"
+              ? "تظهر الإيصالات التي تحتوي على طابع زمني للتحقق بعد تشغيل Gemini."
+              : "Receipts with a Nest verifiedAt timestamp appear here after Gemini runs."}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -112,25 +131,25 @@ export function SubscriptionsAiLogsTable({
       <TableHeader>
         <TableRow className="border-outline-variant bg-surface-container-low/50 hover:bg-surface-container-low/50">
           <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-            Student
+            {t("subscriptions.table.student")}
           </TableHead>
           <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-            Plan
+            {t("subscriptions.table.plan")}
           </TableHead>
           <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-            Verified
+            {lang === "ar" ? "تاريخ التحقق" : "Verified"}
           </TableHead>
           <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-            Status
+            {t("subscriptions.table.status")}
           </TableHead>
           <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-            AI result
+            {t("subscriptions.table.aiValidation")}
           </TableHead>
           <TableHead className="px-6 py-4 text-label-md uppercase tracking-wider text-on-surface-variant">
-            Model
+            {lang === "ar" ? "النموذج" : "Model"}
           </TableHead>
-          <TableHead className="px-6 py-4 text-right text-label-md uppercase tracking-wider text-on-surface-variant">
-            View
+          <TableHead className="px-6 py-4 text-right rtl:text-left text-label-md uppercase tracking-wider text-on-surface-variant">
+            {lang === "ar" ? "عرض" : "View"}
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -160,7 +179,7 @@ export function SubscriptionsAiLogsTable({
                 {row.plan.name}
               </TableCell>
               <TableCell className="px-6 py-4 text-on-surface-variant">
-                {formatVerifiedAt(row.verifiedAt)}
+                {formatVerifiedAt(row.verifiedAt, lang)}
               </TableCell>
               <TableCell className="px-6 py-4">
                 <StatusBadge status={row.status} />
@@ -178,7 +197,7 @@ export function SubscriptionsAiLogsTable({
                     buttonVariants({ variant: "ghost", size: "icon" }),
                     "text-on-surface-variant",
                   )}
-                  aria-label={`Open ${row.student.fullName}`}
+                  aria-label={`${lang === "ar" ? "عرض" : "Open"} ${row.student.fullName}`}
                 >
                   <EyeIcon className="size-4" />
                 </Link>

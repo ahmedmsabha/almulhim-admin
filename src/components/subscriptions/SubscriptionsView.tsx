@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import type {
   AdminSubscriptionListResponse,
   AiVerificationLogListResponse,
@@ -34,19 +35,21 @@ export function SubscriptionsView({
   subscriptions,
   aiLogs,
 }: SubscriptionsViewProps) {
+  const { t } = useTranslation();
+
   const title =
     tab === "pending"
-      ? "Receipt review"
+      ? t("subscriptions.titles.pending")
       : tab === "archived"
-        ? "Archived decisions"
-        : "AI verification logs";
+        ? t("subscriptions.titles.archived")
+        : t("subscriptions.titles.ai_logs");
 
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        eyebrow="Subscriptions"
-        title="Approval Queue"
-        description="Review pending receipts before students unlock paid lessons."
+        eyebrow={t("subscriptions.eyebrow")}
+        title={t("subscriptions.title")}
+        description={t("subscriptions.description")}
         className="mb-0"
       />
       <Card className="overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest py-0 ring-0">

@@ -14,6 +14,7 @@ import {
   type SupportRequestStatus,
 } from "@/lib/domain/support-request-status";
 import type { AdminSupportRequestListResponse } from "@/lib/support/types";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { cn } from "@/lib/utils";
 
 type SupportViewProps = {
@@ -52,6 +53,7 @@ export function SupportView({
   const searchParams = useSearchParams();
   const [pending, startTransition] = useTransition();
   const [draftQ, setDraftQ] = useState(q);
+  const { t, lang } = useTranslation();
 
   useEffect(() => {
     setDraftQ(q);
@@ -109,12 +111,21 @@ export function SupportView({
     }
   }, [requests, selectedId, patchUrl]);
 
+  const getStatusLabel = (val: string) => {
+    if (lang === "ar") {
+      if (val === "open") return "مفتوح";
+      if (val === "replied") return "تم الرد";
+      if (val === "closed") return "مغلق";
+    }
+    return SUPPORT_REQUEST_STATUS_LABELS[val as SupportRequestStatus];
+  };
+
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        eyebrow="Support"
-        title="Support Inbox"
-        description="Review student tickets, read the thread, and prepare replies."
+        eyebrow={t("support.eyebrow")}
+        title={t("support.title")}
+        description={t("support.description")}
         className="mb-0"
       />
 
@@ -125,14 +136,14 @@ export function SupportView({
           aria-label="Filter by status"
         >
           <FilterChip
-            label="All"
+            label={lang === "ar" ? "الكل" : "All"}
             active={status === ""}
             onClick={() => patchUrl({ status: null })}
           />
           {SUPPORT_REQUEST_STATUSES.map((value) => (
             <FilterChip
               key={value}
-              label={SUPPORT_REQUEST_STATUS_LABELS[value]}
+              label={getStatusLabel(value)}
               active={status === value}
               onClick={() => patchUrl({ status: value })}
             />
@@ -141,15 +152,15 @@ export function SupportView({
 
         <div className="relative w-full max-w-sm">
           <MagnifyingGlassIcon
-            className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-on-surface-variant"
+            className="pointer-events-none absolute start-3 rtl:end-3 rtl:start-auto top-1/2 size-4 -translate-y-1/2 text-on-surface-variant"
             aria-hidden
           />
           <Input
             value={draftQ}
             onChange={(event) => setDraftQ(event.target.value)}
-            placeholder="Search name, email, or subject"
-            className="ps-9"
-            aria-label="Search support requests"
+            placeholder={lang === "ar" ? "ابحث بالاسم، البريد الإلكتروني، أو الموضوع" : "Search name, email, or subject"}
+            className="ps-9 rtl:ps-4 rtl:pe-9"
+            aria-label={lang === "ar" ? "البحث في طلبات الدعم" : "Search support requests"}
             disabled={pending}
           />
         </div>

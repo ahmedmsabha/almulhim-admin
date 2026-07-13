@@ -12,24 +12,25 @@ import {
   useCloseSupportRequest,
   useReplySupportRequest,
 } from "@/lib/support/use-support-mutations";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type SupportComposerProps = {
   requestId: string;
   ticketStatus: SupportRequestStatus;
 };
 
-const CLOSED_HELPER =
-  "This ticket is closed. Reply and close are unavailable.";
+const CLOSED_HELPER = "This ticket is closed. Reply and close are unavailable.";
+const CLOSED_HELPER_AR = "هذه التذكرة مغلقة. الرد والإغلاق غير متاحين.";
 
-function mutationErrorMessage(error: unknown): string {
-  if (!isApiError(error)) return "Something went wrong. Try again.";
-  if (error.status === 400) return error.message || "Request was rejected.";
-  if (error.status === 404) return "This support request no longer exists.";
+function mutationErrorMessage(error: unknown, lang: string): string {
+  if (!isApiError(error)) return lang === "ar" ? "حدث خطأ ما. حاول مرة أخرى." : "Something went wrong. Try again.";
+  if (error.status === 400) return error.message || (lang === "ar" ? "تم رفض الطلب." : "Request was rejected.");
+  if (error.status === 404) return lang === "ar" ? "طلب الدعم هذا لم يعد موجوداً." : "This support request no longer exists.";
   if (error.kind === "unauthorized") {
-    return "Your session token was missing. Sign in again, then retry.";
+    return lang === "ar" ? "رمز الجلسة مفقود. سجل الدخول مرة أخرى ثم أعد المحاولة." : "Your session token was missing. Sign in again, then retry.";
   }
   if (error.kind === "network" || error.kind === "config") {
-    return "Could not reach the Mulhim Backend. Check the API and try again.";
+    return lang === "ar" ? "تعذر الاتصال بـ Mulhim Backend. تحقق من واجهة برمجة التطبيقات وحاول مرة أخرى." : "Could not reach the Mulhim Backend. Check the API and try again.";
   }
   return error.message;
 }
@@ -41,6 +42,7 @@ export function SupportComposer({
   const isClosed = ticketStatus === "closed";
   const [draft, setDraft] = useState("");
   const [validationError, setValidationError] = useState<string | null>(null);
+  const { lang } = useTranslation();
 
   const reply = useReplySupportRequest();
   const close = useCloseSupportRequest();
@@ -62,7 +64,7 @@ export function SupportComposer({
     const parsed = replySupportSchema.safeParse({ reply: draft });
     if (!parsed.success) {
       setValidationError(
-        parsed.error.issues[0]?.message ?? "Reply is required",
+        parsed.error.issues[0]?.message ?? (lang === "ar" ? "الرد مطلوب" : "Reply is required"),
       );
       return;
     }
@@ -87,7 +89,7 @@ export function SupportComposer({
     <div className="border-t border-outline-variant bg-surface-container-lowest p-4">
       <div className="overflow-hidden rounded-xl border border-outline-variant focus-within:ring-2 focus-within:ring-primary/30">
         <label htmlFor="support-reply" className="sr-only">
-          Reply
+          {lang === "ar" ? "رد" : "Reply"}
         </label>
         <Textarea
           id="support-reply"
@@ -100,8 +102,8 @@ export function SupportComposer({
           }}
           placeholder={
             isClosed
-              ? "Closed tickets cannot accept replies"
-              : "Type your reply here…"
+              ? (lang === "ar" ? "لا يمكن الرد على التذاكر المغلقة" : "Closed tickets cannot accept replies")
+              : (lang === "ar" ? "اكتب ردك هنا…" : "Type your reply here…")
           }
           className="min-h-20 resize-none rounded-none border-0 bg-transparent px-4 py-4 text-body-md md:text-body-md"
           aria-describedby="support-reply-help"
@@ -112,8 +114,10 @@ export function SupportComposer({
             className="text-body-sm text-on-surface-variant"
           >
             {isClosed
-              ? CLOSED_HELPER
-              : "A reply emails the student when Nest mail is enabled. Close marks the ticket done."}
+              ? (lang === "ar" ? CLOSED_HELPER_AR : CLOSED_HELPER)
+              : (lang === "ar"
+                  ? "يرسل الرد بريداً إلكترونياً إلى الطالب عندما يتم تمكين بريد Nest. يحدد خيار الإغلاق التذكرة كمكتملة."
+                  : "A reply emails the student when Nest mail is enabled. Close marks the ticket done.")}
           </p>
           <div className="flex shrink-0 gap-2">
             <Button
@@ -122,7 +126,9 @@ export function SupportComposer({
               disabled={isClosed || busy}
               onClick={handleClose}
             >
-              {close.isPending ? "Closing…" : "Close ticket"}
+              {close.isPending
+                ? (lang === "ar" ? "جاري الإغلاق…" : "Closing…")
+                : (lang === "ar" ? "إغلاق التذكرة" : "Close ticket")}
             </Button>
             <Button
               type="button"
@@ -130,7 +136,9 @@ export function SupportComposer({
               className="gap-2"
               onClick={handleReply}
             >
-              {reply.isPending ? "Sending…" : "Send reply"}
+              {reply.isPending
+                ? (lang === "ar" ? "جاري الإرسال…" : "Sending…")
+                : (lang === "ar" ? "إرسال الرد" : "Send reply")}
               <PaperPlaneTiltIcon className="size-4" aria-hidden />
             </Button>
           </div>
@@ -143,7 +151,7 @@ export function SupportComposer({
       ) : null}
       {actionError ? (
         <p className="mt-2 text-body-sm text-error" role="alert">
-          {mutationErrorMessage(actionError)}
+          {mutationErrorMessage(actionError, lang)}
         </p>
       ) : null}
     </div>

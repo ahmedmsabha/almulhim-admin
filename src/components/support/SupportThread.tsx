@@ -11,20 +11,55 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { REGION_LABELS } from "@/lib/domain/region";
 import {
-  formatSupportTime,
   initialsFromName,
   looksArabic,
 } from "@/lib/support/format";
 import type { AdminSupportRequestResponse } from "@/lib/support/types";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 import { cn } from "@/lib/utils";
 
 type SupportThreadProps = {
   request: AdminSupportRequestResponse | null;
 };
 
+function formatSupportTimeLocalized(iso: string, lang: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "—";
+
+  const now = new Date("2026-07-13T18:00:00.000Z");
+  const sameDay =
+    date.getUTCFullYear() === now.getUTCFullYear() &&
+    date.getUTCMonth() === now.getUTCMonth() &&
+    date.getUTCDate() === now.getUTCDate();
+
+  if (sameDay) {
+    return date.toLocaleTimeString(lang === "ar" ? "ar-EG" : "en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "UTC",
+    });
+  }
+
+  const yesterday = new Date(now);
+  yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+  const isYesterday =
+    date.getUTCFullYear() === yesterday.getUTCFullYear() &&
+    date.getUTCMonth() === yesterday.getUTCMonth() &&
+    date.getUTCDate() === yesterday.getUTCDate();
+
+  if (isYesterday) return lang === "ar" ? "أمس" : "Yesterday";
+
+  return date.toLocaleDateString(lang === "ar" ? "ar-EG" : "en-GB", {
+    day: "numeric",
+    month: "short",
+    timeZone: "UTC",
+  });
+}
+
 export function SupportThread({ request }: SupportThreadProps) {
+  const { t, lang } = useTranslation();
+
   if (!request) {
     return (
       <Empty className="min-h-72 flex-1 rounded-none border-0 bg-surface-bright px-6">
@@ -32,10 +67,13 @@ export function SupportThread({ request }: SupportThreadProps) {
           <EmptyMedia variant="icon">
             <ChatTeardropTextIcon />
           </EmptyMedia>
-          <EmptyTitle className="text-on-surface">No ticket selected</EmptyTitle>
+          <EmptyTitle className="text-on-surface">
+            {lang === "ar" ? "لم يتم تحديد تذكرة" : "No ticket selected"}
+          </EmptyTitle>
           <EmptyDescription>
-            Choose a request from the list, or clear filters if the inbox is
-            empty.
+            {lang === "ar"
+              ? "اختر طلباً من القائمة، أو امسح التصفية إذا كان صندوق الوارد فارغاً."
+              : "Choose a request from the list, or clear filters if the inbox is empty."}
           </EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -58,13 +96,13 @@ export function SupportThread({ request }: SupportThreadProps) {
             {initialsFromName(request.student.fullName)}
           </span>
           <div className="min-w-0">
-            <h2 className="truncate font-semibold text-body-lg text-on-surface">
+            <h2 className="truncate font-semibold text-body-lg text-on-surface text-start rtl:text-right">
               {request.student.fullName}
             </h2>
-            <p className="truncate text-body-sm text-on-surface-variant">
+            <p className="truncate text-body-sm text-on-surface-variant text-start rtl:text-right">
               {request.subject}
               {" · "}
-              {REGION_LABELS[request.student.region]}
+              {t(`common.regions.${request.student.region}`)}
               {" · "}
               {request.student.email}
             </p>
@@ -93,7 +131,7 @@ export function SupportThread({ request }: SupportThreadProps) {
             {request.message}
           </div>
           <span className="mt-1 px-2 text-label-md text-on-surface-variant">
-            {formatSupportTime(request.createdAt)}
+            {formatSupportTimeLocalized(request.createdAt, lang)}
           </span>
         </div>
 
@@ -118,7 +156,7 @@ export function SupportThread({ request }: SupportThreadProps) {
             </div>
             <span className="mt-1 px-2 text-label-md text-on-surface-variant">
               {request.reviewedAt
-                ? formatSupportTime(request.reviewedAt)
+                ? formatSupportTimeLocalized(request.reviewedAt, lang)
                 : "—"}
             </span>
           </div>

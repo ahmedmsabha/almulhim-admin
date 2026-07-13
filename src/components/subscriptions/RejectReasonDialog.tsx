@@ -25,6 +25,7 @@ import {
   rejectSubscriptionSchema,
   type RejectSubscriptionFormValues,
 } from "@/lib/subscriptions/reject-form-schema";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type RejectReasonDialogProps = {
   open: boolean;
@@ -47,6 +48,7 @@ export function RejectReasonDialog({
     resolver: zodResolver(rejectSubscriptionSchema),
     defaultValues: { reason: "" },
   });
+  const { lang } = useTranslation();
 
   useEffect(() => {
     if (open) {
@@ -64,10 +66,11 @@ export function RejectReasonDialog({
     >
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Reject subscription</DialogTitle>
+          <DialogTitle>{lang === "ar" ? "رفض الاشتراك" : "Reject subscription"}</DialogTitle>
           <DialogDescription>
-            Tell {studentName} why this receipt is being rejected. The reason is
-            required and is sent to Nest with the reject call.
+            {lang === "ar"
+              ? `أخبر ${studentName} عن سبب رفض هذا الإيصال. السبب مطلوب وسيتم إرساله مع طلب الرفض.`
+              : `Tell ${studentName} why this receipt is being rejected. The reason is required and is sent to Nest with the reject call.`}
           </DialogDescription>
         </DialogHeader>
         <form
@@ -78,11 +81,11 @@ export function RejectReasonDialog({
         >
           <FieldGroup>
             <Field data-invalid={Boolean(form.formState.errors.reason)}>
-              <FieldLabel htmlFor="reject-reason">Rejection reason</FieldLabel>
+              <FieldLabel htmlFor="reject-reason">{lang === "ar" ? "سبب الرفض" : "Rejection reason"}</FieldLabel>
               <Textarea
                 id="reject-reason"
                 rows={4}
-                placeholder="Enter rejection reason…"
+                placeholder={lang === "ar" ? "أدخل سبب الرفض…" : "Enter rejection reason…"}
                 disabled={pending}
                 aria-invalid={Boolean(form.formState.errors.reason)}
                 {...form.register("reason")}
@@ -102,10 +105,12 @@ export function RejectReasonDialog({
               disabled={pending}
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {lang === "ar" ? "إلغاء" : "Cancel"}
             </Button>
             <Button type="submit" variant="destructive" disabled={pending}>
-              {pending ? "Rejecting…" : "Reject subscription"}
+              {pending
+                ? (lang === "ar" ? "جاري الرفض…" : "Rejecting…")
+                : (lang === "ar" ? "رفض الاشتراك" : "Reject subscription")}
             </Button>
           </DialogFooter>
         </form>
@@ -114,16 +119,16 @@ export function RejectReasonDialog({
   );
 }
 
-export function rejectMutationErrorMessage(error: unknown): string {
-  if (!isApiError(error)) return "Reject failed. Try again.";
+export function rejectMutationErrorMessage(error: unknown, lang: string): string {
+  if (!isApiError(error)) return lang === "ar" ? "فشل الرفض. حاول مرة أخرى." : "Reject failed. Try again.";
   if (error.status === 403) {
-    return "You are not allowed to reject this subscription.";
+    return lang === "ar" ? "ليس لديك صلاحية لرفض هذا الاشتراك." : "You are not allowed to reject this subscription.";
   }
   if (error.status === 404) {
-    return "This subscription no longer exists.";
+    return lang === "ar" ? "هذا الاشتراك لم يعد موجوداً." : "This subscription no longer exists.";
   }
   if (error.status === 400) {
-    return "Nest rejected the reason payload. Check the reason and try again.";
+    return lang === "ar" ? "رفض Nest محتوى السبب. تحقق من السبب وحاول مرة أخرى." : "Nest rejected the reason payload. Check the reason and try again.";
   }
   return error.message;
 }

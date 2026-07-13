@@ -10,6 +10,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type ContentToolbarProps = {
   /** Canonical URL `q` (for sync / shareable links). */
@@ -47,6 +48,7 @@ export function ContentToolbar({
   const searchParams = useSearchParams();
   const [pending, startTransition] = useTransition();
   const busy = pending || Boolean(isSearching);
+  const { t, lang } = useTranslation();
 
   useEffect(() => {
     if (draftQ === q) return;
@@ -68,21 +70,21 @@ export function ContentToolbar({
       data-pending={busy ? "" : undefined}
     >
       <div className="relative w-full max-w-sm">
-        <MagnifyingGlassIcon className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-on-surface-variant" />
+        <MagnifyingGlassIcon className="pointer-events-none absolute top-1/2 left-3 rtl:right-3 rtl:left-auto size-4 -translate-y-1/2 text-on-surface-variant" />
         <Input
           value={draftQ}
           onChange={(event) => onDraftQChange(event.target.value)}
-          placeholder="Search curricula…"
-          aria-label="Search content tree"
+          placeholder={t("content.toolbar.search")}
+          aria-label={t("content.toolbar.search")}
           aria-busy={busy}
-          className="h-9 rounded-lg border-outline-variant bg-surface-container-lowest pl-9 text-body-sm"
+          className="h-9 rounded-lg border-outline-variant bg-surface-container-lowest pl-9 rtl:pl-4 rtl:pr-9 text-body-sm"
         />
       </div>
       <div className="flex flex-wrap items-center gap-3">
         {isSearching ? (
           <p className="flex items-center gap-2 font-body-sm text-on-surface-variant">
             <CircleNotchIcon className="size-4 animate-spin" aria-hidden />
-            Matching…
+            {lang === "ar" ? "جاري البحث…" : "Matching…"}
           </p>
         ) : null}
         {onNewUnit ? (
@@ -93,7 +95,7 @@ export function ContentToolbar({
             onClick={onNewUnit}
           >
             <PlusIcon />
-            New unit
+            {lang === "ar" ? "وحدة جديدة" : "New unit"}
           </Button>
         ) : null}
       </div>
