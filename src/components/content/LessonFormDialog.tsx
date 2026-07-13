@@ -47,6 +47,7 @@ import {
   useUpdateLesson,
 } from "@/lib/content/use-content-mutations";
 import { nestFieldErrorsFromApiError } from "@/lib/plans/nest-field-errors";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type LessonFormDialogProps = {
   open: boolean;
@@ -86,6 +87,7 @@ export function LessonFormDialog({
   const create = useCreateLesson();
   const update = useUpdateLesson();
   const pending = create.isPending || update.isPending;
+  const { t, lang } = useTranslation();
 
   const form = useForm<LessonFormInput, unknown, LessonFormValues>({
     resolver: zodResolver(lessonFormSchema),
@@ -129,7 +131,7 @@ export function LessonFormDialog({
         form.setError("root", {
           message: isApiError(error)
             ? error.message
-            : "Could not save lesson. Try again.",
+            : (lang === "ar" ? "تعذر حفظ الدرس. حاول مرة أخرى." : "Could not save lesson. Try again."),
         });
       }
     }
@@ -139,17 +141,27 @@ export function LessonFormDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{isEdit ? "Edit lesson" : "New lesson"}</DialogTitle>
+          <DialogTitle>
+            {isEdit
+              ? (lang === "ar" ? "تعديل الدرس" : "Edit lesson")
+              : (lang === "ar" ? "درس جديد" : "New lesson")}
+          </DialogTitle>
           <DialogDescription>
             {isEdit
-              ? "Update lesson title, access level, and order."
-              : "Create a lesson under this chapter. Sort order is appended."}
+              ? (lang === "ar"
+                  ? "تحديث عنوان الدرس، مستوى الوصول، والترتيب."
+                  : "Update lesson title, access level, and order.")
+              : (lang === "ar"
+                  ? "إنشاء درس تحت هذا الفصل. يتم إلحاق ترتيب الفرز."
+                  : "Create a lesson under this chapter. Sort order is appended.")}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <FieldGroup>
             <Field data-invalid={Boolean(form.formState.errors.title)}>
-              <FieldLabel htmlFor="lesson-title">Title</FieldLabel>
+              <FieldLabel htmlFor="lesson-title">
+                {lang === "ar" ? "العنوان" : "Title"}
+              </FieldLabel>
               <Input
                 id="lesson-title"
                 {...form.register("title")}
@@ -158,7 +170,7 @@ export function LessonFormDialog({
               <FieldError>{form.formState.errors.title?.message}</FieldError>
             </Field>
             <Field data-invalid={Boolean(form.formState.errors.accessLevel)}>
-              <FieldLabel>Access level</FieldLabel>
+              <FieldLabel>{lang === "ar" ? "مستوى الوصول" : "Access level"}</FieldLabel>
               <Controller
                 control={form.control}
                 name="accessLevel"
@@ -173,7 +185,9 @@ export function LessonFormDialog({
                       className="w-full"
                       aria-label="Lesson access level"
                     >
-                      <SelectValue />
+                      <SelectValue>
+                        {(value) => (value ? t(`common.accessLevels.${value}`) : "")}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
@@ -183,7 +197,7 @@ export function LessonFormDialog({
                           ) as LessonAccessLevel[]
                         ).map((level) => (
                           <SelectItem key={level} value={level}>
-                            {ACCESS_LEVEL_LABELS[level]}
+                            {t(`common.accessLevels.${level}`)}
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -197,7 +211,9 @@ export function LessonFormDialog({
             </Field>
             {isEdit ? (
               <Field data-invalid={Boolean(form.formState.errors.sortOrder)}>
-                <FieldLabel htmlFor="lesson-sort">Sort order</FieldLabel>
+                <FieldLabel htmlFor="lesson-sort">
+                  {lang === "ar" ? "ترتيب الفرز" : "Sort order"}
+                </FieldLabel>
                 <Input
                   id="lesson-sort"
                   type="number"
@@ -223,10 +239,14 @@ export function LessonFormDialog({
               onClick={() => onOpenChange(false)}
               disabled={pending}
             >
-              Cancel
+              {lang === "ar" ? "إلغاء" : "Cancel"}
             </Button>
             <Button type="submit" disabled={pending}>
-              {pending ? "Saving…" : isEdit ? "Save lesson" : "Create lesson"}
+              {pending
+                ? (lang === "ar" ? "جاري الحفظ…" : "Saving…")
+                : isEdit
+                ? (lang === "ar" ? "حفظ الدرس" : "Save lesson")
+                : (lang === "ar" ? "إنشاء درس" : "Create lesson")}
             </Button>
           </DialogFooter>
         </form>

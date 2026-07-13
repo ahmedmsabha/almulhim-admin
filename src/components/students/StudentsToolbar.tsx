@@ -112,7 +112,9 @@ export function StudentsToolbar({
             className="h-9 min-w-40 rounded-lg border-outline-variant bg-surface-container-lowest text-body-sm"
             aria-label="Filter by region"
           >
-            <SelectValue placeholder={t("students.allRegions")} />
+            <SelectValue placeholder={t("students.allRegions")}>
+              {(value) => (value === "all" || !value ? t("students.allRegions") : t(`common.regions.${value}`))}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -137,7 +139,9 @@ export function StudentsToolbar({
             className="h-9 min-w-44 rounded-lg border-outline-variant bg-surface-container-lowest text-body-sm"
             aria-label="Filter by subscription status"
           >
-            <SelectValue placeholder={t("students.allStatuses")} />
+            <SelectValue placeholder={t("students.allStatuses")}>
+              {(value) => (value === "all" || !value ? t("students.allStatuses") : t(`common.subscriptionStatuses.${value}`))}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>

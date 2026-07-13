@@ -124,7 +124,7 @@ export function AnnouncementsComposer({
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h3 className="font-display text-headline-sm font-semibold text-on-surface">
-              {isEdit ? t("announcements.form.edit") : t("announcements.form.create")}
+              {isEdit ? t("announcements.composer.editTitle") : t("announcements.composer.createTitle")}
             </h3>
             <p className="mt-1 text-body-sm text-on-surface-variant">
               {lang === "ar"
@@ -144,7 +144,7 @@ export function AnnouncementsComposer({
         <FieldGroup>
           <Field data-invalid={Boolean(form.formState.errors.title)}>
             <FieldLabel htmlFor="announcement-title">
-              {t("announcements.form.title")}
+              {t("announcements.composer.titleLabel")}
             </FieldLabel>
             <Input
               id="announcement-title"
@@ -170,7 +170,9 @@ export function AnnouncementsComposer({
                     className="w-full max-w-xs"
                     aria-label="Announcement region"
                   >
-                    <SelectValue />
+                    <SelectValue>
+                      {(value) => (value ? t(`common.regions.${value}`) : "")}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -191,7 +193,7 @@ export function AnnouncementsComposer({
 
           <Field data-invalid={Boolean(form.formState.errors.body)}>
             <FieldLabel htmlFor="announcement-body">
-              {t("announcements.form.body")}
+              {t("announcements.composer.bodyLabel")}
             </FieldLabel>
             <Textarea
               id="announcement-body"
@@ -227,7 +229,7 @@ export function AnnouncementsComposer({
             {saving
               ? (lang === "ar" ? "جاري الحفظ…" : "Saving…")
               : isEdit
-              ? t("announcements.form.save")
+              ? (lang === "ar" ? "حفظ التغييرات" : "Save changes")
               : (lang === "ar" ? "حفظ مسودة" : "Save draft")}
           </Button>
         </div>

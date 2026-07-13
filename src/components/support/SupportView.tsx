@@ -114,7 +114,7 @@ export function SupportView({
   const getStatusLabel = (val: string) => {
     if (lang === "ar") {
       if (val === "open") return "مفتوح";
-      if (val === "replied") return "تم الرد";
+      if (val === "reviewed") return "تمت المراجعة";
       if (val === "closed") return "مغلق";
     }
     return SUPPORT_REQUEST_STATUS_LABELS[val as SupportRequestStatus];

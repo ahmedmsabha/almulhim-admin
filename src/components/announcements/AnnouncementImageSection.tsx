@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { isApiError } from "@/lib/api/errors";
 import { useUploadAnnouncementImage } from "@/lib/announcements/use-announcement-mutations";
 import { MAX_ANNOUNCEMENT_IMAGE_SIZE_BYTES } from "@/lib/announcements/upload-constants";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type AnnouncementImageSectionProps = {
   announcementId: string | null;
@@ -23,6 +24,7 @@ export function AnnouncementImageSection({
   const upload = useUploadAnnouncementImage();
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const { lang } = useTranslation();
 
   useEffect(() => {
     return () => {
@@ -50,7 +52,7 @@ export function AnnouncementImageSection({
     } catch (error) {
       if (controller.signal.aborted) return;
       setUploadError(
-        isApiError(error) ? error.message : "Image upload failed.",
+        isApiError(error) ? error.message : (lang === "ar" ? "فشل رفع الصورة." : "Image upload failed."),
       );
     } finally {
       if (abortRef.current === controller) {
@@ -65,24 +67,25 @@ export function AnnouncementImageSection({
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-3">
         <p className="font-body-sm text-body-sm text-on-surface-variant">
-          Featured image
+          {lang === "ar" ? "الصورة البارزة" : "Featured image"}
         </p>
         {imageStorageKey ? (
           <span className="inline-flex items-center gap-1.5 text-body-sm font-semibold text-on-surface">
             <ImageIcon className="size-4" aria-hidden />
-            Image attached
+            {lang === "ar" ? "تم إرفاق الصورة" : "Image attached"}
           </span>
         ) : (
           <span className="text-body-sm text-on-surface-variant">
-            No image yet
+            {lang === "ar" ? "لا توجد صورة بعد" : "No image yet"}
           </span>
         )}
       </div>
 
       {!announcementId ? (
         <p className="rounded-lg border border-dashed border-outline-variant bg-surface-container-low px-4 py-6 text-center text-body-sm text-on-surface-variant">
-          Save the announcement first, then upload an image (JPEG, PNG, or WebP,
-          max {MAX_ANNOUNCEMENT_IMAGE_SIZE_BYTES / (1024 * 1024)} MB).
+          {lang === "ar"
+            ? "احفظ الإعلان أولاً، ثم قم برفع صورة (JPEG أو PNG أو WebP، بحجم أقصى ٥ ميجابايت)."
+            : `Save the announcement first, then upload an image (JPEG, PNG, or WebP, max ${MAX_ANNOUNCEMENT_IMAGE_SIZE_BYTES / (1024 * 1024)} MB).`}
         </p>
       ) : (
         <label
@@ -95,11 +98,14 @@ export function AnnouncementImageSection({
           </div>
           <div className="text-center">
             <p className="font-body-md text-body-md font-semibold text-on-surface">
-              {imageStorageKey ? "Replace image" : "Click to upload"}
+              {imageStorageKey
+                ? (lang === "ar" ? "استبدال الصورة" : "Replace image")
+                : (lang === "ar" ? "انقر للرفع" : "Click to upload")}
             </p>
             <p className="font-body-sm text-body-sm text-on-surface-variant">
-              PNG, JPG or WEBP (Max.{" "}
-              {MAX_ANNOUNCEMENT_IMAGE_SIZE_BYTES / (1024 * 1024)} MB)
+              {lang === "ar"
+                ? "PNG أو JPG أو WEBP (بحد أقصى ٥ ميجابايت)"
+                : `PNG, JPG or WEBP (Max. ${MAX_ANNOUNCEMENT_IMAGE_SIZE_BYTES / (1024 * 1024)} MB)`}
             </p>
           </div>
           <input
@@ -119,7 +125,7 @@ export function AnnouncementImageSection({
         <div className="space-y-2">
           <Progress value={uploadProgress} aria-label="Upload progress" />
           <p className="text-body-sm text-on-surface-variant">
-            Uploading… {uploadProgress}%
+            {lang === "ar" ? "جاري الرفع…" : "Uploading…"} {uploadProgress}%
           </p>
         </div>
       ) : null}
@@ -135,7 +141,7 @@ export function AnnouncementImageSection({
             size="sm"
             onClick={() => setUploadError(null)}
           >
-            Dismiss
+            {lang === "ar" ? "تجاهل" : "Dismiss"}
           </Button>
         </div>
       ) : null}

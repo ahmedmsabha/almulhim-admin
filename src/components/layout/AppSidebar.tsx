@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserButton, useUser, SignOutButton } from "@clerk/nextjs";
-import { ShieldCheck, X, LogOut } from "lucide-react";
+import { X, LogOut } from "lucide-react";
 import { DASHBOARD_NAV_ITEMS } from "@/lib/navigation";
 import { useTranslation } from "@/lib/i18n/LanguageContext";
 
@@ -44,8 +44,9 @@ export function AppSidebar({
     >
       <div className="mb-8 flex items-center justify-between px-2">
         <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-on-primary">
-            <ShieldCheck className="size-5" aria-hidden />
+          <div className="flex size-10 items-center justify-center rounded-xl overflow-hidden bg-surface-container-high border border-outline-variant">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.jpg" alt={t("common.appName")} className="size-full object-cover" />
           </div>
           <div>
             <p className="text-headline-sm font-bold text-primary leading-none">

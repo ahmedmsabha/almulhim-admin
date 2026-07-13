@@ -45,6 +45,7 @@ import {
   useUpdateUnit,
 } from "@/lib/content/use-content-mutations";
 import { nestFieldErrorsFromApiError } from "@/lib/plans/nest-field-errors";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type UnitFormDialogProps = {
   open: boolean;
@@ -80,6 +81,7 @@ export function UnitFormDialog({
   const create = useCreateUnit();
   const update = useUpdateUnit();
   const pending = create.isPending || update.isPending;
+  const { t, lang } = useTranslation();
 
   const form = useForm<UnitFormInput, unknown, UnitFormValues>({
     resolver: zodResolver(unitFormSchema),
@@ -118,7 +120,7 @@ export function UnitFormDialog({
         form.setError("root", {
           message: isApiError(error)
             ? error.message
-            : "Could not save unit. Try again.",
+            : (lang === "ar" ? "تعذر حفظ الوحدة. حاول مرة أخرى." : "Could not save unit. Try again."),
         });
       }
     }
@@ -128,17 +130,27 @@ export function UnitFormDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{isEdit ? "Edit unit" : "New unit"}</DialogTitle>
+          <DialogTitle>
+            {isEdit
+              ? (lang === "ar" ? "تعديل الوحدة" : "Edit unit")
+              : (lang === "ar" ? "وحدة جديدة" : "New unit")}
+          </DialogTitle>
           <DialogDescription>
             {isEdit
-              ? "Update unit title, region, description, and order."
-              : "Create a unit. Sort order is appended after existing units."}
+              ? (lang === "ar"
+                  ? "تحديث عنوان الوحدة، المنطقة، الوصف، والترتيب."
+                  : "Update unit title, region, description, and order.")
+              : (lang === "ar"
+                  ? "إنشاء وحدة. يتم إلحاق ترتيب الفرز بعد الوحدات الموجودة."
+                  : "Create a unit. Sort order is appended after existing units.")}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <FieldGroup>
             <Field data-invalid={Boolean(form.formState.errors.title)}>
-              <FieldLabel htmlFor="unit-title">Title</FieldLabel>
+              <FieldLabel htmlFor="unit-title">
+                {lang === "ar" ? "العنوان" : "Title"}
+              </FieldLabel>
               <Input
                 id="unit-title"
                 {...form.register("title")}
@@ -147,7 +159,9 @@ export function UnitFormDialog({
               <FieldError>{form.formState.errors.title?.message}</FieldError>
             </Field>
             <Field data-invalid={Boolean(form.formState.errors.description)}>
-              <FieldLabel htmlFor="unit-description">Description</FieldLabel>
+              <FieldLabel htmlFor="unit-description">
+                {lang === "ar" ? "الوصف" : "Description"}
+              </FieldLabel>
               <Textarea
                 id="unit-description"
                 rows={3}
@@ -158,7 +172,7 @@ export function UnitFormDialog({
               </FieldError>
             </Field>
             <Field data-invalid={Boolean(form.formState.errors.region)}>
-              <FieldLabel>Region</FieldLabel>
+              <FieldLabel>{lang === "ar" ? "المنطقة" : "Region"}</FieldLabel>
               <Controller
                 control={form.control}
                 name="region"
@@ -170,7 +184,9 @@ export function UnitFormDialog({
                     }
                   >
                     <SelectTrigger className="w-full" aria-label="Unit region">
-                      <SelectValue />
+                      <SelectValue>
+                        {(value) => (value ? t(`common.regions.${value}`) : "")}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
@@ -178,7 +194,7 @@ export function UnitFormDialog({
                           Object.keys(CONTENT_REGION_LABELS) as ContentRegion[]
                         ).map((region) => (
                           <SelectItem key={region} value={region}>
-                            {CONTENT_REGION_LABELS[region]}
+                            {t(`common.regions.${region}`)}
                           </SelectItem>
                         ))}
                       </SelectGroup>
@@ -190,7 +206,9 @@ export function UnitFormDialog({
             </Field>
             {isEdit ? (
               <Field data-invalid={Boolean(form.formState.errors.sortOrder)}>
-                <FieldLabel htmlFor="unit-sort">Sort order</FieldLabel>
+                <FieldLabel htmlFor="unit-sort">
+                  {lang === "ar" ? "ترتيب الفرز" : "Sort order"}
+                </FieldLabel>
                 <Input
                   id="unit-sort"
                   type="number"
@@ -216,10 +234,14 @@ export function UnitFormDialog({
               onClick={() => onOpenChange(false)}
               disabled={pending}
             >
-              Cancel
+              {lang === "ar" ? "إلغاء" : "Cancel"}
             </Button>
             <Button type="submit" disabled={pending}>
-              {pending ? "Saving…" : isEdit ? "Save unit" : "Create unit"}
+              {pending
+                ? (lang === "ar" ? "جاري الحفظ…" : "Saving…")
+                : isEdit
+                ? (lang === "ar" ? "حفظ الوحدة" : "Save unit")
+                : (lang === "ar" ? "إنشاء وحدة" : "Create unit")}
             </Button>
           </DialogFooter>
         </form>

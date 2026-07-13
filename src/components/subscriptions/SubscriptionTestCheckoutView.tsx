@@ -120,7 +120,14 @@ export function SubscriptionTestCheckoutView() {
                   disabled={pending || plans.length === 0}
                 >
                   <SelectTrigger id="planId" className="w-full">
-                    <SelectValue placeholder={lang === "ar" ? "اختر باقة" : "Select a plan"} />
+                    <SelectValue placeholder={lang === "ar" ? "اختر باقة" : "Select a plan"}>
+                      {(value) => {
+                        const plan = plans.find((p) => p.id === value);
+                        return plan
+                          ? `${plan.name} · ${(plan.priceAmount / 100).toFixed(2)} ${plan.currency}`
+                          : "";
+                      }}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {plans.map((plan) => (
