@@ -35,13 +35,17 @@ function errorMessage(error: unknown): string | undefined {
   return error.message;
 }
 
+import { useTranslation } from "@/lib/i18n/LanguageContext";
+
 function Frame({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        eyebrow="Support"
-        title="Support Inbox"
-        description="Review student tickets, reply by email, and close resolved requests."
+        eyebrow={t("support.eyebrow")}
+        title={t("support.title")}
+        description={t("support.description")}
         className="mb-0"
       />
       {children}

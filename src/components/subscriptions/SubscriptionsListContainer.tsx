@@ -46,13 +46,17 @@ function errorMessage(error: unknown, tab: SubscriptionsTab): string | undefined
   return error.message;
 }
 
+import { useTranslation } from "@/lib/i18n/LanguageContext";
+
 function Frame({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        eyebrow="Subscriptions"
-        title="Approval Queue"
-        description="Review pending receipts before students unlock paid lessons."
+        eyebrow={t("subscriptions.eyebrow")}
+        title={t("subscriptions.title")}
+        description={t("subscriptions.description")}
         className="mb-0"
       />
       {children}

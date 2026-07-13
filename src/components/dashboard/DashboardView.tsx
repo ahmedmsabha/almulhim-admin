@@ -1,3 +1,5 @@
+"use client";
+
 import {
   HourglassIcon,
   SealCheckIcon,
@@ -12,45 +14,48 @@ import { RegionDistribution } from "@/components/dashboard/RegionDistribution";
 import { SubscriptionGrowthChart } from "@/components/dashboard/SubscriptionGrowthChart";
 import { PageHeader } from "@/components/layout/PageHeader";
 import type { DashboardStats } from "@/lib/dashboard/mock-data";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type DashboardViewProps = {
   stats: DashboardStats;
 };
 
 export function DashboardView({ stats }: DashboardViewProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader
-          eyebrow="Overview"
-          title="Analytics Dashboard"
+          eyebrow={t("dashboard.eyebrow")}
+          title={t("dashboard.title")}
           className="mb-0"
         />
-        <DashboardHeaderActions rangeLabel="Last 30 Days" />
+        <DashboardHeaderActions rangeLabel={t("dashboard.range30Days")} />
       </div>
 
       <div className="grid grid-cols-1 gap-gutter md:grid-cols-2 lg:grid-cols-4">
         <KpiCard
-          label="Total Students"
+          label={t("dashboard.kpis.totalStudents")}
           value={stats.totalStudents}
           sparkline={stats.subscriptionGrowth.map((point) => point.count)}
           sparklineColor="var(--color-primary)"
           icon={<UsersThreeIcon />}
         />
         <KpiCard
-          label="Active Subscriptions"
+          label={t("dashboard.kpis.activeSubscriptions")}
           value={stats.activeSubscriptions}
           icon={<SealCheckIcon />}
         />
         <KpiCard
-          label="Pending Approvals"
+          label={t("dashboard.kpis.pendingApprovals")}
           value={stats.pendingApprovals}
           urgent
-          urgentHint="Requires immediate review"
+          urgentHint={t("dashboard.kpis.urgentHint")}
           icon={<HourglassIcon />}
         />
         <KpiCard
-          label="Open Support Tickets"
+          label={t("dashboard.kpis.openSupport")}
           value={stats.openSupportTickets}
           icon={<HeadsetIcon />}
         />

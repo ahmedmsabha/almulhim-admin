@@ -30,7 +30,7 @@ export function DashboardShell({
         onClose={() => setMobileOpen(false)}
       />
 
-      <div className="flex min-h-screen flex-col lg:pl-sidebar">
+      <div className="flex min-h-screen flex-col lg:pl-sidebar rtl:lg:pl-0 rtl:lg:pr-sidebar">
         <AppTopbar
           onMenuClick={() => setMobileOpen(true)}
         />

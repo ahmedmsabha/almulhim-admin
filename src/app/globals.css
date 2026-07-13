@@ -6,8 +6,8 @@
 
 @theme {
   /* Fonts (next/font variables wired in root layout) */
-  --font-display: var(--font-hanken), "Hanken Grotesk", sans-serif;
-  --font-sans: var(--font-inter), "Inter", sans-serif;
+  --font-display: var(--font-hanken), var(--font-arabic), "Hanken Grotesk", sans-serif;
+  --font-sans: var(--font-inter), var(--font-arabic), "Inter", sans-serif;
   --font-mono: var(--font-jetbrains), "JetBrains Mono", monospace;
 
   /* Surfaces */

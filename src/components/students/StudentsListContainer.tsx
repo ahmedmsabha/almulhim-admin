@@ -37,14 +37,18 @@ function errorMessage(error: unknown): string | undefined {
   return error.message;
 }
 
+import { useTranslation } from "@/lib/i18n/LanguageContext";
+
 function Frame({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader
-          eyebrow="Students"
-          title="Students & Devices"
-          description="Manage enrollment and open a student for device bindings."
+          eyebrow={t("students.eyebrow")}
+          title={t("students.title")}
+          description={t("students.description")}
           className="mb-0"
         />
         <StudentsHeaderActions />

@@ -43,13 +43,17 @@ function errorMessage(error: unknown): string | undefined {
   return error.message;
 }
 
+import { useTranslation } from "@/lib/i18n/LanguageContext";
+
 function DashboardFrame({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader
-          eyebrow="Overview"
-          title="Analytics Dashboard"
+          eyebrow={t("dashboard.eyebrow")}
+          title={t("dashboard.title")}
           className="mb-0"
         />
         <DashboardHeaderActions />

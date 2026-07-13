@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { ShieldCheck, X } from "lucide-react";
 import { DASHBOARD_NAV_ITEMS } from "@/lib/navigation";
+import { useTranslation } from "@/lib/i18n/LanguageContext";
 
 type AppSidebarProps = {
   mobileOpen: boolean;
@@ -19,19 +20,27 @@ export function AppSidebar({
 }: AppSidebarProps) {
   const pathname = usePathname();
   const { user } = useUser();
+  const { t } = useTranslation();
+  
   const displayName =
-    user?.fullName || user?.primaryEmailAddress?.emailAddress || "Admin";
+    user?.fullName || user?.primaryEmailAddress?.emailAddress || t("common.admin");
   const displayEmail =
-    user?.primaryEmailAddress?.emailAddress || "Teacher Administrator";
+    user?.primaryEmailAddress?.emailAddress || t("common.teacherAdmin");
+
+  const getTranslationKey = (href: string) => {
+    if (href.startsWith("/dev/")) return "nav.testCheckout";
+    const path = href.split("/")[1];
+    return `nav.${path}`;
+  };
 
   return (
     <aside
       className={[
-        "fixed top-0 left-0 z-50 flex h-full w-sidebar flex-col border-r border-outline-variant bg-surface-container-lowest px-4 py-6 transition-transform duration-200",
-        "lg:translate-x-0",
-        mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+        "fixed top-0 left-0 rtl:right-0 rtl:left-auto z-50 flex h-full w-sidebar flex-col border-r rtl:border-l rtl:border-r-0 border-outline-variant bg-surface-container-lowest px-4 py-6 transition-transform duration-200",
+        "lg:translate-x-0 rtl:lg:translate-x-0",
+        mobileOpen ? "translate-x-0" : "-translate-x-full rtl:translate-x-full lg:translate-x-0 rtl:lg:translate-x-0",
       ].join(" ")}
-      aria-label="Main navigation"
+      aria-label={t("common.openNavigation")}
     >
       <div className="mb-8 flex items-center justify-between px-2">
         <div className="flex items-center gap-3">
@@ -40,10 +49,10 @@ export function AppSidebar({
           </div>
           <div>
             <p className="text-headline-sm font-bold text-primary leading-none">
-              Mulhim Admin
+              {t("common.appName")}
             </p>
             <p className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">
-              Tawjihi Admin
+              {t("common.subName")}
             </p>
           </div>
         </div>
@@ -51,7 +60,7 @@ export function AppSidebar({
           type="button"
           className="rounded-lg p-2 text-on-surface-variant hover:bg-surface-container-low lg:hidden"
           onClick={onClose}
-          aria-label="Close navigation"
+          aria-label={t("common.closeNavigation")}
         >
           <X className="size-5" aria-hidden />
         </button>
@@ -71,13 +80,13 @@ export function AppSidebar({
               className={[
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-body-md transition-colors duration-200",
                 isActive
-                  ? "border-r-2 border-primary bg-surface-container-low font-bold text-primary"
+                  ? "border-r-2 rtl:border-r-0 rtl:border-l-2 border-primary bg-surface-container-low font-bold text-primary"
                   : "text-on-surface-variant hover:bg-surface-container-low hover:text-primary",
               ].join(" ")}
               aria-current={isActive ? "page" : undefined}
             >
               <Icon className="size-5 shrink-0" aria-hidden />
-              <span>{item.label}</span>
+              <span>{t(getTranslationKey(item.href))}</span>
             </Link>
           );
         })}
