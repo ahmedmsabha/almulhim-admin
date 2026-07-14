@@ -1,5 +1,4 @@
 import { SignOutButton } from "@clerk/nextjs";
-import Link from "next/link";
 
 type ForbiddenPageProps = {
   searchParams: Promise<{ reason?: string }>;
@@ -22,7 +21,7 @@ export default async function ForbiddenPage({
             ? "We could not confirm your admin role with the Mulhim Backend. Check that the API is reachable, then try again."
             : "This account is signed in but is not registered as an admin on the Mulhim Backend."}
         </p>
-        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+        <div className="mt-8 flex flex-col items-center">
           <SignOutButton redirectUrl="/login">
             <button
               type="button"
@@ -31,12 +30,6 @@ export default async function ForbiddenPage({
               Sign out
             </button>
           </SignOutButton>
-          <Link
-            href="/login"
-            className="inline-flex h-10 items-center justify-center rounded-lg border border-outline-variant px-4 text-body-md font-semibold text-on-surface transition-colors hover:bg-surface-container-low"
-          >
-            Back to sign in
-          </Link>
         </div>
       </div>
     </main>
