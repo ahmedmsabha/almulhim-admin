@@ -30,6 +30,7 @@ export function AuthOtpField({
   className,
 }: AuthOtpFieldProps) {
   const invalid = Boolean(error);
+  const errorId = `${id}-error`;
   const slots = Array.from({ length: maxLength }, (_, index) => index);
 
   return (
@@ -44,6 +45,7 @@ export function AuthOtpField({
         onChange={onChange}
         disabled={disabled}
         aria-invalid={invalid}
+        aria-describedby={error ? errorId : undefined}
         containerClassName="justify-center gap-0 w-full"
       >
         <InputOTPGroup className="w-full justify-between gap-1.5 rounded-none border-0">
@@ -56,7 +58,11 @@ export function AuthOtpField({
           ))}
         </InputOTPGroup>
       </InputOTP>
-      {error ? <FieldError className="text-body-sm text-error">{error}</FieldError> : null}
+      {error ? (
+        <FieldError id={errorId} className="text-body-sm text-error">
+          {error}
+        </FieldError>
+      ) : null}
     </Field>
   );
 }

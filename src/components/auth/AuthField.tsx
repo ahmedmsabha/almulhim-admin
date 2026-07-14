@@ -28,6 +28,7 @@ export function AuthField({
   className,
 }: AuthFieldProps) {
   const invalid = Boolean(error);
+  const errorId = `${id}-error`;
 
   return (
     <Field
@@ -46,9 +47,14 @@ export function AuthField({
         autoComplete={autoComplete}
         disabled={disabled}
         aria-invalid={invalid}
+        aria-describedby={error ? errorId : undefined}
         className="h-10 rounded-lg border-outline-variant bg-surface-container-lowest px-3 text-body-md"
       />
-      {error ? <FieldError className="text-body-sm text-error">{error}</FieldError> : null}
+      {error ? (
+        <FieldError id={errorId} className="text-body-sm text-error">
+          {error}
+        </FieldError>
+      ) : null}
     </Field>
   );
 }

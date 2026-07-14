@@ -29,9 +29,13 @@ export function ForgotPasswordForm() {
   const [confirmError, setConfirmError] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [codeSent, setCodeSent] = useState(false);
+  const [resent, setResent] = useState(false);
 
   const loading = fetchStatus === "fetching";
   const needsNewPassword = signIn.status === "needs_new_password";
+  const needsMfa =
+    signIn.status === "needs_second_factor" ||
+    signIn.status === "needs_client_trust";
   const navigate = createNavigateAfterAuth("/dashboard", router);
 
   const clearLocalState = () => {
@@ -45,6 +49,7 @@ export function ForgotPasswordForm() {
     setConfirmError(null);
     setFormError(null);
     setCodeSent(false);
+    setResent(false);
   };
 
   useEffect(() => {
@@ -178,12 +183,79 @@ export function ForgotPasswordForm() {
         return;
       }
 
+      if (
+        signIn.status === "needs_second_factor" ||
+        signIn.status === "needs_client_trust"
+      ) {
+        const emailFactor = signIn.supportedSecondFactors?.find(
+          (factor) => factor.strategy === "email_code",
+        );
+        if (emailFactor) {
+          const { error: mfaError } = await signIn.mfa.sendEmailCode();
+          if (mfaError) {
+            setFormError(mfaError.message || t("auth.resendFailed"));
+            return;
+          }
+          setCode("");
+          setCodeError(null);
+          setResent(false);
+          return;
+        }
+        setFormError(t("auth.secondFactorRequired"));
+        return;
+      }
+
       setFormError(t("auth.resetIncomplete"));
     } catch (err) {
       setFormError(
         err instanceof Error ? err.message : t("auth.resetFailed"),
       );
     }
+  };
+
+  const verifyMfa = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormError(null);
+
+    if (code.trim().length < 6) {
+      setCodeError(t("auth.codeRequired"));
+      return;
+    }
+    setCodeError(null);
+
+    try {
+      const { error } = await signIn.mfa.verifyEmailCode({ code: code.trim() });
+      if (error) {
+        setCodeError(
+          errors.fields.code?.message ||
+            error.message ||
+            t("auth.verifyFailed"),
+        );
+        return;
+      }
+
+      if (signIn.status === "complete") {
+        await signIn.finalize({ navigate });
+        return;
+      }
+
+      setFormError(t("auth.verifyIncomplete"));
+    } catch (err) {
+      setFormError(
+        err instanceof Error ? err.message : t("auth.verifyFailed"),
+      );
+    }
+  };
+
+  const resendMfa = async () => {
+    setResent(false);
+    setFormError(null);
+    const { error } = await signIn.mfa.sendEmailCode();
+    if (error) {
+      setFormError(error.message || t("auth.resendFailed"));
+      return;
+    }
+    setResent(true);
   };
 
   const backLink = (
@@ -243,6 +315,52 @@ export function ForgotPasswordForm() {
             {loading ? t("auth.resettingPassword") : t("auth.resetPassword")}
           </Button>
         </form>
+        {backLink}
+      </div>
+    );
+  }
+
+  if (needsMfa) {
+    return (
+      <div className="flex flex-col gap-4">
+        <p className="text-center text-body-sm text-on-surface-variant">
+          {t("auth.codeSentTo")}{" "}
+          <span className="text-on-surface">{email.trim()}</span>
+        </p>
+        <form onSubmit={verifyMfa} className="flex flex-col gap-4">
+          <AuthOtpField
+            id="forgot-mfa-code"
+            label={t("auth.verificationCode")}
+            value={code}
+            onChange={(v) => {
+              setCode(v);
+              if (codeError) setCodeError(null);
+            }}
+            disabled={loading}
+            error={codeError}
+          />
+          {formError ? (
+            <p className="text-center text-body-sm text-error" role="alert">
+              {formError}
+            </p>
+          ) : null}
+          <Button
+            type="submit"
+            disabled={loading || code.trim().length < 6}
+            className="h-10 w-full rounded-lg text-body-md font-semibold"
+          >
+            {loading ? t("auth.verifying") : t("auth.verify")}
+          </Button>
+        </form>
+        <Button
+          type="button"
+          variant="ghost"
+          disabled={loading || resent}
+          onClick={resendMfa}
+          className="h-9 w-full rounded-lg text-body-sm"
+        >
+          {resent ? t("auth.codeSent") : t("auth.resendCode")}
+        </Button>
         {backLink}
       </div>
     );

@@ -29,9 +29,13 @@ export function SignInForm() {
   const [codeError, setCodeError] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [resent, setResent] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
 
   const loading = fetchStatus === "fetching";
-  const needsTrust = signIn.status === "needs_client_trust";
+  const showOtp =
+    otpSent &&
+    (signIn.status === "needs_client_trust" ||
+      signIn.status === "needs_second_factor");
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,17 +79,25 @@ export function SignInForm() {
         return;
       }
 
-      if (signIn.status === "needs_client_trust") {
+      if (
+        signIn.status === "needs_client_trust" ||
+        signIn.status === "needs_second_factor"
+      ) {
         const emailFactor = signIn.supportedSecondFactors?.find(
           (factor) => factor.strategy === "email_code",
         );
         if (emailFactor) {
-          await signIn.mfa.sendEmailCode();
+          const { error: mfaError } = await signIn.mfa.sendEmailCode();
+          if (mfaError) {
+            setFormError(mfaError.message || t("auth.resendFailed"));
+            return;
+          }
+          setCode("");
+          setCodeError(null);
+          setResent(false);
+          setOtpSent(true);
           return;
         }
-      }
-
-      if (signIn.status === "needs_second_factor") {
         setFormError(t("auth.secondFactorRequired"));
         return;
       }
@@ -147,9 +159,10 @@ export function SignInForm() {
     setCodeError(null);
     setFormError(null);
     setResent(false);
+    setOtpSent(false);
   };
 
-  if (needsTrust) {
+  if (showOtp) {
     return (
       <div className="flex flex-col gap-4">
         <p className="text-center text-body-sm text-on-surface-variant">

@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
-import type { Language } from "@/lib/i18n/translations";
+import { translations, type Language } from "@/lib/i18n/translations";
 
 export default async function AuthLayout({
   children,
@@ -16,7 +16,11 @@ export default async function AuthLayout({
   }
 
   const cookieStore = await cookies();
-  const lang = (cookieStore.get("lang")?.value || "en") as Language;
+  const cookieLang = cookieStore.get("lang")?.value;
+  const lang: Language =
+    cookieLang != null && cookieLang in translations
+      ? (cookieLang as Language)
+      : "en";
 
   return <LanguageProvider initialLang={lang}>{children}</LanguageProvider>;
 }
